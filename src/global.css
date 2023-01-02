@@ -1,3 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  /* default color: #007aff */
+  --swiper-theme-color: rgb(0, 255, 140) ;
+}
+
+.swiper-horizontal > .swiper-pagination-progressbar,
+.swiper-pagination-progressbar.swiper-pagination-horizontal,
+.swiper-pagination-progressbar.swiper-pagination-vertical.swiper-pagination-progressbar-opposite,
+.swiper-vertical > .swiper-pagination-progressbar.swiper-pagination-progressbar-opposite {
+  height: 8px;
+}
+
+.swiper {
+  height: 90vh;
+}
+
+.swiper-slide {
+  text-align: center;
+  /* Center slide text vertically */
+}
+
+.swiper-slide img {
+  /* width: 60%;
+  height: 100%; */
+  width: 100%;
+  height: 100%;
+}
