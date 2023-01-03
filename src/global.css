@@ -2,20 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* default color: #007aff */
-  --swiper-theme-color: rgb(0, 255, 140) ;
+@font-face {
+  font-family: "soraLight";
+  src: url("assets/fonts/Sora-Light.ttf");
 }
 
-.swiper-horizontal > .swiper-pagination-progressbar,
-.swiper-pagination-progressbar.swiper-pagination-horizontal,
-.swiper-pagination-progressbar.swiper-pagination-vertical.swiper-pagination-progressbar-opposite,
-.swiper-vertical > .swiper-pagination-progressbar.swiper-pagination-progressbar-opposite {
-  height: 8px;
+:root {
+  /* default color: #007aff */
+  --swiper-theme-color: rgb(0, 255, 140);
 }
 
 .swiper {
-  height: 90vh;
+  max-height: 90vh;
 }
 
 .swiper-slide {
@@ -28,4 +26,22 @@
   height: 100%; */
   width: 100%;
   height: 100%;
+}
+
+/* Progress Bar customized if it's ever used */
+/* .swiper-horizontal > .swiper-pagination-progressbar,
+.swiper-pagination-progressbar.swiper-pagination-horizontal,
+.swiper-pagination-progressbar.swiper-pagination-vertical.swiper-pagination-progressbar-opposite,
+.swiper-vertical > .swiper-pagination-progressbar.swiper-pagination-progressbar-opposite {
+  height: 8px;
+} */
+
+.swiper-pagination-bullet {
+  opacity: 1;
+  background: var(--swiper-pagination-bullet-inactive-color, white);
+}
+
+/* Bulleted Progress bar, active bullets */
+.swiper-pagination-bullet-active {
+  background: var(--swiper-pagination-bullet-inactive-color, rgb(0, 255, 140));
 }

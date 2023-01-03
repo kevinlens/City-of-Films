@@ -12,6 +12,9 @@ module.exports = {
       fontSize: {
         xxs: '0.625rem',
       },
+      fontFamily: {
+        soraLight: ['Sora-Light', 'sans-serif'],
+      },
       height: {
         98: '26.0625rem',
         100: '28rem',
