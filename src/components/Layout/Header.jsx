@@ -11,7 +11,7 @@ export default function Example() {
   return (
     <Disclosure as='nav'>
       {({ open }) => (
-        <div className='absolute w-full z-20 bg-gray-800 lg:bg-opacity-10'>
+        <div className='absolute w-full z-20 bg-gray-800 lg:bg-opacity-20'>
           <div className='max-w-7xl mx-auto px-2 sm:px-4 lg:px-8'>
             <div className='relative flex items-center justify-between h-16'>
               <div className='flex items-center px-2 lg:px-0'>
@@ -29,7 +29,7 @@ export default function Example() {
                 </div>
               </div>
               <div className='flex-1 flex justify-center px-2 lg:ml-6 lg:justify-end'>
-                <div className='max-w-lg w-full lg:max-w-[28rem] xl:mr-[12%]'>
+                <div className='max-w-lg w-full lg:max-w-[26rem] xl:max-w-[28rem] lg:mr-[8%] xl:mr-[6%]'>
                   <label htmlFor='search' className='sr-only'>
                     Search
                   </label>
