@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { SearchIcon } from '@heroicons/react/solid';
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
@@ -8,10 +8,20 @@ function classNames(...classes) {
 }
 
 export default function Example() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  window.onscroll = function() {
+    if(window.pageYOffset <= 40) {
+      setIsScrolled(false)
+    }else {
+      setIsScrolled(true)
+    }
+  };
+
   return (
     <Disclosure as='nav'>
       {({ open }) => (
-        <div className='absolute w-full z-20 bg-gray-800 lg:bg-opacity-20'>
+        <div className={`fixed w-full z-20 bg-gray-800 transition-all duration-600 ${isScrolled ? "lg:bg-opacity-20" : "lg:bg-opacity-20"}`}>
           <div className='max-w-7xl mx-auto px-2 sm:px-4 lg:px-8'>
             <div className='relative flex items-center justify-between h-16'>
               <div className='flex items-center px-2 lg:px-0'>

@@ -1,0 +1,34 @@
+
+.hero {
+  // For isolating and overriding predefined/universal Swiper components 
+  // To achieve single component customization, without polluting other similar 
+  // component and classes
+  :global{
+    .swiper {
+      max-height: 90vh;
+    }
+    .swiper-slide {
+      text-align: center;
+      /* Center slide text vertically */
+      img {
+        /* width: 60%;
+        height: 100%; */
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .swiper-pagination-bullet {
+      opacity: 1;
+      background: var(--swiper-pagination-bullet-inactive-color, white);
+      height: 4px;
+      width:  35px;
+      padding: none;
+      border-radius: 5px; 
+    }
+    .swiper-pagination-bullet-active {
+      background: var(--swiper-pagination-bullet-inactive-color, #00ff8c);
+      width: 75px !important;
+    }
+  }
+}
+

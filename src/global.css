@@ -6,3 +6,18 @@
   font-family: 'soraLight';
   src: url('assets/fonts/Sora-Light.ttf');
 }
+
+
+body{
+  background-color: black;
+}
+
+
+.splide__slide img {
+  border-radius: 12px;
+  
+}
+
+.splide__track {
+  overflow: visible;
+}

@@ -1,15 +1,15 @@
-import Header from '../components/Layout/Header'
-import Hero from '../components/Layout/Hero'
-import ItemCarousel from '../components/Layout/ItemCarousel'
-function App() {
+import Header from '../components/Layout/Header';
+import Hero from '../components/Layout/Hero';
+import Carousels from '../components/Layout/Carousels';
 
+function App() {
   return (
     <div>
       <Header />
       <Hero />
-      <ItemCarousel />
+      <Carousels />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
