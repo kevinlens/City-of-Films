@@ -20,5 +20,24 @@
         object-fit: cover;
       }
     }
+    .swiper-button-next{
+      background-image: url('/assets/svg/RightArrow.svg')!important;
+      background-repeat: no-repeat;
+      background-size: 100% auto;
+      background-position: center;
+    }
+    .swiper-button-next::after {
+      display: none;
+    }
+    .swiper-button-prev{
+      background-image: url('/assets/svg/RightArrow.svg')!important;
+      background-repeat: no-repeat;
+      background-size: 100% auto;
+      background-position: center;
+      transform: rotate(180deg);
+    }
+    .swiper-button-prev::after {
+      display: none;
+    }
   }
 }

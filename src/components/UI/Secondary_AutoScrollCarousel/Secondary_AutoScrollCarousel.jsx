@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from "react-router-dom"
 // Default theme
 import '@splidejs/react-splide/css';
 
@@ -76,9 +77,11 @@ const Secondary_AutoScrollCarousel = (props) => {
       >
         {movieArray.map((item) => (
           <SplideSlide>
+            <Link to="/details">
             <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
               <img src={item.movie} alt='Image 2' />
             </div>
+            </Link>
           </SplideSlide>
         ))}
       </Splide>

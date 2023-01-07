@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './Hero.module.scss';
+import { Link } from 'react-router-dom';
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -14,8 +15,20 @@ import 'swiper/css/navigation';
 import { Pagination, Navigation, EffectFade } from 'swiper';
 
 const Hero = () => {
+  const movieArray = [
+    {
+      id: 1,
+      movie:
+        'https://image.tmdb.org/t/p/original/evaFLqtswezLosllRZtJNMiO1UR.jpg',
+    },
+    {
+      id: 1,
+      movie:
+        'https://image.tmdb.org/t/p/original/ecaB1LUoQE1ylZJVF5KLRTkewt8.jpg',
+    }
+  ];
   return (
-    <div className={styles.hero}>
+    <div className={["-lg:pt-16", styles.hero].join(" ")}>
       {/* progress bar */}
       <Swiper
         pagination={{
@@ -31,29 +44,18 @@ const Hero = () => {
           disableOnInteraction: false,
         }}
       >
-        <SwiperSlide>
-          <div>
-            <img
-              src={`https://image.tmdb.org/t/p/original/lXhgCODAbBXL5buk9yEmTpOoOgR.jpg`}
-              alt='Random image'
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div>
-            <img
-              src={`https://image.tmdb.org/t/p/original/tmU7GeKVybMWFButWEGl2M4GeiP.jpg`}
-              alt='Random 222image'
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide></SwiperSlide>
-        <SwiperSlide></SwiperSlide>
-        <SwiperSlide></SwiperSlide>
-        <SwiperSlide></SwiperSlide>
-        <SwiperSlide></SwiperSlide>
-        <SwiperSlide></SwiperSlide>
-        <SwiperSlide></SwiperSlide>
+        {movieArray.map((item) => (
+          <SwiperSlide>
+            <Link to="/details">
+              
+            <div >
+              <img src={item.movie} alt='Image 2' />
+            </div>
+              
+            </Link>
+          </SwiperSlide>
+        ))}
+
       </Swiper>
     </div>
   );

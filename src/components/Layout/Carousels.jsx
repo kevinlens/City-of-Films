@@ -6,12 +6,11 @@ import Secondary_AutoScrollCarousel from '../UI/Secondary_AutoScrollCarousel/Sec
 const Carousels = () => {
   return (
     <div className='mb-12'>
-      
-      <div className='flex justify-center mb-12 mt-6'>
+      <div className='flex justify-center mt-12 '>
         <ToggleSwitch />
       </div>
 
-      <div className='max-w-full mx-auto mt-24'>
+      <div className='max-w-full mx-auto mt-14'>
         <Primary_AutoScrollCarousel />
         <hr />
         <Secondary_AutoScrollCarousel speed={-0.4} />
@@ -25,6 +24,12 @@ const Carousels = () => {
 
       <ItemCarousel />
       <hr />
+
+      <ItemCarousel />
+      <hr />
+
+      {/* <ItemCarousel />
+      <hr /> */}
     </div>
   );
 };

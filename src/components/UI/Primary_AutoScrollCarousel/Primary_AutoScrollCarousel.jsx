@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 // Default theme
 import '@splidejs/react-splide/css';
 
@@ -26,7 +27,6 @@ const Primary_AutoScrollCarousel = () => {
   }
   let currentMedia = isMobile ? 2 : 4;
 
-
   //Note: Has to be an EVEN amount of items or will cause a loop reset glitch!
   const movieArray = [
     {
@@ -48,7 +48,7 @@ const Primary_AutoScrollCarousel = () => {
       id: 1,
       movie:
         'https://image.tmdb.org/t/p/original/wMDUDwAArpfGdtTTZ25SfwngGwt.jpg',
-    }
+    },
   ];
 
   return (
@@ -67,7 +67,7 @@ const Primary_AutoScrollCarousel = () => {
           pagination: false,
           drag: false,
           autoScroll: {
-            speed: .8,
+            speed: 0.8,
             pauseOnHover: false,
             pauseOnFocus: false,
           },
@@ -76,9 +76,11 @@ const Primary_AutoScrollCarousel = () => {
       >
         {movieArray.map((item) => (
           <SplideSlide className='odd:mt-24'>
-            <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
-            <img src={item.movie} alt='Image 2' />
-            </div>
+            <Link to='/details'>
+              <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
+                <img src={item.movie} alt='Image 2' />
+              </div>
+            </Link>
           </SplideSlide>
         ))}
 
@@ -99,5 +101,4 @@ const Primary_AutoScrollCarousel = () => {
   );
 };
 
-
-export default Primary_AutoScrollCarousel
+export default Primary_AutoScrollCarousel;
