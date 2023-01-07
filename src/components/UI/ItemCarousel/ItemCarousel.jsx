@@ -10,67 +10,47 @@ import 'swiper/css/navigation';
 
 // import required modules
 import { Pagination, Navigation } from 'swiper';
-
+const movieArray = [
+  {
+    id: 1,
+    movie:
+      'https://image.tmdb.org/t/p/original/lXhgCODAbBXL5buk9yEmTpOoOgR.jpg',
+  },
+  {
+    id: 1,
+    movie:
+      'https://image.tmdb.org/t/p/original/c1bz69r0v065TGFA5nqBiKzPDys.jpg',
+  },
+  {
+    id: 1,
+    movie:
+      'https://image.tmdb.org/t/p/original/jazlkwXfw4KdF6fVTRsolOvRCmu.jpg',
+  },
+  {
+    id: 1,
+    movie:
+      'https://image.tmdb.org/t/p/original/c1bz69r0v065TGFA5nqBiKzPDys.jpg',
+  }
+];
 const ItemCarousel = () => {
   return (
     <div className={`${styles.itemCarousel} my-4 mx-8`}>
-      <h1 className='text-4xl mb-4'>Latest</h1>
+      <h1 className='text-4xl mb-4 text-white'>Latest</h1>
       <Swiper
         slidesPerView={4}
-        spaceBetween={5}
+        spaceBetween={12}
         loop={true}
         navigation={true}
         modules={[Navigation]}
         className='mySwiper'
       >
-        <SwiperSlide>
-          <div>
-            <img
-              src={`https://image.tmdb.org/t/p/original/jazlkwXfw4KdF6fVTRsolOvRCmu.jpg`}
-              alt='Random image'
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div>
-            <img
-              src={`https://image.tmdb.org/t/p/original/c1bz69r0v065TGFA5nqBiKzPDys.jpg`}
-              alt='Random image'
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div>
-            <img
-              src={`https://image.tmdb.org/t/p/original/lXhgCODAbBXL5buk9yEmTpOoOgR.jpg`}
-              alt='Random image'
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div>
-            <img
-              src={`https://image.tmdb.org/t/p/original/lXhgCODAbBXL5buk9yEmTpOoOgR.jpg`}
-              alt='Random image'
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div>
-            <img
-              src={`https://image.tmdb.org/t/p/original/lXhgCODAbBXL5buk9yEmTpOoOgR.jpg`}
-              alt='Random image'
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div>
-            <img
-              src={`https://image.tmdb.org/t/p/original/tmU7GeKVybMWFButWEGl2M4GeiP.jpg`}
-              alt='Random 222image'
-            />
-          </div>
-        </SwiperSlide>
+        {movieArray.map((item) => (
+          <SwiperSlide>
+            <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
+            <img src={item.movie} alt='Image 2' />
+            </div>
+          </SwiperSlide>
+        ))}
 
       </Swiper>
     </div>

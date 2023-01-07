@@ -53,7 +53,7 @@ const Primary_AutoScrollCarousel = () => {
 
   return (
     <div className='mt-4 mb-8 relative text-center'>
-      <h1 className='text-6xl top-[-36px] left-0 right-0 text-white absolute z-10 mix-blend-exclusion'>
+      <h1 className='text-6xl top-[-10px] left-0 right-0 text-white absolute z-10 mix-blend-exclusion'>
         Latest Movies
       </h1>
       <Splide
@@ -76,7 +76,9 @@ const Primary_AutoScrollCarousel = () => {
       >
         {movieArray.map((item) => (
           <SplideSlide className='odd:mt-24'>
-            <img className='transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer' src={item.movie} alt='Image 2' />
+            <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
+            <img src={item.movie} alt='Image 2' />
+            </div>
           </SplideSlide>
         ))}
 

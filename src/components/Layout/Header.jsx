@@ -39,7 +39,7 @@ export default function Example() {
                 </div>
               </div>
               <div className='flex-1 flex justify-center px-2 lg:ml-6 lg:justify-end'>
-                <div className='max-w-lg w-full lg:max-w-[26rem] xl:max-w-[28rem] lg:mr-[8%] xl:mr-[6%]'>
+                <div className='max-w-lg w-full lg:max-w-[26rem] xl:max-w-[28rem] lg:mr-[10%] xl:mr-[10%]'>
                   <label htmlFor='search' className='sr-only'>
                     Search
                   </label>
