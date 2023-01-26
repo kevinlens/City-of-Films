@@ -10,13 +10,17 @@ function classNames(...classes) {
 
 export default function Example() {
   const [isScrolled, setIsScrolled] = useState(false);
-
+  const [searchValue, setSearchValue] = useState('');
   window.onscroll = function () {
     if (window.pageYOffset <= 10) {
       setIsScrolled(false);
     } else {
       setIsScrolled(true);
     }
+  };
+
+  const handleSubmit = (e) => {
+    setSearchValue(e.target.value);
   };
 
   return (
@@ -31,38 +35,61 @@ export default function Example() {
             <div className='relative flex items-center justify-between h-16'>
               <div className='flex items-center px-2 lg:px-0'>
                 <div className='flex-shrink-0'>
-                  <img
-                    className='block lg:hidden h-8 w-auto'
-                    src='https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600'
-                    alt='Workflow'
-                  />
-                  <img
-                    className='hidden lg:block h-8 w-auto'
-                    src='https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600'
-                    alt='Workflow'
-                  />
+                  
+                  <Link to='/'>
+                    <img
+                      className='block lg:hidden h-8 w-auto'
+                      src='/assets/images/buildings.png'
+                      alt='Workflow'
+                    />
+                  </Link>
+
+                  {/* <div className='flex items-center text-lg uppercase font-bold text-white'> */}
+                
+                  <Link className='flex -lg:hidden items-center text-lg uppercase font-bold text-white' to='/'>
+                    Film
+                    <img
+                      className='px-3 hidden lg:block h-8 w-auto'
+                      src='/assets/images/buildings.png'
+                      alt='Workflow'
+                    />
+                    City
+                  </Link>
+                  {/* </div> */}
+
                 </div>
               </div>
               <div className='flex-1 flex justify-center px-2 lg:ml-6 lg:justify-end'>
-                <div className='max-w-lg w-full lg:max-w-[26rem] xl:max-w-[28rem] lg:mr-[10%] xl:mr-[10%]'>
-                  <label htmlFor='search' className='sr-only'>
-                    Search
-                  </label>
-                  <div className='relative'>
-                    <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-                      <SearchIcon
-                        className='h-5 w-5 text-gray-400'
-                        aria-hidden='true'
+                <div className='max-w-lg w-full lg:max-w-[26rem] xl:max-w-[28rem] lg:mr-[10%] xl:mr-[15%]'>
+                  {/* USER SEARCH FOR MOVE RESULTS */}
+                  <form onSubmit={handleSubmit}>
+                    <label htmlFor='search' className='sr-only'>
+                      Search
+                    </label>
+
+                    <div className='relative'>
+                      <Link to='/searchresults'>
+                        <button
+                          type='submit'
+                          className='absolute inset-y-0 left-0 pl-3 flex items-center cursor-pointer'
+                        >
+                          <SearchIcon
+                            className='h-5 w-5 text-gray-400'
+                            aria-hidden='true'
+                          />
+                        </button>
+                      </Link>
+
+                      <input
+                        id='search'
+                        name='search'
+                        className='block w-full pl-10 pr-3 py-2 border border-transparent rounded-md leading-5 bg-gray-700 text-gray-300 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-white focus:ring-white focus:text-gray-900 sm:text-sm'
+                        placeholder='Search'
+                        type='search'
+                        onSubmit={handleSubmit}
                       />
                     </div>
-                    <input
-                      id='search'
-                      name='search'
-                      className='block w-full pl-10 pr-3 py-2 border border-transparent rounded-md leading-5 bg-gray-700 text-gray-300 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-white focus:ring-white focus:text-gray-900 sm:text-sm'
-                      placeholder='Search'
-                      type='search'
-                    />
-                  </div>
+                  </form>
                 </div>
               </div>
               <div className='flex lg:hidden'>
@@ -88,7 +115,10 @@ export default function Example() {
                       </Link>
 
                       {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                      <Link to='/' className='bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'>
+                      <Link
+                        to='/dashboard'
+                        className='bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
+                      >
                         Dashboard
                       </Link>
                     </div>
