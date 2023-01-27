@@ -18,13 +18,12 @@ import 'swiper/css/navigation';
 // import required modules
 import { Pagination, Navigation, EffectFade } from 'swiper';
 import { useFetchLatestPopularMoviesQuery } from '../../store/reduxStore/features/filmApi';
-import { list } from 'postcss';
+import { average } from 'color.js';
 
 const Hero = () => {
   const { monthsAgoDate, currentDate } = useContext(DateContext);
   const {movieGenres} = useContext(GenreContext);
-  //you are not allowed to adjust these variables ex: data1, movieError, etc
-  //they are also immutable
+  //immutable
   const { data, error, isLoading, isSuccess } =
     useFetchLatestPopularMoviesQuery({ monthsAgoDate, currentDate });
   const [listOfCasts, setListOfCasts] = useState({ casts: [], directors: [] });
@@ -54,20 +53,21 @@ const Hero = () => {
     //viable to make two api calls with one dependent on another
     //at the same time
     const getDetails = async (id) => {
+      //for fetching casts and directors
       let data = await fetch(
         `https://api.themoviedb.org/3/movie/${id}/credits?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US`
       );
       let movieCredits = await data.json();
 
-      let rawDirectorsData = movieCredits.crew.filter((item) => {
+      let directorsData = movieCredits.crew.filter((item) => {
         return item.department === 'Directing';
       });
-      rawDirectorsData.sort(
+      directorsData.sort(
         (a, b) => parseFloat(b.popularity) - parseFloat(a.popularity)
       );
 
-      const rawDirectors = rawDirectorsData.slice(0, 1);
-      const directors = rawDirectors.map((item) => {
+      directorsData.splice(1);
+      const directors = directorsData.map((item) => {
         return item.name;
       });
       let casts = movieCredits.cast;
@@ -75,11 +75,12 @@ const Hero = () => {
       //sort all casts by popularity: desc order
       casts.sort((a, b) => parseFloat(b.popularity) - parseFloat(a.popularity));
       //get only 8 of the most popular casts
-      filteredCasts = casts.slice(0, 8);
+      casts.splice(8);
       //retrieve the casts name
-      let castNames = filteredCasts.map((item) => {
-        return item.name + ', ';
+      let castNames = casts.map((item) => {
+        return item.name;
       });
+
       setListOfCasts((prevState) => ({
         ...prevState,
         casts: [...prevState.casts, castNames],
@@ -96,20 +97,29 @@ const Hero = () => {
   if (data && listOfCasts) {
     //essential rule of redux is keeping the state/data immutable
     //therefore here we make a clone of the existing state using the spread operator
-    const movies = [...data.results];
+    const nowPlayingMovies = [...data.results];
     //organize movies by most vote counts: desc order
-    movies.sort((a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count));
+    nowPlayingMovies.sort((a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count));
 
     //array of only four most popular movies
-    const popularMovies = movies.slice(0, 6);
+    nowPlayingMovies.splice(6);
     bgImage = (
       <>
-        {popularMovies.map((item, index) => {
+        {nowPlayingMovies.map((item, index) => {
           let starring = [];
           let director = [];
+          let genres = [];
+
           if (listOfCasts.casts[index] && listOfCasts.directors) {
-            console.log('🔥🔥🔥');
-            console.log(item);
+            
+            for (let genre of movieGenres){
+              item.genre_ids.find((item) => {
+                  if (item === genre.id) {
+                    genres.push(genre.name)
+                  }
+                })
+            }
+            genres.splice(3);
             //reason why we are using ES6’s Array.prototype.entries here
             //and not a for-in loop 'for (let cast of listOfCasts[index])' is because
             //this comes with a default index feature which we need to use for styling
@@ -123,20 +133,21 @@ const Hero = () => {
                   >
                     Starring: &nbsp;
                   </p>
-                  <p className={`text-base inline-block`}>{cast} &nbsp;</p>
+                  <p className={`text-base inline-block`}>{cast}{i!=7 && ', '} &nbsp;</p>
                   {i === 3 && <br></br>}
                   {i === 7 && (
                     <p className={`text-base block `}>
                       Release Date: {item.release_date}{' '}
                     </p>
                   )}
+                  
                 </>
               );
             }
             for (let [d, dir] of listOfCasts.directors[index].entries()) {
               director.push(
                 <>
-                  <p>Director: {dir}</p>
+                  <p><b>Director:</b> {dir}</p>
                 </>
               );
             }
@@ -144,14 +155,16 @@ const Hero = () => {
 
           return (
             <SwiperSlide key={item.id}>
-              <Link to='/details'>
-                <div>
-                  <div className='absolute top-36 text-white w-full'>
+              <Link to='/details' state={{ data: {item, casts: listOfCasts.casts[index], director: listOfCasts.directors[index], genres}}} >
+                <div className='text-left'>
+                  <div className='absolute left-8 bottom-16  text-white '>
                     <h1 className='text-6xl'>{item.title}</h1>
                     <p className='text-3xl'>Rating {item.vote_average}</p>
                     <div className=''>
                       {director}
                       {starring}
+                      <b>Genres: </b>
+                      { genres.join(", ")}
                     </div>
                   </div>
                   <img

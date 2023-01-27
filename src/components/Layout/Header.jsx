@@ -8,7 +8,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Example() {
+export default function Header(props) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   window.onscroll = function () {
@@ -27,7 +27,7 @@ export default function Example() {
     <Disclosure as='nav'>
       {({ open }) => (
         <div
-          className={`fixed w-full z-20 bg-gray-800 transition-all duration-600 ${
+          className={`${props.modifiedHeader === true ? '' : 'fixed'} w-full z-20 bg-gray-800 transition-all duration-600 ${
             isScrolled ? 'lg:bg-opacity-80' : 'lg:bg-opacity-20'
           }`}
         >
@@ -239,7 +239,7 @@ export default function Example() {
                     Tom Cook
                   </div>
                   <div className='text-sm font-medium text-gray-400'>
-                    tom@example.com
+                    tom@Header.com
                   </div>
                 </div>
                 <button

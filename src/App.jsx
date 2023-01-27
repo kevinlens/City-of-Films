@@ -29,7 +29,7 @@ function App() {
             path='/dashboard'
             element={
               <>
-                <Header />
+                <Header modifiedHeader={true}/>
                 <Dashboard />
                 <Footer />
               </>
@@ -39,7 +39,7 @@ function App() {
             path='/details'
             element={
               <>
-                <Header />
+                <Header modifiedHeader={true}/>
                 <Details />
                 <Footer />
               </>
