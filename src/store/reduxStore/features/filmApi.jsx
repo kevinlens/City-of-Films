@@ -8,13 +8,17 @@ export const filmApi = createApi({
     baseUrl: 'https://api.themoviedb.org/3/movie/',
   }),
   endpoints: (builder) => ({
-    fetchLatestPopularMovies: builder.query({
+    fetchNowPlayingMovies: builder.query({
       query: ({monthsAgoDate, currentDate}) =>
         `now_playing?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=1&primary_release_date.gte=${monthsAgoDate}&primary_release_date.lte=${currentDate}&region=US`,
     }),
     fetchMovieDetails: builder.query({
       query: (movieId) =>
         `${movieId}?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US`,
+    }),
+    fetchMovieCredits: builder.query({
+      query: (movieId) =>
+        `${movieId}/credits?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US`,
     }),
     fetchMovieReviews: builder.query({
       query: (movieId) =>
@@ -31,8 +35,9 @@ export const filmApi = createApi({
 });
 
 export const {
-  useFetchLatestPopularMoviesQuery,
+  useFetchNowPlayingMoviesQuery,
   useFetchMovieDetailsQuery,
+  useFetchMovieCreditsQuery,
   useFetchMovieReviewsQuery,
   // useUpdateTaskMutation
 } = filmApi;

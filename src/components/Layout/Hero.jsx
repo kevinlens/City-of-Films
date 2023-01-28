@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import styles from './Hero.module.scss';
 import { Link } from 'react-router-dom';
 
+//DRY Functions
+import GetMovieDirector from '../../Dry_Functions/GetMovieDirector';
+import GetMovieCasts from '../../Dry_Functions/GetMovieCasts';
+
 import { useContext } from 'react';
 import DateContext from '../../store/contextStore/Date-Context';
 import GenreContext from '../../store/contextStore/Genre-Context';
@@ -17,15 +21,15 @@ import 'swiper/css/navigation';
 
 // import required modules
 import { Pagination, Navigation, EffectFade } from 'swiper';
-import { useFetchLatestPopularMoviesQuery } from '../../store/reduxStore/features/filmApi';
-import { average } from 'color.js';
+import { useFetchNowPlayingMoviesQuery } from '../../store/reduxStore/features/filmApi';
 
 const Hero = () => {
+  //CONTEXT API
   const { monthsAgoDate, currentDate } = useContext(DateContext);
   const {movieGenres} = useContext(GenreContext);
   //immutable
   const { data, error, isLoading, isSuccess } =
-    useFetchLatestPopularMoviesQuery({ monthsAgoDate, currentDate });
+    useFetchNowPlayingMoviesQuery({ monthsAgoDate, currentDate });
   const [listOfCasts, setListOfCasts] = useState({ casts: [], directors: [] });
 
   useEffect(() => {
@@ -59,32 +63,13 @@ const Hero = () => {
       );
       let movieCredits = await data.json();
 
-      let directorsData = movieCredits.crew.filter((item) => {
-        return item.department === 'Directing';
-      });
-      directorsData.sort(
-        (a, b) => parseFloat(b.popularity) - parseFloat(a.popularity)
-      );
-
-      directorsData.splice(1);
-      const directors = directorsData.map((item) => {
-        return item.name;
-      });
-      let casts = movieCredits.cast;
-      let filteredCasts;
-      //sort all casts by popularity: desc order
-      casts.sort((a, b) => parseFloat(b.popularity) - parseFloat(a.popularity));
-      //get only 8 of the most popular casts
-      casts.splice(8);
-      //retrieve the casts name
-      let castNames = casts.map((item) => {
-        return item.name;
-      });
+      const director = GetMovieDirector(movieCredits.crew)
+      const castNames = GetMovieCasts(movieCredits.cast)
 
       setListOfCasts((prevState) => ({
         ...prevState,
         casts: [...prevState.casts, castNames],
-        directors: [...prevState.directors, directors],
+        directors: [...prevState.directors, director],
       }));
     };
     //retrieve casts for only 4 movies
@@ -119,6 +104,7 @@ const Hero = () => {
                   }
                 })
             }
+
             genres.splice(3);
             //reason why we are using ES6’s Array.prototype.entries here
             //and not a for-in loop 'for (let cast of listOfCasts[index])' is because
@@ -155,7 +141,7 @@ const Hero = () => {
 
           return (
             <SwiperSlide key={item.id}>
-              <Link to='/details' state={{ data: {item, casts: listOfCasts.casts[index], director: listOfCasts.directors[index], genres}}} >
+              <Link to={`/details/movie/${item.id}`} state={{ data: {item, casts: listOfCasts.casts[index], director: listOfCasts.directors[index], genres}}} >
                 <div className='text-left'>
                   <div className='absolute left-8 bottom-16  text-white '>
                     <h1 className='text-6xl'>{item.title}</h1>

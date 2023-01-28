@@ -36,7 +36,7 @@ function App() {
             }
           />
           <Route
-            path='/details'
+            path='/details/movie/:id'
             element={
               <>
                 <Header modifiedHeader={true}/>
