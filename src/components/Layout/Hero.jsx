@@ -21,15 +21,17 @@ import 'swiper/css/navigation';
 
 // import required modules
 import { Pagination, Navigation, EffectFade } from 'swiper';
-import { useFetchNowPlayingMoviesQuery } from '../../store/reduxStore/features/filmApi';
+import { useFetchNowPlayingMoviesQuery } from '../../store/reduxStore/fetch/filmApi';
 
 const Hero = () => {
   //CONTEXT API
   const { monthsAgoDate, currentDate } = useContext(DateContext);
-  const {movieGenres} = useContext(GenreContext);
+  const { movieGenres } = useContext(GenreContext);
   //immutable
-  const { data, error, isLoading, isSuccess } =
-    useFetchNowPlayingMoviesQuery({ monthsAgoDate, currentDate });
+  const { data, error, isLoading, isSuccess } = useFetchNowPlayingMoviesQuery({
+    monthsAgoDate,
+    currentDate,
+  });
   const [listOfCasts, setListOfCasts] = useState({ casts: [], directors: [] });
 
   useEffect(() => {
@@ -63,8 +65,8 @@ const Hero = () => {
       );
       let movieCredits = await data.json();
 
-      const director = GetMovieDirector(movieCredits.crew)
-      const castNames = GetMovieCasts(movieCredits.cast)
+      const director = GetMovieDirector(movieCredits.crew);
+      const castNames = GetMovieCasts(movieCredits.cast);
 
       setListOfCasts((prevState) => ({
         ...prevState,
@@ -84,7 +86,9 @@ const Hero = () => {
     //therefore here we make a clone of the existing state using the spread operator
     const nowPlayingMovies = [...data.results];
     //organize movies by most vote counts: desc order
-    nowPlayingMovies.sort((a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count));
+    nowPlayingMovies.sort(
+      (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
+    );
 
     //array of only four most popular movies
     nowPlayingMovies.splice(6);
@@ -96,13 +100,12 @@ const Hero = () => {
           let genres = [];
 
           if (listOfCasts.casts[index] && listOfCasts.directors) {
-            
-            for (let genre of movieGenres){
+            for (let genre of movieGenres) {
               item.genre_ids.find((item) => {
-                  if (item === genre.id) {
-                    genres.push(genre.name)
-                  }
-                })
+                if (item === genre.id) {
+                  genres.push(genre.name);
+                }
+              });
             }
 
             genres.splice(3);
@@ -119,21 +122,25 @@ const Hero = () => {
                   >
                     Starring: &nbsp;
                   </p>
-                  <p className={`text-base inline-block`}>{cast}{i!=7 && ', '} &nbsp;</p>
+                  <p className={`text-base inline-block`}>
+                    {cast}
+                    {i != 7 && ', '} &nbsp;
+                  </p>
                   {i === 3 && <br></br>}
                   {i === 7 && (
                     <p className={`text-base block `}>
                       Release Date: {item.release_date}{' '}
                     </p>
                   )}
-                  
                 </>
               );
             }
             for (let [d, dir] of listOfCasts.directors[index].entries()) {
               director.push(
                 <>
-                  <p><b>Director:</b> {dir}</p>
+                  <p>
+                    <b>Director:</b> {dir}
+                  </p>
                 </>
               );
             }
@@ -141,7 +148,17 @@ const Hero = () => {
 
           return (
             <SwiperSlide key={item.id}>
-              <Link to={`/details/movie/${item.id}`} state={{ data: {item, casts: listOfCasts.casts[index], director: listOfCasts.directors[index], genres}}} >
+              <Link
+                to={`/details/movie/${item.id}`}
+                state={{
+                  data: {
+                    item,
+                    casts: listOfCasts.casts[index],
+                    director: listOfCasts.directors[index],
+                    genres,
+                  },
+                }}
+              >
                 <div className='text-left'>
                   <div className='absolute left-8 bottom-16  text-white '>
                     <h1 className='text-6xl'>{item.title}</h1>
@@ -150,10 +167,11 @@ const Hero = () => {
                       {director}
                       {starring}
                       <b>Genres: </b>
-                      { genres.join(", ")}
+                      {genres.join(', ')}
                     </div>
                   </div>
                   <img
+                    loading='lazy'
                     src={`https://image.tmdb.org/t/p/original/${item.backdrop_path}`}
                     alt='Image 2'
                   />

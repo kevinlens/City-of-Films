@@ -5,7 +5,7 @@ import Primary_AutoScrollCarousel from '../UI/Carousels/Primary_AutoScrollCarous
 import Secondary_AutoScrollCarousel from '../UI/Carousels/Secondary_AutoScrollCarousel/Secondary_AutoScrollCarousel';
 const Carousels = () => {
   return (
-    <div className='mb-12'>
+    <div className='mb-12 special'>
       <div className='flex justify-center mt-12 '>
         <ToggleSwitch />
       </div>

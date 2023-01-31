@@ -40,6 +40,9 @@ module.exports = {
         '-sm': { max: '639px' },
         // => @media (max-width: 639px) { ... }
       },
+      boxShadow: {
+        'smedium': '0 2px 8px rgba(0,0,0,0.1)',
+      }
     },
   },
   plugins: [require('preline/plugin')],

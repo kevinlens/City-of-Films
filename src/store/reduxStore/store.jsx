@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { filmApi } from './features/filmApi';
-// import usersReducer from '../features/users/usersSlice'
-// import postsReducer from '../features/posts/postsSlice'
-// import commentsReducer from '../features/comments/commentsSlice'
+import { filmApi } from './fetch/filmApi';
+// import usersReducer from '../fetch/users/usersSlice'
+// import postsReducer from '../fetch/posts/postsSlice'
+// import commentsReducer from '../fetch/comments/commentsSlice'
 
 export const store = configureStore({
   reducer: {

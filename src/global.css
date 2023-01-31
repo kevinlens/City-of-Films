@@ -23,7 +23,7 @@ body{
   overflow-x: hidden;
   
 } */
-hr {
+.special hr {
   background-image: radial-gradient(circle, rgba(210,208,208,0.19091386554621848) 0%, rgba(210,208,208,0) 90%);
   border: none;
   height: 2px;
