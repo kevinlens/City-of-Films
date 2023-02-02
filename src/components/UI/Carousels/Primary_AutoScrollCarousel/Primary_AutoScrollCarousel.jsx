@@ -13,8 +13,12 @@ import '@splidejs/splide/dist/css/splide.min.css';
 import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 
-const Primary_AutoScrollCarousel = ({collectionOfMovies}) => {
+const Primary_AutoScrollCarousel = ({ collectionOfMovies }) => {
   const [isMobile, setIsMobile] = useState(false);
+
+  // *! Has to be an EVEN amount of items or will cause a loop reset glitch!
+  const {upcomingMovies} = collectionOfMovies;
+  const {latestMovies} = collectionOfMovies;
 
   useEffect(() => {
     const mql = window.matchMedia('(max-width: 768px)');
@@ -24,46 +28,39 @@ const Primary_AutoScrollCarousel = ({collectionOfMovies}) => {
     return () => {
       mql.removeEventListener('change', handleMediaQueryChange);
     };
-  }, []);
-  console.log('🍉')
+  }, [upcomingMovies]);
 
-  if(collectionOfMovies){
-    console.log('🌌🌌🌌')
-    console.log(collectionOfMovies)
+  let movieCards = '';
+
+  if (collectionOfMovies.upcomingMovies) {
+    movieCards = (
+      <>
+        {upcomingMovies.map((item) => (
+          <SplideSlide className='odd:mt-24'>
+            <Link to='/details'>
+              <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
+                <img
+                  src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
+                  alt='Image 2'
+                />
+              </div>
+            </Link>
+          </SplideSlide>
+        ))}
+      </>
+    );
   }
+
   function handleMediaQueryChange(event) {
     setIsMobile(event.matches);
   }
   let currentMedia = isMobile ? 2 : 4;
 
-  //Note: Has to be an EVEN amount of items or will cause a loop reset glitch!
-  const movieArray = [
-    {
-      id: 1,
-      movie:
-        'https://image.tmdb.org/t/p/original/wMDUDwAArpfGdtTTZ25SfwngGwt.jpg',
-    },
-    {
-      id: 1,
-      movie:
-        'https://image.tmdb.org/t/p/original/m80kPdrmmtEh9wlLroCp0bwUGH0.jpg',
-    },
-    {
-      id: 1,
-      movie:
-        'https://image.tmdb.org/t/p/original/9z4jRr43JdtU66P0iy8h18OyLql.jpg',
-    },
-    {
-      id: 1,
-      movie:
-        'https://image.tmdb.org/t/p/original/wMDUDwAArpfGdtTTZ25SfwngGwt.jpg',
-    },
-  ];
 
   return (
     <div className='mt-4 mb-8 relative text-center'>
       <h1 className='text-6xl top-[-10px] left-0 right-0 text-white absolute z-10 mix-blend-exclusion'>
-        Latest Movies
+        Upcoming Movies
       </h1>
       <Splide
         aria-label='...'
@@ -83,15 +80,7 @@ const Primary_AutoScrollCarousel = ({collectionOfMovies}) => {
         }}
         extensions={{ AutoScroll }}
       >
-        {movieArray.map((item) => (
-          <SplideSlide className='odd:mt-24'>
-            <Link to='/details'>
-              <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
-                <img src={item.movie} alt='Image 2' />
-              </div>
-            </Link>
-          </SplideSlide>
-        ))}
+        {movieCards}
 
         {/* <SplideSlide>
         <img

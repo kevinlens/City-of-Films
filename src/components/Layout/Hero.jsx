@@ -96,9 +96,9 @@ const Hero = () => {
     //essential rule of redux is keeping the state/data immutable
     //therefore here we make a clone of the existing state using the spread operator
     const nowPlayingMovies = [...data.results];
-    console.log('🥑🥑🥑')
-    console.log(data)
     //organize movies by most vote counts: desc order
+    //if organized by popularity let's say, the movies 
+    //would have very low vote count!
     nowPlayingMovies.sort(
       (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
     );

@@ -9,12 +9,14 @@ const DateProvider = (props) => {
   //Must use state and not regular variable
   const [todaysDate, setTodaysDate] = useState([]);
   const [monthsAgoDate, setMonthsAgoDate] = useState([]);
-  const [last30DaysDate, setLast30DaysDate] = useState([]);
+  const [last60DaysDate, setLast60DaysDate] = useState([]);
+  const [lastDecadeDate, setLastDecadeDate] = useState([]);
   
   useEffect(() => {
     getCurrentDate();
     getMonthsAgoDate();
-    getLast30DaysDate();
+    getLast60DaysDate();
+    getLastDecadeDate();
   });
 
   const getCurrentDate = () => {
@@ -25,10 +27,11 @@ const DateProvider = (props) => {
     today = yyyy + '-' + mm + '-' + dd;
     setTodaysDate(today);
   };
+  
   const getMonthsAgoDate = () => {
     let today = new Date();
     //However many days ago 
-    today.setDate(today.getDate() - 120);
+    today.setDate(today.getDate() - 80);
     let dd = String(today.getDate()).padStart(2, '0');
     let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     let yyyy = today.getFullYear();
@@ -36,15 +39,26 @@ const DateProvider = (props) => {
     setMonthsAgoDate(today);
   };
 
-  const getLast30DaysDate = () => {
+  const getLast60DaysDate = () => {
     let today = new Date();
     //However many days ago 
-    today.setDate(today.getDate() - 30);
+    today.setDate(today.getDate() - 60);
     let dd = String(today.getDate()).padStart(2, '0');
     let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     let yyyy = today.getFullYear();
     today = yyyy + '-' + mm + '-' + dd;
-    setLast30DaysDate(today);
+    setLast60DaysDate(today);
+  };
+
+  const getLastDecadeDate = () => {
+    let today = new Date();
+    //However many days ago 
+    today.setDate(today.getDate() - 3650);
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+    today = yyyy + '-' + mm + '-' + dd;
+    setLastDecadeDate(today);
   };
 
   //CONCRETE CONTEXT VALUES TO BE UPDATED OVER TIME
@@ -52,7 +66,8 @@ const DateProvider = (props) => {
     //values
     currentDate: todaysDate,
     monthsAgoDate: monthsAgoDate,
-    last30DaysDate: last30DaysDate,
+    last60DaysDate: last60DaysDate,
+    lastDecadeDate: lastDecadeDate,
   };
 
   //COMPONENTS/CHILDREN INSIDE OF THIS PROVIDER WILL

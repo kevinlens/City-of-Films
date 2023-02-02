@@ -87,6 +87,7 @@ const Summary = (props) => {
   let summary = '';
   let midSection = '';
   let midSectionAside = '';
+  let belowMidSection = '';
   let finalSection = '';
   let genres = [];
 
@@ -128,14 +129,14 @@ const Summary = (props) => {
     genres.splice(3);
 
     // console.log('Movie Details', movieDetails);
-    console.log('🍉🍉🍉');
-    console.log(vote_average);
+
     // console.log('Movie Genres', movieGenres);
     // console.log('Movie Credits', movieCredits);
 
     const director = GetMovieDirector(movieCredits.crew);
     const casts = GetMovieCasts(movieCredits.cast, true, 'all');
-
+    console.log('🍉🍉🍉');
+    console.log(casts);
     const timestamp = '2022-12-16T06:48:15.541Z';
     const dt = new Date(timestamp);
     const options = { month: 'long', day: 'numeric', year: 'numeric' };
@@ -194,14 +195,16 @@ const Summary = (props) => {
         >
           {casts.map((item) => (
             <li className='w-36 mb-8 ml-2 h-72 flex-shrink-0 border-[1px] border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium'>
-              <img
-                loading='lazy'
-                onError={(e) => {
-                  e.currentTarget.src =
-                    'https://image.tmdb.org/t/p/w276_and_h350_face/mworc2R4hnmPk6EvogFqoqlVdhD.jpg';
-                }}
-                src={`https://image.tmdb.org/t/p/w276_and_h350_face/${item.profile_path}`}
-              />
+              <div className='h-44 '>
+                <img
+                  loading='lazy'
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      'https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-36-user-female-grey-d9222f16ec16a33ed5e2c9bbdca07a4c48db14008bbebbabced8f8ed1fa2ad59.svg';
+                  }}
+                  src={`https://image.tmdb.org/t/p/w276_and_h350_face/${item.profile_path}`}
+                />
+              </div>
               <figcaption className='pt-4 pb-4 px-2'>
                 <p className='text-[.9rem]'>
                   <b>{item.name}</b>
@@ -218,6 +221,42 @@ const Summary = (props) => {
             }}
           ></div>
         </ul>
+
+        <div className='relative flex flex-col'>
+          <ul
+            id='scrolling-content'
+            className='flex overflow-x-scroll overflow-y-hidden rounded-lg'
+          >
+            {trailers.map((item) => (
+              <div
+                className='relative pr-[485px]'
+                style={{
+                  backgroundImage: `url('https://i.ytimg.com/vi/${item.key}/hqdefault.jpg')`,
+                  width: 533,
+                  height: 350,
+                  backgroundRepeat: 'no-repeat',
+                }}
+                onClick={() =>
+                  openModal(`https://www.youtube.com/embed/${item.key}`)
+                }
+              >
+                <button className='absolute bg-black opacity-75 w-[4.5rem] h-[4.5rem] rounded-full ml-[40%] mt-[29%]'>
+                  <img
+                    src='/assets/svg/playButton.svg'
+                    className='invert ml-[0.7rem] w-14'
+                  />
+                </button>
+              </div>
+            ))}
+          </ul>
+          <div
+            className='absolute h-full w-12 right-0'
+            style={{
+              backgroundImage:
+                'linear-gradient(to right, rgba(255,255,255,0) 0%, #fff 100%)',
+            }}
+          ></div>
+        </div>
 
         <div>Full Cast & Crew</div>
         <hr></hr>
@@ -335,39 +374,6 @@ const Summary = (props) => {
 
     finalSection = (
       <div className='relative flex flex-col w-[75%] pl-16'>
-        <ul
-          id='scrolling-content'
-          className='flex overflow-x-scroll overflow-y-hidden rounded-lg'
-        >
-          {trailers.map((item) => (
-            <div
-              className='relative pr-[485px]'
-              style={{
-                backgroundImage: `url('https://i.ytimg.com/vi/${item.key}/hqdefault.jpg')`,
-                width: 533,
-                height: 350,
-                backgroundRepeat: 'no-repeat',
-              }}
-              onClick={() =>
-                openModal(`https://www.youtube.com/embed/${item.key}`)
-              }
-            >
-              <button className='absolute bg-black opacity-75 w-[4.5rem] h-[4.5rem] rounded-full ml-[40%] mt-[29%]'>
-                <img
-                  src='/assets/svg/playButton.svg'
-                  className='invert ml-[0.7rem] w-14'
-                />
-              </button>
-            </div>
-          ))}
-        </ul>
-        <div
-          className='absolute h-full w-12 right-0'
-          style={{
-            backgroundImage:
-              'linear-gradient(to right, rgba(255,255,255,0) 0%, #fff 100%)',
-          }}
-        ></div>
         <section className='flex flex-col'>
           <h1 className='block'>Recommendations</h1>
           <div className='flex overflow-hidden'>

@@ -11,7 +11,8 @@ const DateContext = React.createContext({
   //autocompletion by React later on
   currentDate: '',
   monthsAgoDate:'',
-  last30DaysDate: '',
+  last60DaysDate: '',
+  lastDecadeDate: '',
 });
 
 export default DateContext;

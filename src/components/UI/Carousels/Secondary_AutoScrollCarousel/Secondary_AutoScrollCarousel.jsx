@@ -1,5 +1,9 @@
-import { useState, useEffect } from 'react';
+//BUILT-IN REACT HOOKS
+import React, { useState, useEffect } from 'react';
+
+//ROUTING
 import { Link } from "react-router-dom"
+
 // Default theme
 import '@splidejs/react-splide/css';
 
@@ -9,7 +13,7 @@ import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/splide/dist/css/splide.min.css';
 
-const Secondary_AutoScrollCarousel = (props) => {
+const Secondary_AutoScrollCarousel = ({latestMovies, speed}) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
 
@@ -26,7 +30,7 @@ const Secondary_AutoScrollCarousel = (props) => {
       mobileMql.removeEventListener('change', handleMobileMediaQueryChange);
       tabletMql.removeEventListener('change', handleTabletMediaQueryChange);
     };
-  }, []);
+  }, [latestMovies]);
 
   function handleMobileMediaQueryChange(event) {
     setIsMobile(event.matches);
@@ -37,24 +41,23 @@ const Secondary_AutoScrollCarousel = (props) => {
   }
 
   let currentMedia = isMobile ? 4 : isTablet ? 6 : 9;
+  let movieCards = '';
 
-  const movieArray = [
-    {
-      id: 1,
-      movie:
-        'https://image.tmdb.org/t/p/original/wMDUDwAArpfGdtTTZ25SfwngGwt.jpg',
-    },
-    {
-      id: 1,
-      movie:
-        'https://image.tmdb.org/t/p/original/m80kPdrmmtEh9wlLroCp0bwUGH0.jpg',
-    },
-    {
-      id: 1,
-      movie:
-        'https://image.tmdb.org/t/p/original/9z4jRr43JdtU66P0iy8h18OyLql.jpg',
-    },
-  ];
+  if (latestMovies) {
+    movieCards = (
+      <>
+        {latestMovies.map((item) => (
+          <SplideSlide>
+            <Link to="/details">
+            <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
+              <img src={`https://image.tmdb.org/t/p/original/${item.poster_path}`} alt='Image 2' />
+            </div>
+            </Link>
+          </SplideSlide>
+        ))}
+      </>
+    );
+  }
 
   return (
     <div className='mt-2'>
@@ -68,22 +71,14 @@ const Secondary_AutoScrollCarousel = (props) => {
           arrows: false,
           drag: false,
           autoScroll: {
-            speed: props.speed,
+            speed: speed,
             pauseOnHover: false,
             pauseOnFocus: false,
           },
         }}
         extensions={{ AutoScroll }}
       >
-        {movieArray.map((item) => (
-          <SplideSlide>
-            <Link to="/details">
-            <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
-              <img src={item.movie} alt='Image 2' />
-            </div>
-            </Link>
-          </SplideSlide>
-        ))}
+      {movieCards}
       </Splide>
     </div>
   );
