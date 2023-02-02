@@ -8,12 +8,14 @@ module.exports = {
     './node_modules/preline/dist/*.js',
   ],
   theme: {
+    fontFamily: {
+      soraLight: ['Custom-1', 'sans-serif'],
+      sourceSansProLight: ['Custom-2', 'sans-serif'],
+      sourceSansProRegular: ['Custom-3', 'sans-serif'],
+    },
     extend: {
       fontSize: {
         xxs: '0.625rem',
-      },
-      fontFamily: {
-        soraLight: ['Sora-Light', 'sans-serif'],
       },
       height: {
         98: '26.0625rem',

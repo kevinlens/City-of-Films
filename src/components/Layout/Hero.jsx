@@ -1,19 +1,28 @@
+//BUILT-IN REACT HOOKS
 import React, { useEffect, useState } from 'react';
-import styles from './Hero.module.scss';
+
+//ROUTING
 import { Link } from 'react-router-dom';
 
-//DRY Functions
+//STYLING
+import styles from './Hero.module.scss';
+
+//DRY FUNCTIONS
 import GetMovieDirector from '../../Dry_Functions/GetMovieDirector';
 import GetMovieCasts from '../../Dry_Functions/GetMovieCasts';
 
+//CONTEXT API
 import { useContext } from 'react';
 import DateContext from '../../store/contextStore/Date-Context';
 import GenreContext from '../../store/contextStore/Genre-Context';
+
+//SWIPER.JS AND IT'S ASSOCIATED MODULES
+import { Autoplay } from 'swiper';
+
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
-// import required modules
-import { Autoplay } from 'swiper';
-// Import Swiper styles
+
+// SWIPER.JS STYLING
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
@@ -21,7 +30,9 @@ import 'swiper/css/navigation';
 
 // import required modules
 import { Pagination, Navigation, EffectFade } from 'swiper';
-import { useFetchNowPlayingMoviesQuery } from '../../store/reduxStore/fetch/filmApi';
+
+//RTK QUERY
+import { useFetchNowPlayingMoviesQuery } from '../../store/reduxStore/fetch/fetchApi';
 
 const Hero = () => {
   //CONTEXT API
@@ -85,6 +96,8 @@ const Hero = () => {
     //essential rule of redux is keeping the state/data immutable
     //therefore here we make a clone of the existing state using the spread operator
     const nowPlayingMovies = [...data.results];
+    console.log('🥑🥑🥑')
+    console.log(data)
     //organize movies by most vote counts: desc order
     nowPlayingMovies.sort(
       (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
@@ -162,6 +175,7 @@ const Hero = () => {
                 <div className='text-left'>
                   <div className='absolute left-8 bottom-16  text-white '>
                     <h1 className='text-6xl'>{item.title}</h1>
+                    <p className='text-xl'>(Now Playing)</p>
                     <p className='text-3xl'>Rating {item.vote_average}</p>
                     <div className=''>
                       {director}
@@ -172,6 +186,10 @@ const Hero = () => {
                   </div>
                   <img
                     loading='lazy'
+                    onError={(e) => {
+                      e.currentTarget.src =
+                        'https://gravatar.com/avatar/418738537ab04bae411c5001438c99ca?s=400&d=robohash&r=x';
+                    }}
                     src={`https://image.tmdb.org/t/p/original/${item.backdrop_path}`}
                     alt='Image 2'
                   />

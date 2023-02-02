@@ -9,10 +9,12 @@ const DateProvider = (props) => {
   //Must use state and not regular variable
   const [todaysDate, setTodaysDate] = useState([]);
   const [monthsAgoDate, setMonthsAgoDate] = useState([]);
-
+  const [last30DaysDate, setLast30DaysDate] = useState([]);
+  
   useEffect(() => {
     getCurrentDate();
     getMonthsAgoDate();
+    getLast30DaysDate();
   });
 
   const getCurrentDate = () => {
@@ -25,7 +27,8 @@ const DateProvider = (props) => {
   };
   const getMonthsAgoDate = () => {
     let today = new Date();
-    today.setDate(today.getDate() - 70);
+    //However many days ago 
+    today.setDate(today.getDate() - 120);
     let dd = String(today.getDate()).padStart(2, '0');
     let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     let yyyy = today.getFullYear();
@@ -33,11 +36,23 @@ const DateProvider = (props) => {
     setMonthsAgoDate(today);
   };
 
+  const getLast30DaysDate = () => {
+    let today = new Date();
+    //However many days ago 
+    today.setDate(today.getDate() - 30);
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+    today = yyyy + '-' + mm + '-' + dd;
+    setLast30DaysDate(today);
+  };
+
   //CONCRETE CONTEXT VALUES TO BE UPDATED OVER TIME
   const dateContext = {
     //values
     currentDate: todaysDate,
     monthsAgoDate: monthsAgoDate,
+    last30DaysDate: last30DaysDate,
   };
 
   //COMPONENTS/CHILDREN INSIDE OF THIS PROVIDER WILL

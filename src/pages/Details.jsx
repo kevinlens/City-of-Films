@@ -1,19 +1,32 @@
+//BUILT-IN REACT HOOKS
 import React, { useState, useEffect } from 'react';
+
+//REACT 3RD PARTY PACKAGE
+import ReactMarkdown from 'react-markdown';
 import { average } from 'color.js';
+
+//ROUTING
 import { useParams } from 'react-router-dom';
+
+//RTK QUERY
 import {
   useFetchMovieDetailsQuery,
   useFetchMovieReviewsQuery,
   useFetchMovieCreditsQuery,
   useFetchMovieTrailersQuery,
-} from '../store/reduxStore/fetch/filmApi';
+  useFetchMovieRecommendationQuery,
+  useFetchMovieKeywordsQuery,
+} from '../store/reduxStore/fetch/fetchApi';
+
+//CONTEXT API
 import { useContext } from 'react';
 import GenreContext from '../store/contextStore/Genre-Context';
+
+//DRY FUNCTIONS
 import GetMovieCasts from '../Dry_Functions/GetMovieCasts';
 import GetMovieDirector from '../Dry_Functions/GetMovieDirector';
 
-import ReactMarkdown from 'react-markdown';
-
+//Convert movie screen time to readable hours
 const timeConvert = (n) => {
   let num = n;
   let hours = num / 60;
@@ -38,14 +51,32 @@ const Summary = (props) => {
   const { data: movieReviews } = useFetchMovieReviewsQuery(params.id);
   const { data: movieCredits } = useFetchMovieCreditsQuery(params.id);
   const { data: movieTrailers } = useFetchMovieTrailersQuery(params.id);
+  const { data: movieKeywords } = useFetchMovieKeywordsQuery(params.id);
+  const { data: movieRecommendation } = useFetchMovieRecommendationQuery(
+    params.id
+  );
 
   useEffect(() => {
     //all three to avoid unnecessary rerenders
-    if ((movieDetails, movieReviews, movieCredits, movieTrailers)) {
+    if (
+      (movieDetails,
+      movieReviews,
+      movieCredits,
+      movieTrailers,
+      movieRecommendation,
+      movieKeywords)
+    ) {
       getColor();
-      loadData();
+      setHasLoaded(true);
     }
-  }, [movieDetails, movieReviews, movieCredits, movieTrailers]);
+  }, [
+    movieDetails,
+    movieReviews,
+    movieCredits,
+    movieTrailers,
+    movieRecommendation,
+    movieKeywords,
+  ]);
 
   //should always watch out for the state as it will sometimes
   //cause unwanted rerenders if unwatched for
@@ -55,12 +86,9 @@ const Summary = (props) => {
   const [videoSrc, setVideoSrc] = useState('');
   let summary = '';
   let midSection = '';
+  let midSectionAside = '';
   let finalSection = '';
   let genres = [];
-
-  const loadData = () => {
-    setHasLoaded(true);
-  };
 
   const getColor = async () => {
     const imgColor = await average(
@@ -88,7 +116,8 @@ const Summary = (props) => {
 
     const reviews = movieReviews.results.slice(0, 4);
     const trailers = movieTrailers.results.slice(0, 5);
-
+    const recommendation = movieRecommendation.results.slice(0, 5);
+    const keywords = movieKeywords.keywords;
     for (let genre of movieGenres) {
       movieDetails.genres.map((item) => {
         if (item.id === genre.id) {
@@ -99,8 +128,8 @@ const Summary = (props) => {
     genres.splice(3);
 
     // console.log('Movie Details', movieDetails);
-    console.log('Movie Reviews', reviews);
-    console.log('Movie Trailers', trailers);
+    console.log('🍉🍉🍉');
+    console.log(vote_average);
     // console.log('Movie Genres', movieGenres);
     // console.log('Movie Credits', movieCredits);
 
@@ -151,7 +180,10 @@ const Summary = (props) => {
     );
 
     midSection = (
-      <div id='container' className='relative flex flex-col my-24 w-[70%]'>
+      <div
+        id='container'
+        className='relative flex flex-col my-24 w-[75%] pl-16'
+      >
         <h1 className='text-3xl text-gray-900 text-left mb-4'>
           Top Billed Cast
         </h1>
@@ -254,13 +286,55 @@ const Summary = (props) => {
       </div>
     );
 
+    midSectionAside = (
+      <aside className='pl-12 w-[19rem] mt-24'>
+        <section>
+          <div className='mb-4'>
+            <p className='font-extrabold'>Status</p>
+            <p>{status}</p>
+          </div>
+          <div className='mb-4'>
+            <p className='font-extrabold'>Original Language</p>
+            <p>
+              {original_language.charAt(0).toUpperCase() +
+                original_language.slice(1)}
+            </p>
+          </div>
+          <div className='mb-4'>
+            <p className='font-extrabold'>Budget</p>
+            <p>
+              {budget != '0' ? '$' + budget.toLocaleString('en-US') : 'N/A'}
+            </p>
+          </div>
+          <div className='mb-4'>
+            <p className='font-extrabold'>Revenue</p>
+            <p>
+              {revenue != '0' ? '$' + revenue.toLocaleString('en-US') : 'N/A'}
+            </p>
+          </div>
+        </section>
+        <section>
+          <p className='font-extrabold'>Keywords</p>
+          <div className='flex flex-wrap'>
+            {keywords.map((item) => {
+              return (
+                <p className='bg-[#e5e5e5] text-[.90rem] font-semibold font-sourceSansProLight  mr-[4.5px] my-[2.5px] px-2 py-[4px] rounded border  border-[#d7d7d7]'>
+                  {item.name}
+                </p>
+              );
+            })}
+          </div>
+        </section>
+      </aside>
+    );
+
     const openModal = (src) => {
       setIsModalOpen(true);
       setVideoSrc(src);
     };
 
     finalSection = (
-      <div className='relative flex flex-col my-24 w-[70%]'>
+      <div className='relative flex flex-col w-[75%] pl-16'>
         <ul
           id='scrolling-content'
           className='flex overflow-x-scroll overflow-y-hidden rounded-lg'
@@ -275,9 +349,16 @@ const Summary = (props) => {
                 backgroundRepeat: 'no-repeat',
               }}
               onClick={() =>
-                openModal('https://www.youtube.com/embed/LonqJIvAx58')
+                openModal(`https://www.youtube.com/embed/${item.key}`)
               }
-            ></div>
+            >
+              <button className='absolute bg-black opacity-75 w-[4.5rem] h-[4.5rem] rounded-full ml-[40%] mt-[29%]'>
+                <img
+                  src='/assets/svg/playButton.svg'
+                  className='invert ml-[0.7rem] w-14'
+                />
+              </button>
+            </div>
           ))}
         </ul>
         <div
@@ -287,31 +368,61 @@ const Summary = (props) => {
               'linear-gradient(to right, rgba(255,255,255,0) 0%, #fff 100%)',
           }}
         ></div>
+        <section className='flex flex-col'>
+          <h1 className='block'>Recommendations</h1>
+          <div className='flex overflow-hidden'>
+            <ul
+              id='scrolling-content'
+              className='flex overflow-x-scroll overflow-y-hidden rounded-lg'
+            >
+              {recommendation.map((item) => (
+                <li className='w-72 mb-8 ml-2 h-48 flex-shrink-0 border-[1px] border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium'>
+                  <img
+                    loading='lazy'
+                    onError={(e) => {
+                      e.currentTarget.src =
+                        'https://image.tmdb.org/t/p/original/mworc2R4hnmPk6EvogFqoqlVdhD.jpg';
+                    }}
+                    src={`https://image.tmdb.org/t/p/original/${item.backdrop_path}`}
+                  />
+                  <p className='pl-2'>{item.title}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
       </div>
     );
   }
 
   return (
-    <div className='bg-white'>
+    <div className='bg-white font-sourceSansProRegular'>
       {summary}
-      {midSection}
+      <section className='flex'>
+        {midSection}
+        {midSectionAside}
+      </section>
       {finalSection}
       {isModalOpen && (
         <div
           className='fixed top-0 left-0 bottom-0 right-0'
           style={{ background: 'rgba(0,0,0,0.8)' }}
+          onClick={() => setIsModalOpen(false)}
         >
           <div
             onClick={() => setIsModalOpen(false)}
             style={{
               position: 'absolute',
-              top: 0,
-              right: 0,
+              top: 16,
+              right: 95,
               color: 'white',
               cursor: 'pointer',
             }}
           >
-            Close
+            <img
+              className='h-8 w-8 rounded-full invert'
+              src='/assets/images/closeButton.png'
+            />
           </div>
           <iframe
             id='if'

@@ -1,15 +1,19 @@
+//BUILT-IN REACT HOOKS
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-// Default theme
-import '@splidejs/react-splide/css';
 
-// or only core styles
+//ROUTING
+import { Link } from 'react-router-dom';
+
+//SPLIDE.JS STYLING
+import '@splidejs/react-splide/css';
 import '@splidejs/react-splide/css/core';
-import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
-import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/splide/dist/css/splide.min.css';
 
-const Primary_AutoScrollCarousel = () => {
+//SPLIDE.JS AND IT'S ASSOCIATED MODULES
+import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+
+const Primary_AutoScrollCarousel = ({collectionOfMovies}) => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -21,7 +25,12 @@ const Primary_AutoScrollCarousel = () => {
       mql.removeEventListener('change', handleMediaQueryChange);
     };
   }, []);
+  console.log('🍉')
 
+  if(collectionOfMovies){
+    console.log('🌌🌌🌌')
+    console.log(collectionOfMovies)
+  }
   function handleMediaQueryChange(event) {
     setIsMobile(event.matches);
   }

@@ -3,10 +3,18 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'soraLight';
-  src: url('assets/fonts/Sora-Light.ttf');
+  font-family: 'Custom-1';
+  src: url('/assets/fonts/Sora-Light.ttf');
+}
+@font-face {
+  font-family: 'Custom-2';
+  src: url('/assets/fonts/SourceSansPro-Light.ttf');
 }
 
+@font-face {
+  font-family: 'Custom-3';
+  src: url('/assets/fonts/SourceSansPro-Regular.ttf');
+}
 
 body{
   background-color: #23272f;
