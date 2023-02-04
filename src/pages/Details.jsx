@@ -59,11 +59,11 @@ const Summary = (props) => {
   useEffect(() => {
     //all three to avoid unnecessary rerenders
     if (
-      (movieDetails,
-      movieReviews,
-      movieCredits,
-      movieTrailers,
-      movieRecommendation,
+      (movieDetails && 
+      movieReviews && 
+      movieCredits &&
+      movieTrailers &&
+      movieRecommendation &&
       movieKeywords)
     ) {
       getColor();
@@ -156,6 +156,7 @@ const Summary = (props) => {
           }}
         >
           <img
+            loading='lazy'
             className='w-[300px] mr-10 rounded-lg'
             src={`https://image.tmdb.org/t/p/original/${poster_path}`}
             alt='Image 2'
@@ -242,6 +243,7 @@ const Summary = (props) => {
               >
                 <button className='absolute bg-black opacity-75 w-[4.5rem] h-[4.5rem] rounded-full ml-[40%] mt-[29%]'>
                   <img
+                    loading='lazy'
                     src='/assets/svg/playButton.svg'
                     className='invert ml-[0.7rem] w-14'
                   />
@@ -286,7 +288,7 @@ const Summary = (props) => {
                         User: {item.author}
                         &nbsp;&nbsp;
                         {Array.from(
-                          Array(item.author_details.rating),
+                          Array(Math.round(item.author_details.rating)),
                           (e, i) => {
                             return (
                               <img
@@ -301,6 +303,7 @@ const Summary = (props) => {
                             );
                           }
                         )}
+                        
                         &nbsp;&nbsp; ({item.author_details.rating} / 10 Stars)
                       </p>
                       <p className='font-light mb-4'>
@@ -335,8 +338,9 @@ const Summary = (props) => {
           <div className='mb-4'>
             <p className='font-extrabold'>Original Language</p>
             <p>
-              {original_language.charAt(0).toUpperCase() +
-                original_language.slice(1)}
+              {/* {original_language.charAt(0).toUpperCase() +
+                original_language.slice(1)} */}
+                {original_language.toUpperCase()}
             </p>
           </div>
           <div className='mb-4'>
@@ -426,6 +430,7 @@ const Summary = (props) => {
             }}
           >
             <img
+              loading='lazy'
               className='h-8 w-8 rounded-full invert'
               src='/assets/images/closeButton.png'
             />

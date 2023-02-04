@@ -36,8 +36,8 @@ const Primary_AutoScrollCarousel = ({ collectionOfMovies }) => {
     movieCards = (
       <>
         {upcomingMovies.map((item) => (
-          <SplideSlide className='odd:mt-24'>
-            <Link to='/details'>
+          <SplideSlide className='odd:mt-24' key={item.id}>
+            <Link to={`/details/movie/${item.id}`}>
               <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
                 <img
                   src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}

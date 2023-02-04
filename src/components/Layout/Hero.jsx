@@ -44,25 +44,37 @@ const Hero = () => {
     currentDate,
   });
   const [listOfCasts, setListOfCasts] = useState({ casts: [], directors: [] });
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [loadedMoviesEn, setLoadedMoviesEn] = useState(null);
 
+  //! fetchURL is not able to access state upon execution but it can with
+  //! global variables (like the ones below)
+  let loadedMovies;
+  let loadedMoviesSortedList;
   useEffect(() => {
-    if (!isLoading) {
+    if (data) {
+      //essential rule of redux is keeping the state/data immutable
+      //therefore here we make a clone of the existing state using the spread operator
+      loadedMovies = [...data.results];
+      loadedMovies.sort(
+        (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
+      );
+      loadedMoviesSortedList = loadedMovies.filter((item) => {
+        if (item.original_language == 'en') {
+          return item;
+        }
+      });
+      setLoadedMoviesEn(loadedMoviesSortedList);
       fetchUrl();
     }
   }, [data]);
 
   let bgImage = '';
-
   //fetching and organizing a list of popular cast names for
   //our four movies (already fetched) displayed in Hero section
   const fetchUrl = async () => {
-    const listOfMovies = [...data.results];
-    //filter for most popular movies
-    listOfMovies.sort(
-      (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
-    );
     //retrieve a bunch of ID's from movie
-    const listOfMovieIDs = listOfMovies.map((item) => {
+    const listOfMovieIDs = loadedMoviesSortedList.map((item) => {
       return item.id;
     });
     //api call shouldn't exists in components like this but
@@ -84,6 +96,7 @@ const Hero = () => {
         casts: [...prevState.casts, castNames],
         directors: [...prevState.directors, director],
       }));
+      setHasLoaded(true);
     };
     //retrieve casts for only 4 movies
     for (let i = 0; i < 6; i++) {
@@ -92,19 +105,11 @@ const Hero = () => {
   };
 
   //ensures data has been retrieved before moving onwards
-  if (data && listOfCasts) {
-    //essential rule of redux is keeping the state/data immutable
-    //therefore here we make a clone of the existing state using the spread operator
-    const nowPlayingMovies = [...data.results];
-    //organize movies by most vote counts: desc order
-    //if organized by popularity let's say, the movies 
-    //would have very low vote count!
-    nowPlayingMovies.sort(
-      (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
-    );
-
+  if (data && listOfCasts && hasLoaded) {
+    let nowPlayingMovies = loadedMoviesEn;
     //array of only four most popular movies
     nowPlayingMovies.splice(6);
+
     bgImage = (
       <>
         {nowPlayingMovies.map((item, index) => {
@@ -160,18 +165,8 @@ const Hero = () => {
           }
 
           return (
-            <SwiperSlide key={item.id}>
-              <Link
-                to={`/details/movie/${item.id}`}
-                state={{
-                  data: {
-                    item,
-                    casts: listOfCasts.casts[index],
-                    director: listOfCasts.directors[index],
-                    genres,
-                  },
-                }}
-              >
+            <SwiperSlide>
+              <Link to={`/details/movie/${item.id}`}>
                 <div className='text-left'>
                   <div className='absolute left-8 bottom-16  text-white '>
                     <h1 className='text-6xl'>{item.title}</h1>

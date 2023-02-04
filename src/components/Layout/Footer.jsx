@@ -106,7 +106,7 @@ export default function Footer() {
         </div>
         <p className='mt-8 text-center text-base text-gray-400'>
           <a href='https://www.themoviedb.org/'>
-            <img src='/assets/svg/TMDB.svg' className='ml-auto mr-auto w-96' />
+            <img loading='lazy' src='/assets/svg/TMDB.svg' className='ml-auto mr-auto w-96' />
           </a>
         </p>
       </div>

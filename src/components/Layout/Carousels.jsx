@@ -14,6 +14,8 @@ import {
   useFetchUpcomingMoviesQuery,
   useFetchHighestRatedQuery,
   useFetchHighestRatedPage2Query,
+  useFetchPopularMoviesQuery,
+  useFetchPopularMoviesPage2Query,
   useFetchHighestRatedPage3Query,
 } from '../../store/reduxStore/fetch/fetchApi';
 
@@ -33,6 +35,10 @@ const Carousels = () => {
     last60DaysDate,
     currentDate,
   });
+
+  const { data: moviePopular } = useFetchPopularMoviesQuery();
+  const { data: moviePopularPage2 } = useFetchPopularMoviesPage2Query();
+
   const { data: movieUpcoming } = useFetchUpcomingMoviesQuery({ currentDate });
   const { data: movieHighestRated } = useFetchHighestRatedQuery({
     lastDecadeDate,
@@ -50,20 +56,27 @@ const Carousels = () => {
 
   useEffect(() => {
     //all three to avoid unnecessary rerenders
-    if ((movieLatest, movieUpcoming)) {
+    if (
+      movieLatest &&
+      movieLatestPage2 &&
+      movieUpcoming &&
+      moviePopular &&
+      movieHighestRated
+    ) {
       setHasLoaded(true);
     }
   }, [movieLatest, movieLatestPage2, movieUpcoming]);
 
-  let latestMovies = '';
-  let latestMoviesPage2 = '';
-  let upcomingMovies = '';
-  let highestRatedMoviesEn = '';
-  let highestRatedMoviesInt = '';
-
-  if (hasLoaded && movieLatest) {
+  let latestMovies,
+    latestMoviesPage2,
+    upcomingMovies,
+    highestRatedMoviesEn,
+    highestRatedMoviesInt,
+    popularMovies = '';
+  if (hasLoaded) {
     //need to declare a separate function here in order to filter for movies in English
     const upcomingMoviesLists = [...movieUpcoming.results];
+    popularMovies = [...moviePopular.results, ...moviePopularPage2.results];
     const highestRatedMovies = [
       ...movieHighestRated.results,
       ...movieHighestRatedPage2.results,
@@ -75,7 +88,7 @@ const Carousels = () => {
     latestMovies = [...movieLatest.results];
     latestMoviesPage2 = [...movieLatestPage2.results];
 
-    upcomingMovies = upcomingMoviesLists.map((item) => {
+    upcomingMovies = upcomingMoviesLists.filter((item) => {
       if (item.original_language == 'en') {
         return item;
       }
@@ -97,9 +110,10 @@ const Carousels = () => {
     upcomingMovies.sort(
       (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
     );
+    popularMovies.sort(
+      (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
+    );
 
-    console.log('🥑🥑🥑');
-    console.log('Highest Rated', highestRatedMoviesInt);
     upcomingMovies.splice(12);
   }
 
@@ -118,7 +132,9 @@ const Carousels = () => {
           speed={-0.4}
           latestMovies={latestMovies}
         />
-        <hr />
+        <h1 className='flex text-white text-5xl justify-center'>
+          Latest Movies
+        </h1>
         <Secondary_AutoScrollCarousel
           speed={0.5}
           latestMovies={latestMoviesPage2}
@@ -126,13 +142,22 @@ const Carousels = () => {
       </div>
       <hr />
 
-      <ItemCarousel highestRatedMovies={highestRatedMoviesEn}/>
+      <ItemCarousel
+        highestRatedMovies={highestRatedMoviesEn}
+        title={'Highest Rated of the Decade'}
+      />
       <hr />
 
-      <ItemCarousel highestRatedMovies={highestRatedMoviesInt}/>
+      <ItemCarousel
+        highestRatedMovies={highestRatedMoviesInt}
+        title={' Highest Rated of the Decade (International)'}
+      />
       <hr />
 
-      <ItemCarousel />
+      <ItemCarousel
+        highestRatedMovies={popularMovies}
+        title={'Popular Movies'}
+      />
       <hr />
 
       {/* <ItemCarousel />

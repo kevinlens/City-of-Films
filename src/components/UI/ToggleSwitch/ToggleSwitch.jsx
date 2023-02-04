@@ -11,6 +11,7 @@ const ToggleSwitch = () => {
         type='checkbox'
         checked={isChecked ? 'checked' : null}
         onClick={checkedBox}
+        readOnly
       ></input>
       <span className={styles.slider}></span>
     </label>

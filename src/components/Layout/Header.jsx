@@ -38,6 +38,7 @@ export default function Header(props) {
                   
                   <Link to='/'>
                     <img
+                      loading='lazy'
                       className='block lg:hidden h-8 w-auto'
                       src='/assets/images/buildings.png'
                       alt='Workflow'
@@ -49,6 +50,7 @@ export default function Header(props) {
                   <Link className='flex -lg:hidden items-center text-lg uppercase font-bold text-white' to='/'>
                     Film
                     <img
+                      loading='lazy'
                       className='px-3 hidden lg:block h-8 w-auto'
                       src='/assets/images/buildings.png'
                       alt='Workflow'
@@ -130,6 +132,7 @@ export default function Header(props) {
                       <Menu.Button className='bg-gray-800 rounded-full flex text-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'>
                         <span className='sr-only'>Open user menu</span>
                         <img
+                          loading='lazy'
                           className='h-8 w-8 rounded-full'
                           src='/assets/images/me.png'
                           alt=''
@@ -229,6 +232,7 @@ export default function Header(props) {
               <div className='flex items-center px-5'>
                 <div className='flex-shrink-0'>
                   <img
+                    loading='lazy'
                     className='h-10 w-10 rounded-full'
                     src='/assets/images/me.png'
                     alt=''

@@ -4,6 +4,7 @@ const NotFound = () => {
   return (
     <div class='relative h-screen overflow-hidden bg-indigo-900'>
       <img
+        loading='lazy'
         src='/assets/svg/NotFound.svg'
         class='absolute object-cover w-full h-full'
       />
