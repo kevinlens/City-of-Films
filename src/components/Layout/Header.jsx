@@ -1,9 +1,9 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { SearchIcon } from '@heroicons/react/solid';
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
@@ -11,6 +11,7 @@ function classNames(...classes) {
 export default function Header(props) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  
   window.onscroll = function () {
     if (window.pageYOffset <= 10) {
       setIsScrolled(false);
@@ -19,7 +20,7 @@ export default function Header(props) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleUserValue = (e) => {
     setSearchValue(e.target.value);
   };
 
@@ -64,13 +65,13 @@ export default function Header(props) {
               <div className='flex-1 flex justify-center px-2 lg:ml-6 lg:justify-end'>
                 <div className='max-w-lg w-full lg:max-w-[26rem] xl:max-w-[28rem] lg:mr-[10%] xl:mr-[15%]'>
                   {/* USER SEARCH FOR MOVE RESULTS */}
-                  <form onSubmit={handleSubmit}>
+                  <form onSubmit={handleUserValue}>
                     <label htmlFor='search' className='sr-only'>
                       Search
                     </label>
 
                     <div className='relative'>
-                      <Link to='/searchresults'>
+                      <Link to={`/searchresults/${searchValue}`}>
                         <button
                           type='submit'
                           className='absolute inset-y-0 left-0 pl-3 flex items-center cursor-pointer'
@@ -88,7 +89,7 @@ export default function Header(props) {
                         className='block w-full pl-10 pr-3 py-2 border border-transparent rounded-md leading-5 bg-gray-700 text-gray-300 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-white focus:ring-white focus:text-gray-900 sm:text-sm'
                         placeholder='Use Me to SEARCH! 👈'
                         type='search'
-                        onSubmit={handleSubmit}
+                        onChange={handleUserValue}
                       />
                     </div>
                   </form>

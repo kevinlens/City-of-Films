@@ -59,6 +59,7 @@ const Hero = () => {
       loadedMovies.sort(
         (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
       );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       loadedMoviesSortedList = loadedMovies.filter((item) => {
         if (item.original_language == 'en') {
           return item;
@@ -127,9 +128,11 @@ const Hero = () => {
             }
 
             genres.splice(3);
-            //reason why we are using ES6’s Array.prototype.entries here
-            //and not a for-in loop 'for (let cast of listOfCasts[index])' is because
-            //this comes with a default index feature which we need to use for styling
+            {
+              /* reason why we are using ES6’s Array.prototype.entries here
+            and not a for-in loop 'for (let cast of listOfCasts[index])' is because
+            this comes with a default index feature which we need to use for styling */
+            }
             for (let [i, cast] of listOfCasts.casts[index].entries()) {
               starring.push(
                 <>
@@ -153,7 +156,7 @@ const Hero = () => {
                 </>
               );
             }
-            for (let [d, dir] of listOfCasts.directors[index].entries()) {
+            for (let dir of listOfCasts.directors[index].entries()) {
               director.push(
                 <>
                   <p>
@@ -165,7 +168,7 @@ const Hero = () => {
           }
 
           return (
-            <SwiperSlide>
+            <SwiperSlide key={item.id}>
               <Link to={`/details/movie/${item.id}`}>
                 <div className='text-left'>
                   <div className='absolute left-8 bottom-16  text-white '>

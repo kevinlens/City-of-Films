@@ -59,16 +59,17 @@ const Summary = (props) => {
   useEffect(() => {
     //all three to avoid unnecessary rerenders
     if (
-      (movieDetails && 
-      movieReviews && 
+      movieDetails &&
+      movieReviews &&
       movieCredits &&
       movieTrailers &&
       movieRecommendation &&
-      movieKeywords)
+      movieKeywords
     ) {
       getColor();
       setHasLoaded(true);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     movieDetails,
     movieReviews,
@@ -87,7 +88,6 @@ const Summary = (props) => {
   let summary = '';
   let midSection = '';
   let midSectionAside = '';
-  let belowMidSection = '';
   let finalSection = '';
   let genres = [];
 
@@ -195,7 +195,7 @@ const Summary = (props) => {
           className='flex overflow-x-scroll overflow-y-hidden rounded-lg'
         >
           {casts.map((item) => (
-            <li className='w-36 mb-8 ml-2 h-72 flex-shrink-0 border-[1px] border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium'>
+            <li className='w-36 mb-8 ml-2 h-72 flex-shrink-0 border-[1px] border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium' key={item.id}>
               <div className='h-44 '>
                 <img
                   loading='lazy'
@@ -230,6 +230,7 @@ const Summary = (props) => {
           >
             {trailers.map((item) => (
               <div
+                key={item.id}
                 className='relative pr-[485px]'
                 style={{
                   backgroundImage: `url('https://i.ytimg.com/vi/${item.key}/hqdefault.jpg')`,
@@ -303,7 +304,6 @@ const Summary = (props) => {
                             );
                           }
                         )}
-                        
                         &nbsp;&nbsp; ({item.author_details.rating} / 10 Stars)
                       </p>
                       <p className='font-light mb-4'>
@@ -340,7 +340,7 @@ const Summary = (props) => {
             <p>
               {/* {original_language.charAt(0).toUpperCase() +
                 original_language.slice(1)} */}
-                {original_language.toUpperCase()}
+              {original_language.toUpperCase()}
             </p>
           </div>
           <div className='mb-4'>

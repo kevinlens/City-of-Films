@@ -46,7 +46,7 @@ function App() {
             }
           />
           <Route
-            path='/searchresults'
+            path='/searchresults/:userSearchValue'
             element={
               <>
                 <Header />

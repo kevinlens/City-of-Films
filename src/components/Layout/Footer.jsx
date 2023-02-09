@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 /* This Footer requires Tailwind CSS v2.0+ */
 const navigation = {
   main: [
