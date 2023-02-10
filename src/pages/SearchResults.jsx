@@ -6,6 +6,29 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { useFetchMoviesWithUserSearchQueryQuery } from '../store/reduxStore/fetch/fetchApi';
+//STYLING
+import styles from './SearchResults.module.scss';
+
+const hasDuplicates = (arr) => {
+  return new Set(arr).size !== arr.length;
+}
+
+const removeDuplicates = (array) => {
+  return [...new Set(array)];
+};
+
+const matchArrays = (arr1, arr2) => {
+  const matchedObjects = [];
+  arr2.forEach(obj => {
+    // * "!matchedObjects.some(o => o.id === obj.id)" ensures that the object(id) doesn't already
+    // * exists within our array
+    if (arr1.includes(obj.id) && !matchedObjects.some(o => o.id === obj.id)) {
+      matchedObjects.push(obj);
+    }
+  });
+  return matchedObjects;
+}
+
 const SearchResults = () => {
   const params = useParams();
   const searchQuery = params.userSearchValue;
@@ -21,22 +44,23 @@ const SearchResults = () => {
   const itemsPerPage = 10;
   const [listOfMovies, setListOfMovies] = useState([]);
   const [hasLoaded, setHasLoaded] = useState(false);
-  // We start with an empty list of items
   const [currentItems, setCurrentItems] = useState(null);
   const [pageCount, setPageCount] = useState(0);
-  // Here we use item offsets; we could also use page offsets
-  // following the API or data you're working with.
   const [itemOffset, setItemOffset] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     setHasLoaded(false);
     setCurrentItems(null);
     setPageCount(0);
     setItemOffset(0);
-  }, [params]);
+    console.log('🧊');
+    setCurrentPage(0);
+  }, [moviesDataSet]);
 
   useEffect(() => {
     if (moviesDataSet && hasLoaded != true) {
+      console.log('😢😢😢😢😢😢', moviesDataSet);
       fetchUrl();
     }
 
@@ -74,19 +98,34 @@ const SearchResults = () => {
     // for (let index = 1; index <= totalPages; index++) {
     //   await fetchTotalPages(index);
     // }
+
+    // * fetches all url at once as each url is limited to 20 array elements
     const list = await Promise.all(
       Array.from({ length: totalPages }, (_, index) => fetchTotalPages(index))
     );
-
     let entireList = [];
-
+    
+    // * merge all array elements
     list.map((item) => {
       let reassignedArray = item.results;
       entireList.push(...reassignedArray);
     });
+    
+    // * for helping with identifying existing duplicates
+    let movieIDs = entireList.map(item=>{
+      return item.id
+    })
+    
+    // * must check if are ID's are identical
+    if(hasDuplicates(movieIDs)){
+      // * cleansing array with duplicate elements by removing them
+      let checkedForDuplicateArray = removeDuplicates(movieIDs);
+      let finalData = matchArrays(checkedForDuplicateArray, entireList)
+      setListOfMovies(finalData);
+    }else{
+      setListOfMovies(entireList);
+    }
 
-    console.log('🐳🐳🐳🐳', entireList);
-    setListOfMovies(entireList);
     setHasLoaded(true);
   };
 
@@ -97,6 +136,7 @@ const SearchResults = () => {
       `User requested page number ${event.selected}, which is offset ${newOffset}`
     );
     setItemOffset(newOffset);
+    setCurrentPage(event.selected);
   };
 
   let movies = [];
@@ -104,10 +144,9 @@ const SearchResults = () => {
   if (currentItems) {
     currentItems.map((item, index) => {
       movies.push(
-        <section key={index}>
-          {item.title}
+        <section className='w-52 ' key={index}>
           <img
-            className='w-52'
+            className=' '
             loading='lazy'
             onError={(e) => {
               e.currentTarget.src =
@@ -116,6 +155,7 @@ const SearchResults = () => {
             src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
             alt='Image 2'
           />
+          {item.title}
         </section>
       );
     });
@@ -125,7 +165,7 @@ const SearchResults = () => {
     <>
       <div className='flex'>{movies}</div>
       <ReactPaginate
-        className='flex'
+        className={`${styles.pagination} flex`}
         nextLabel='next >'
         onPageChange={handlePageClick}
         pageRangeDisplayed={3}
@@ -137,6 +177,7 @@ const SearchResults = () => {
         previousClassName='page-item'
         previousLinkClassName='page-link'
         nextClassName='page-item'
+        forcePage={currentPage}
         nextLinkClassName='page-link'
         breakLabel='...'
         breakClassName='page-item'

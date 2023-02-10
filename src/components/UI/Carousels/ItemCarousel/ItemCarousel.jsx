@@ -67,7 +67,6 @@ const ItemCarousel = ({ highestRatedMovies, title}) => {
             <Link to={`/details/movie/${item.id}`}>
               <div className='py-3 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
                 <img
-                  loading='lazy'
                   src={`https://image.tmdb.org/t/p/original/${item.backdrop_path}`}
                   alt='Image 2'
                 />

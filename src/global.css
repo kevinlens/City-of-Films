@@ -36,3 +36,10 @@ body{
   border: none;
   height: 2px;
 }
+
+.active{
+  background-color: #5ab1bb;
+}
+.page-link {
+  padding: 10px 15px!important;
+}
