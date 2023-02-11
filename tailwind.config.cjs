@@ -12,8 +12,12 @@ module.exports = {
       soraLight: ['Custom-1', 'sans-serif'],
       sourceSansProLight: ['Custom-2', 'sans-serif'],
       sourceSansProRegular: ['Custom-3', 'sans-serif'],
+      sourcePoppinsRegular: ['Custom-4', 'sans-serif'],
     },
     extend: {
+      gridTemplateColumns: {
+        autoFill: 'repeat(auto-fill, 300px)',
+      },
       fontSize: {
         xxs: '0.625rem',
       },
@@ -30,9 +34,21 @@ module.exports = {
         '-2xl': { max: '1535px' },
         // => @media (max-width: 1535px) { ... }
 
+        //!For a special case inside searchResults file
+        '-1xl': { max: '1499px' },
+        // => @media (max-width: 1535px) { ... }
+
+        //!For a special case inside searchResults file
+        '-lxl': { max: '1299px' },
+        // => @media (max-width: 1279px) { ... }
+
         '-xl': { max: '1279px' },
         // => @media (max-width: 1279px) { ... }
-        
+
+        //!For a special case inside searchResults file
+        '-sxl': { max: '1200px' },
+        // => @media (max-width: 1279px) { ... }
+
         '-lg': { max: '1023px' },
         // => @media (max-width: 1023px) { ... }
 
@@ -43,8 +59,8 @@ module.exports = {
         // => @media (max-width: 639px) { ... }
       },
       boxShadow: {
-        'smedium': '0 2px 8px rgba(0,0,0,0.1)',
-      }
+        smedium: '0 2px 8px rgba(0,0,0,0.1)',
+      },
     },
   },
   plugins: [require('preline/plugin')],

@@ -6,6 +6,7 @@
   font-family: 'Custom-1';
   src: url('/assets/fonts/Sora-Light.ttf');
 }
+
 @font-face {
   font-family: 'Custom-2';
   src: url('/assets/fonts/SourceSansPro-Light.ttf');
@@ -14,6 +15,11 @@
 @font-face {
   font-family: 'Custom-3';
   src: url('/assets/fonts/SourceSansPro-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Custom-4';
+  src: url('/assets/fonts/Poppins-Regular.ttf');
 }
 
 body{

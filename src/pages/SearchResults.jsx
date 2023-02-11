@@ -11,7 +11,7 @@ import styles from './SearchResults.module.scss';
 
 const hasDuplicates = (arr) => {
   return new Set(arr).size !== arr.length;
-}
+};
 
 const removeDuplicates = (array) => {
   return [...new Set(array)];
@@ -19,15 +19,15 @@ const removeDuplicates = (array) => {
 
 const matchArrays = (arr1, arr2) => {
   const matchedObjects = [];
-  arr2.forEach(obj => {
+  arr2.forEach((obj) => {
     // * "!matchedObjects.some(o => o.id === obj.id)" ensures that the object(id) doesn't already
     // * exists within our array
-    if (arr1.includes(obj.id) && !matchedObjects.some(o => o.id === obj.id)) {
+    if (arr1.includes(obj.id) && !matchedObjects.some((o) => o.id === obj.id)) {
       matchedObjects.push(obj);
     }
   });
   return matchedObjects;
-}
+};
 
 const SearchResults = () => {
   const params = useParams();
@@ -37,30 +37,47 @@ const SearchResults = () => {
     searchQuery,
   });
 
-  // TODO: See how many pages there are from the first page execution API Call (Page 1)
-  // TODO: If user clicks on next page button / 2-3-4 page button it should make an fetch back data with the page number
-  // ! What you could do is make separate API calls based on user click
-  // ! of next page
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(12);
   const [listOfMovies, setListOfMovies] = useState([]);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [currentItems, setCurrentItems] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
+  const [screenSize, setScreenSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
+  //for resetting everything when user searches for new movies
   useEffect(() => {
     setHasLoaded(false);
     setCurrentItems(null);
     setPageCount(0);
     setItemOffset(0);
-    console.log('🧊');
     setCurrentPage(0);
   }, [moviesDataSet]);
+  
+  //for detecting user window resize
+  useEffect(() => {
+    function handleResize() {
+      setScreenSize({ width: window.innerWidth, height: window.innerHeight });
+    }
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
+    // * This is to get a consistent image portrayal without empty spaces
+    if(screenSize.width >= 1500){
+      setItemsPerPage(10)
+    }else{
+      setItemsPerPage(12)
+    }
+    // Ensures movie data is fetched and has finished loading
     if (moviesDataSet && hasLoaded != true) {
-      console.log('😢😢😢😢😢😢', moviesDataSet);
       fetchUrl();
     }
 
@@ -70,14 +87,12 @@ const SearchResults = () => {
     );
     // Fetch items from another resources.
     const endOffset = itemOffset + itemsPerPage;
-    // console.log(`Loading items from ${itemOffset} to ${endOffset}`);
     setCurrentItems(sortedMovies.slice(itemOffset, endOffset));
     setPageCount(Math.ceil(sortedMovies.length / itemsPerPage));
-    console.log('🍑🍑🍑🍑', listOfMovies);
-  }, [moviesDataSet, itemOffset, itemsPerPage, hasLoaded]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [moviesDataSet, itemOffset, itemsPerPage, hasLoaded, screenSize]);
 
   const fetchUrl = async () => {
-    console.log('🍇🍇🍇🍇', moviesDataSet);
     setListOfMovies([]);
     let totalPages = moviesDataSet.total_pages;
 
@@ -104,25 +119,25 @@ const SearchResults = () => {
       Array.from({ length: totalPages }, (_, index) => fetchTotalPages(index))
     );
     let entireList = [];
-    
+
     // * merge all array elements
     list.map((item) => {
       let reassignedArray = item.results;
       entireList.push(...reassignedArray);
     });
-    
+
     // * for helping with identifying existing duplicates
-    let movieIDs = entireList.map(item=>{
-      return item.id
-    })
-    
+    let movieIDs = entireList.map((item) => {
+      return item.id;
+    });
+
     // * must check if are ID's are identical
-    if(hasDuplicates(movieIDs)){
+    if (hasDuplicates(movieIDs)) {
       // * cleansing array with duplicate elements by removing them
       let checkedForDuplicateArray = removeDuplicates(movieIDs);
-      let finalData = matchArrays(checkedForDuplicateArray, entireList)
+      let finalData = matchArrays(checkedForDuplicateArray, entireList);
       setListOfMovies(finalData);
-    }else{
+    } else {
       setListOfMovies(entireList);
     }
 
@@ -132,9 +147,6 @@ const SearchResults = () => {
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % listOfMovies.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
     setCurrentPage(event.selected);
   };
@@ -144,18 +156,17 @@ const SearchResults = () => {
   if (currentItems) {
     currentItems.map((item, index) => {
       movies.push(
-        <section className='w-52 ' key={index}>
+        <section className='w-72 text-center text-xl font-sourcePoppinsRegular' key={index}>
           <img
             className=' '
             loading='lazy'
             onError={(e) => {
-              e.currentTarget.src =
-                'https://gravatar.com/avatar/418738537ab04bae411c5001438c99ca?s=400&d=robohash&r=x';
+              e.currentTarget.src = '/assets/images/NotAvailable.png';
             }}
             src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
             alt='Image 2'
           />
-          {item.title}
+          <p className='pt-2'>{item.title}</p>
         </section>
       );
     });
@@ -163,7 +174,9 @@ const SearchResults = () => {
 
   return (
     <>
-      <div className='flex'>{movies}</div>
+      <div className='grid grid-cols-autoFill wrap overflow-hidden justify-center pt-32 -1xl:gap-4 -lxl:gap-0 -sxl:gap-8'>
+        {movies}
+      </div>
       <ReactPaginate
         className={`${styles.pagination} flex`}
         nextLabel='next >'
