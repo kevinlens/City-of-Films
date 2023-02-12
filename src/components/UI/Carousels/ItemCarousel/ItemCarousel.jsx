@@ -18,29 +18,6 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-const movieArray = [
-  {
-    id: 1,
-    movie:
-      'https://image.tmdb.org/t/p/original/lXhgCODAbBXL5buk9yEmTpOoOgR.jpg',
-  },
-  {
-    id: 1,
-    movie:
-      'https://image.tmdb.org/t/p/original/c1bz69r0v065TGFA5nqBiKzPDys.jpg',
-  },
-  {
-    id: 1,
-    movie:
-      'https://image.tmdb.org/t/p/original/jazlkwXfw4KdF6fVTRsolOvRCmu.jpg',
-  },
-  {
-    id: 1,
-    movie:
-      'https://image.tmdb.org/t/p/original/c1bz69r0v065TGFA5nqBiKzPDys.jpg',
-  },
-];
-
 const ItemCarousel = ({ highestRatedMovies, title}) => {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -67,7 +44,7 @@ const ItemCarousel = ({ highestRatedMovies, title}) => {
             <Link to={`/details/movie/${item.id}`}>
               <div className='py-3 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
                 <img
-                  src={`https://image.tmdb.org/t/p/original/${item.backdrop_path}`}
+                  src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
                   alt='Image 2'
                 />
                 <p className='text-zinc-400'>

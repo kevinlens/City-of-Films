@@ -93,7 +93,7 @@ const Summary = (props) => {
 
   const getColor = async () => {
     const imgColor = await average(
-      `https://image.tmdb.org/t/p/original/${movieDetails.poster_path}`,
+      `http://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`,
       { amount: 1 }
     );
     setHasColor(imgColor);
@@ -134,9 +134,8 @@ const Summary = (props) => {
     // console.log('Movie Credits', movieCredits);
 
     const director = GetMovieDirector(movieCredits.crew);
-    const casts = GetMovieCasts(movieCredits.cast, true, 'all');
-    console.log('🍉🍉🍉');
-    console.log(casts);
+    // const casts = GetMovieCasts(movieCredits.cast, true, 'all');
+    const casts = movieCredits.cast
     const timestamp = '2022-12-16T06:48:15.541Z';
     const dt = new Date(timestamp);
     const options = { month: 'long', day: 'numeric', year: 'numeric' };
@@ -146,7 +145,7 @@ const Summary = (props) => {
       <div
         className='bg-cover bg-no-repeat bg-[left_calc((50vw-170px)-340px)_top]'
         style={{
-          backgroundImage: `url(https://image.tmdb.org/t/p/original/${backdrop_path})`,
+          backgroundImage: `url(https://image.tmdb.org/t/p/original${backdrop_path})`,
         }}
       >
         <div
@@ -158,7 +157,7 @@ const Summary = (props) => {
           <img
             loading='lazy'
             className='w-[300px] mr-10 rounded-lg'
-            src={`https://image.tmdb.org/t/p/original/${poster_path}`}
+            src={`https://image.tmdb.org/t/p/original${poster_path}`}
             alt='Image 2'
           />
           <div>
@@ -386,14 +385,14 @@ const Summary = (props) => {
               className='flex overflow-x-scroll overflow-y-hidden rounded-lg'
             >
               {recommendation.map((item) => (
-                <li className='w-72 mb-8 ml-2 h-48 flex-shrink-0 border-[1px] border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium'>
+                <li className='w-72 mb-8 ml-2 h-48 flex-shrink-0 border-[1px] border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium' key={item.id}>
                   <img
                     loading='lazy'
                     onError={(e) => {
                       e.currentTarget.src =
                         'https://image.tmdb.org/t/p/original/mworc2R4hnmPk6EvogFqoqlVdhD.jpg';
                     }}
-                    src={`https://image.tmdb.org/t/p/original/${item.backdrop_path}`}
+                    src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
                   />
                   <p className='pl-2'>{item.title}</p>
                 </li>

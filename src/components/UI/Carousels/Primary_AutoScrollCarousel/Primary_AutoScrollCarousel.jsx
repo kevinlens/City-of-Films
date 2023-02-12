@@ -40,7 +40,7 @@ const Primary_AutoScrollCarousel = ({ collectionOfMovies }) => {
             <Link to={`/details/movie/${item.id}`}>
               <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
                 <img
-                  src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
+                  src={`https://image.tmdb.org/t/p/original${item.poster_path}`}
                   alt='Image 2'
                 />
               </div>

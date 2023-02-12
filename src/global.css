@@ -49,3 +49,72 @@ body{
 .page-link {
   padding: 10px 15px!important;
 }
+
+
+
+
+/* ! For Seach Results */
+.flex-wrapper {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.single-chart {
+  width: 33%;
+  justify-content: space-around ;
+}
+
+.circular-chart {
+  display: block;
+  margin: 10px auto;
+  max-width: 80%;
+  max-height: 250px;
+}
+
+.circle-bg-yellow {
+  fill: none;
+  stroke: #423d0f;
+  stroke-width: 3.8;
+}
+.circle-bg-green {
+  fill: none;
+  stroke: #1f4529;
+  stroke-width: 3.8;
+}
+.circle-bg-red {
+  fill: none;
+  stroke: #571435;
+  stroke-width: 3.8;
+}
+
+.circle {
+  fill: none;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  animation: progress 1s ease-out forwards;
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+}
+
+.circular-chart.yellow .circle {
+  stroke: #d2d630;
+}
+
+.circular-chart.green .circle {
+  stroke: #20cf7a;
+}
+
+.circular-chart.red .circle {
+  stroke: #db2360;
+}
+
+.percentage {
+  fill: white;
+  font-family: sans-serif;
+  font-size: 0.5em;
+  text-anchor: middle;
+}

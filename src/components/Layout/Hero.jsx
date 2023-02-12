@@ -188,7 +188,7 @@ const Hero = () => {
                       e.currentTarget.src =
                         'https://gravatar.com/avatar/418738537ab04bae411c5001438c99ca?s=400&d=robohash&r=x';
                     }}
-                    src={`https://image.tmdb.org/t/p/original/${item.backdrop_path}`}
+                    src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
                     alt='Image 2'
                   />
                 </div>

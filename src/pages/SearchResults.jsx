@@ -8,7 +8,7 @@ import ReactPaginate from 'react-paginate';
 import { useFetchMoviesWithUserSearchQueryQuery } from '../store/reduxStore/fetch/fetchApi';
 //STYLING
 import styles from './SearchResults.module.scss';
-
+import RatingPercentage from '../components/UI/RatingPercentage/RatingPercentage';
 const hasDuplicates = (arr) => {
   return new Set(arr).size !== arr.length;
 };
@@ -27,6 +27,12 @@ const matchArrays = (arr1, arr2) => {
     }
   });
   return matchedObjects;
+};
+
+const formatDate = (dateStr) => {
+  const date = new Date(dateStr);
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  return date.toLocaleDateString('en-US', options);
 };
 
 const SearchResults = () => {
@@ -57,7 +63,7 @@ const SearchResults = () => {
     setItemOffset(0);
     setCurrentPage(0);
   }, [moviesDataSet]);
-  
+
   //for detecting user window resize
   useEffect(() => {
     function handleResize() {
@@ -71,10 +77,10 @@ const SearchResults = () => {
 
   useEffect(() => {
     // * This is to get a consistent image portrayal without empty spaces
-    if(screenSize.width >= 1500){
-      setItemsPerPage(10)
-    }else{
-      setItemsPerPage(12)
+    if (screenSize.width >= 1500) {
+      setItemsPerPage(10);
+    } else {
+      setItemsPerPage(12);
     }
     // Ensures movie data is fetched and has finished loading
     if (moviesDataSet && hasLoaded != true) {
@@ -89,7 +95,7 @@ const SearchResults = () => {
     const endOffset = itemOffset + itemsPerPage;
     setCurrentItems(sortedMovies.slice(itemOffset, endOffset));
     setPageCount(Math.ceil(sortedMovies.length / itemsPerPage));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [moviesDataSet, itemOffset, itemsPerPage, hasLoaded, screenSize]);
 
   const fetchUrl = async () => {
@@ -140,7 +146,6 @@ const SearchResults = () => {
     } else {
       setListOfMovies(entireList);
     }
-
     setHasLoaded(true);
   };
 
@@ -152,22 +157,31 @@ const SearchResults = () => {
   };
 
   let movies = [];
-
   if (currentItems) {
     currentItems.map((item, index) => {
       movies.push(
-        <section className='w-72 text-center text-xl font-sourcePoppinsRegular' key={index}>
-          <img
-            className=' '
-            loading='lazy'
-            onError={(e) => {
-              e.currentTarget.src = '/assets/images/NotAvailable.png';
-            }}
-            src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
-            alt='Image 2'
-          />
-          <p className='pt-2'>{item.title}</p>
-        </section>
+        <Link
+          to={`/details/movie/${item.id}`}
+          className='w-72 font-sourcePoppinsRegular text-white relative'
+          key={index}
+        >
+          <div className='absolute w-44 top-0'>
+            <RatingPercentage rating={item.vote_average} />
+          </div>
+          <div>
+            <img
+              className='rounded-2xl'
+              loading='lazy'
+              onError={(e) => {
+                e.currentTarget.src = '/assets/images/NotAvailable.png';
+              }}
+              src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
+              alt='Image 2'
+            />
+            <p className='pt-2 text-xl'>{item.title}</p>
+            <p className='text-sm'>{formatDate(item.release_date)}</p>
+          </div>
+        </Link>
       );
     });
   }
