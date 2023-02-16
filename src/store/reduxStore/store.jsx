@@ -20,4 +20,4 @@ export const store = configureStore({
     // and other useful features of `rtk-query`.
     //The concat() method is used to merge two or more arrays.
     getDefaultMiddleware().concat(fetchApi.middleware),
-});
+  });

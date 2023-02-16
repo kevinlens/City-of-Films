@@ -15,7 +15,7 @@ import GetMovieCasts from '../../Dry_Functions/GetMovieCasts';
 import { useContext } from 'react';
 import DateContext from '../../store/contextStore/Date-Context';
 import GenreContext from '../../store/contextStore/Genre-Context';
-
+import FormOfEntertainmentContext from '../../store/contextStore/FormOfEntertainment-Context';
 //SWIPER.JS AND IT'S ASSOCIATED MODULES
 import { Autoplay } from 'swiper';
 
@@ -33,29 +33,48 @@ import { Pagination, Navigation, EffectFade } from 'swiper';
 
 //RTK QUERY
 import { useFetchNowPlayingMoviesQuery } from '../../store/reduxStore/fetch/fetchApi';
+import { useFetchPopularTVShowsQuery } from '../../store/reduxStore/fetch/fetchApi';
 
 const Hero = () => {
   //CONTEXT API
   const { monthsAgoDate, currentDate } = useContext(DateContext);
   const { movieGenres } = useContext(GenreContext);
+  const { currentFormIsMovies, setToTVShows } = useContext(
+    FormOfEntertainmentContext
+  );
   //immutable
   const { data, error, isLoading, isSuccess } = useFetchNowPlayingMoviesQuery({
     monthsAgoDate,
     currentDate,
   });
+  const { data: data2 } = useFetchPopularTVShowsQuery();
+
   const [listOfCasts, setListOfCasts] = useState({ casts: [], directors: [] });
   const [hasLoaded, setHasLoaded] = useState(false);
   const [loadedMoviesEn, setLoadedMoviesEn] = useState(null);
 
+  //for ensuring movies/tv slides can change dynamically
+  const [entertainmentIsMovie, SetEntertainmentIsMovie] = useState(false);
   //! fetchURL is not able to access state upon execution but it can with
   //! global variables (like the ones below)
   let loadedMovies;
   let loadedMoviesSortedList;
+
+  //for ensuring movies/tv slides can change dynamically
+  //to separate for easier to read code
   useEffect(() => {
-    if (data) {
+    SetEntertainmentIsMovie(!entertainmentIsMovie);
+  }, [currentFormIsMovies]);
+
+  useEffect(() => {
+    if (data && data2 && setToTVShows) {
       //essential rule of redux is keeping the state/data immutable
       //therefore here we make a clone of the existing state using the spread operator
-      loadedMovies = [...data.results];
+      if (entertainmentIsMovie) {
+        loadedMovies = [...data.results];
+      } else {
+        loadedMovies = [...data2.results];
+      }
       loadedMovies.sort(
         (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
       );
@@ -68,7 +87,7 @@ const Hero = () => {
       setLoadedMoviesEn(loadedMoviesSortedList);
       fetchUrl();
     }
-  }, [data]);
+  }, [data, data2, currentFormIsMovies,entertainmentIsMovie]);
 
   let bgImage = '';
   //fetching and organizing a list of popular cast names for
@@ -83,15 +102,24 @@ const Hero = () => {
     //viable to make two api calls with one dependent on another
     //at the same time
     const getDetails = async (id) => {
+
+      let data;
+      let movieCredits;
       //for fetching casts and directors
-      let data = await fetch(
+      if(entertainmentIsMovie){
+      data = await fetch(
         `https://api.themoviedb.org/3/movie/${id}/credits?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US`
       );
-      let movieCredits = await data.json();
+      movieCredits = await data.json();
+      }else{
+        data = await fetch(
+          `https://api.themoviedb.org/3/tv/${id}/credits?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US`
+        );
+        movieCredits = await data.json();
+      }
 
       const director = GetMovieDirector(movieCredits.crew);
       const castNames = GetMovieCasts(movieCredits.cast);
-
       setListOfCasts((prevState) => ({
         ...prevState,
         casts: [...prevState.casts, castNames],
@@ -106,7 +134,7 @@ const Hero = () => {
   };
 
   //ensures data has been retrieved before moving onwards
-  if (data && listOfCasts && hasLoaded) {
+  if (data && data2 && listOfCasts && hasLoaded) {
     let nowPlayingMovies = loadedMoviesEn;
     //array of only four most popular movies
     nowPlayingMovies.splice(6);
@@ -183,7 +211,6 @@ const Hero = () => {
                     </div>
                   </div>
                   <img
-                    loading='lazy'
                     onError={(e) => {
                       e.currentTarget.src =
                         'https://gravatar.com/avatar/418738537ab04bae411c5001438c99ca?s=400&d=robohash&r=x';

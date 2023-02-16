@@ -10,6 +10,7 @@ import { store } from './store/reduxStore/store';
 //Context
 import DateProvider from './store/contextStore/DateProvider';
 import GenreProvider from './store/contextStore/GenreProvider';
+import FormOfEntertainmentProvider from './store/contextStore/FormOfEntertainment';
 //STYLING
 import './global.css';
 
@@ -21,9 +22,11 @@ root.render(
   <Provider store={store}>
     <DateProvider>
       <GenreProvider>
+        <FormOfEntertainmentProvider>
         <BrowserRouter>
           <App />
         </BrowserRouter>
+        </FormOfEntertainmentProvider>
       </GenreProvider>
     </DateProvider>
   </Provider>

@@ -35,10 +35,8 @@ const Carousels = () => {
     last60DaysDate,
     currentDate,
   });
-
   const { data: moviePopular } = useFetchPopularMoviesQuery();
   const { data: moviePopularPage2 } = useFetchPopularMoviesPage2Query();
-
   const { data: movieUpcoming } = useFetchUpcomingMoviesQuery({ currentDate });
   const { data: movieHighestRated } = useFetchHighestRatedQuery({
     lastDecadeDate,
@@ -73,6 +71,7 @@ const Carousels = () => {
     highestRatedMoviesEn,
     highestRatedMoviesInt,
     popularMovies = '';
+    
   if (hasLoaded) {
     //need to declare a separate function here in order to filter for movies in English
     const upcomingMoviesLists = [...movieUpcoming.results];

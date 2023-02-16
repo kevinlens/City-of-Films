@@ -1,3 +1,4 @@
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import Header from './components/Layout/Header';
@@ -41,6 +42,16 @@ function App() {
               <>
                 <Header modifiedHeader={true}/>
                 <Details />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path='/cast/:id'
+            element={
+              <>
+                <Header modifiedHeader={true}/>
+
                 <Footer />
               </>
             }

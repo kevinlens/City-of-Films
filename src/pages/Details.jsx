@@ -8,6 +8,9 @@ import { average } from 'color.js';
 //ROUTING
 import { useParams } from 'react-router-dom';
 
+//ROUTING
+import { Link } from 'react-router-dom';
+
 //RTK QUERY
 import {
   useFetchMovieDetailsQuery,
@@ -194,7 +197,7 @@ const Summary = (props) => {
           className='flex overflow-x-scroll overflow-y-hidden rounded-lg'
         >
           {casts.map((item) => (
-            <li className='w-36 mb-8 ml-2 h-72 flex-shrink-0 border-[1px] border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium' key={item.id}>
+             <Link to={`/cast/${item.id}`} className='w-36 mb-8 ml-2 h-72 flex-shrink-0 border-[1px] border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium' key={item.id}>
               <div className='h-44 '>
                 <img
                   loading='lazy'
@@ -211,7 +214,7 @@ const Summary = (props) => {
                 </p>
                 <p className='text-sm'>{item.character}</p>
               </figcaption>
-            </li>
+            </Link>
           ))}
           <div
             className='absolute h-full w-12 right-0'
