@@ -36,25 +36,31 @@ import { useFetchNowPlayingMoviesQuery } from '../../store/reduxStore/fetch/fetc
 import { useFetchPopularTVShowsQuery } from '../../store/reduxStore/fetch/fetchApi';
 
 const Hero = () => {
-  //CONTEXT API
+
+  //* CONTEXT API
   const { monthsAgoDate, currentDate } = useContext(DateContext);
   const { movieGenres } = useContext(GenreContext);
-  const { currentFormIsMovies, setToTVShows } = useContext(
+  const { currentFormIsMovies } = useContext(
     FormOfEntertainmentContext
   );
-  //immutable
+
+  //* IMMUTABLE QUERIES
   const { data, error, isLoading, isSuccess } = useFetchNowPlayingMoviesQuery({
     monthsAgoDate,
     currentDate,
   });
   const { data: data2 } = useFetchPopularTVShowsQuery();
 
+  //* STATES
   const [listOfCasts, setListOfCasts] = useState({ casts: [], directors: [] });
+  const [listOfTVCasts, setListOfTVCasts] = useState({
+    casts: [],
+    directors: [],
+  });
   const [hasLoaded, setHasLoaded] = useState(false);
   const [loadedMoviesEn, setLoadedMoviesEn] = useState(null);
-
   //for ensuring movies/tv slides can change dynamically
-  const [entertainmentIsMovie, SetEntertainmentIsMovie] = useState(false);
+
   //! fetchURL is not able to access state upon execution but it can with
   //! global variables (like the ones below)
   let loadedMovies;
@@ -63,14 +69,15 @@ const Hero = () => {
   //for ensuring movies/tv slides can change dynamically
   //to separate for easier to read code
   useEffect(() => {
-    SetEntertainmentIsMovie(!entertainmentIsMovie);
+    setListOfCasts({ casts: [], directors: [] })
+    //if context global entertainment form changes from movies to TV etc.
   }, [currentFormIsMovies]);
 
   useEffect(() => {
-    if (data && data2 && setToTVShows) {
+    if (data && data2) {
       //essential rule of redux is keeping the state/data immutable
       //therefore here we make a clone of the existing state using the spread operator
-      if (entertainmentIsMovie) {
+      if (currentFormIsMovies) {
         loadedMovies = [...data.results];
       } else {
         loadedMovies = [...data2.results];
@@ -87,31 +94,87 @@ const Hero = () => {
       setLoadedMoviesEn(loadedMoviesSortedList);
       fetchUrl();
     }
-  }, [data, data2, currentFormIsMovies,entertainmentIsMovie]);
+  }, [data, data2, currentFormIsMovies]);
 
   let bgImage = '';
   //fetching and organizing a list of popular cast names for
   //our four movies (already fetched) displayed in Hero section
   const fetchUrl = async () => {
-    //retrieve a bunch of ID's from movie
-    const listOfMovieIDs = loadedMoviesSortedList.map((item) => {
-      return item.id;
+
+    let totalPages = 3;
+
+    const fetchTotalPages = async (index) => {
+      let pageNumber = index + 1;
+      let data = await fetch(
+        `https://api.themoviedb.org/3/tv/popular?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=${pageNumber}`
+      );
+      let movieData = await data.json();
+      return movieData;
+      // const rawMovies = [...movieData.results];
+      // setListOfMovies((currentSetOfMovies) => [
+      //   ...currentSetOfMovies,
+      //   ...rawMovies,
+      // ]);
+    };
+
+    // for (let index = 1; index <= totalPages; index++) {
+    //   await fetchTotalPages(index);
+    // }
+
+    // * fetches all url at once as each url is limited to 20 array elements
+    const list = await Promise.all(
+      Array.from({ length: totalPages }, (_, index) => fetchTotalPages(index))
+    );
+
+    let entireList = [];
+
+    // * merge all array elements
+    list.map((item) => {
+      let reassignedArray = item.results;
+      entireList.push(...reassignedArray);
     });
+
+    let sortedList = entireList.filter((item) => {
+      if (item.original_language == 'en') {
+        return item;
+      }
+    });
+
+    sortedList.sort(
+      (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
+    );
+
+    console.log('😢😢😢😢😢😢', sortedList)
+
+
+
+    let listOfMovieIDs;
+    //retrieve a bunch of ID's from movie
+    if(currentFormIsMovies){
+      listOfMovieIDs = loadedMoviesSortedList.map((item) => {
+        return item.id;
+      });
+    }else{
+      setLoadedMoviesEn(sortedList)
+      listOfMovieIDs = sortedList.map((item) => {
+        return item.id;
+      });
+    }
+    console.log('🍑🍑🍑🍑', listOfMovieIDs)
     //api call shouldn't exists in components like this but
     //this will be an exception considering it's not
     //viable to make two api calls with one dependent on another
     //at the same time
     const getDetails = async (id) => {
-
       let data;
       let movieCredits;
       //for fetching casts and directors
-      if(entertainmentIsMovie){
-      data = await fetch(
-        `https://api.themoviedb.org/3/movie/${id}/credits?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US`
-      );
-      movieCredits = await data.json();
-      }else{
+      if(currentFormIsMovies){
+        data = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}/credits?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US`
+        );
+        movieCredits = await data.json();
+      } else {
         data = await fetch(
           `https://api.themoviedb.org/3/tv/${id}/credits?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US`
         );
@@ -120,11 +183,14 @@ const Hero = () => {
 
       const director = GetMovieDirector(movieCredits.crew);
       const castNames = GetMovieCasts(movieCredits.cast);
-      setListOfCasts((prevState) => ({
-        ...prevState,
-        casts: [...prevState.casts, castNames],
-        directors: [...prevState.directors, director],
-      }));
+   
+        setListOfCasts((prevState) => ({
+          ...prevState,
+          casts: [...prevState.casts, castNames],
+          directors: [...prevState.directors, director],
+        }));
+      
+
       setHasLoaded(true);
     };
     //retrieve casts for only 4 movies
@@ -135,6 +201,8 @@ const Hero = () => {
 
   //ensures data has been retrieved before moving onwards
   if (data && data2 && listOfCasts && hasLoaded) {
+    console.log('🐳🐳🐳🐳', listOfCasts)
+    console.log('🍌🍌🍌🍌🍌', listOfTVCasts)
     let nowPlayingMovies = loadedMoviesEn;
     //array of only four most popular movies
     nowPlayingMovies.splice(6);
@@ -142,6 +210,7 @@ const Hero = () => {
     bgImage = (
       <>
         {nowPlayingMovies.map((item, index) => {
+          console.log('🍱🍱🍱🍱', item.name)
           let starring = [];
           let director = [];
           let genres = [];
@@ -185,10 +254,11 @@ const Hero = () => {
               );
             }
             for (let dir of listOfCasts.directors[index].entries()) {
+              
               director.push(
                 <>
                   <p>
-                    <b>Director:</b> {dir}
+                    <b>Director:</b> {dir[1]}
                   </p>
                 </>
               );

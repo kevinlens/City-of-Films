@@ -3,15 +3,17 @@ import FormOfEntertainmentContext from '../../../store/contextStore/FormOfEntert
 import React, { useState } from 'react';
 import styles from './ToggleSwitch.module.css';
 const ToggleSwitch = () => {
-  const { currentFormIsMovies, setToMovies, setToTVShows } = useContext(
+  const { currentFormIsMovies, setToTVShows } = useContext(
     FormOfEntertainmentContext
   );
   const [isChecked, setIsChecked] = useState(true);
 
   const checkedBox = () => {
-    console.log('🐳🐳🐳🐳', currentFormIsMovies)
+    console.log('---------------1', currentFormIsMovies)
+    //for UI purposes
     setIsChecked((isChecked) => !isChecked);
     setToTVShows()
+    console.log('---------------2', currentFormIsMovies)
   };
 
   return (
