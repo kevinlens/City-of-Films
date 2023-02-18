@@ -6,21 +6,16 @@ const ToggleSwitch = () => {
   const { currentFormIsMovies, setToTVShows } = useContext(
     FormOfEntertainmentContext
   );
-  const [isChecked, setIsChecked] = useState(true);
 
   const checkedBox = () => {
-    console.log('---------------1', currentFormIsMovies)
-    //for UI purposes
-    setIsChecked((isChecked) => !isChecked);
     setToTVShows()
-    console.log('---------------2', currentFormIsMovies)
   };
 
   return (
     <label className={styles.switch}>
       <input
         type='checkbox'
-        checked={isChecked ? 'checked' : null}
+        checked={currentFormIsMovies ? 'checked' : null}
         onClick={checkedBox}
       ></input>
       <span className={styles.slider}></span>

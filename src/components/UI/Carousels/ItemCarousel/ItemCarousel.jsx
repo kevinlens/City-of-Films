@@ -18,7 +18,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-const ItemCarousel = ({ highestRatedMovies, title}) => {
+const ItemCarousel = ({ highestRatedMovies, title }) => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -44,11 +44,16 @@ const ItemCarousel = ({ highestRatedMovies, title}) => {
             <Link to={`/details/movie/${item.id}`}>
               <div className='py-3 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
                 <img
+                  onError={(e) => {
+                    e.currentTarget.src = 'https://image.tmdb.org/t/p/original/c8dm74uPCMA27iKAR1WnHKTsI9h.jpg';
+                  }}
                   src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
                   alt='Image 2'
                 />
                 <p className='text-zinc-400'>
-                  {item.title + ' (' + item.vote_average + ')'}
+                  {item.title
+                    ? item.title
+                    : item.name + ' (' + item.vote_average + ')'}
                 </p>
               </div>
             </Link>
@@ -59,9 +64,7 @@ const ItemCarousel = ({ highestRatedMovies, title}) => {
   }
   return (
     <div className={`${styles.itemCarousel} my-4 mx-8`}>
-      <h1 className='text-3xl mt-10 mb-2 text-white'>
-        {title}
-      </h1>
+      <h1 className='text-3xl mt-10 mb-2 text-white'>{title}</h1>
       <Swiper
         slidesPerView={currentMedia}
         spaceBetween={12}

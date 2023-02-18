@@ -1,6 +1,6 @@
 //BUILT-IN REACT HOOKS
 import React, { useEffect, useState } from 'react';
-
+import DuplicatesExterminator from '../Dry_Functions/DuplicatesExterminator';
 //ROUTING
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
@@ -9,25 +9,6 @@ import { useFetchMoviesWithUserSearchQueryQuery } from '../store/reduxStore/fetc
 //STYLING
 import styles from './SearchResults.module.scss';
 import RatingPercentage from '../components/UI/RatingPercentage/RatingPercentage';
-const hasDuplicates = (arr) => {
-  return new Set(arr).size !== arr.length;
-};
-
-const removeDuplicates = (array) => {
-  return [...new Set(array)];
-};
-
-const matchArrays = (arr1, arr2) => {
-  const matchedObjects = [];
-  arr2.forEach((obj) => {
-    // * "!matchedObjects.some(o => o.id === obj.id)" ensures that the object(id) doesn't already
-    // * exists within our array
-    if (arr1.includes(obj.id) && !matchedObjects.some((o) => o.id === obj.id)) {
-      matchedObjects.push(obj);
-    }
-  });
-  return matchedObjects;
-};
 
 const formatDate = (dateStr) => {
   const date = new Date(dateStr);
@@ -131,21 +112,7 @@ const SearchResults = () => {
       let reassignedArray = item.results;
       entireList.push(...reassignedArray);
     });
-
-    // * for helping with identifying existing duplicates
-    let movieIDs = entireList.map((item) => {
-      return item.id;
-    });
-
-    // * must check if are ID's are identical
-    if (hasDuplicates(movieIDs)) {
-      // * cleansing array with duplicate elements by removing them
-      let checkedForDuplicateArray = removeDuplicates(movieIDs);
-      let finalData = matchArrays(checkedForDuplicateArray, entireList);
-      setListOfMovies(finalData);
-    } else {
-      setListOfMovies(entireList);
-    }
+    setListOfMovies(DuplicatesExterminator(entireList))
     setHasLoaded(true);
   };
 

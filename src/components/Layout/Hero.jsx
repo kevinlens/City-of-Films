@@ -33,16 +33,13 @@ import { Pagination, Navigation, EffectFade } from 'swiper';
 
 //RTK QUERY
 import { useFetchNowPlayingMoviesQuery } from '../../store/reduxStore/fetch/fetchApi';
-import { useFetchPopularTVShowsQuery } from '../../store/reduxStore/fetch/fetchApi';
+import { useFetchPopularTVShowsQuery } from '../../store/reduxStore/fetch/fetchTVShowsApi';
 
 const Hero = () => {
-
   //* CONTEXT API
   const { monthsAgoDate, currentDate } = useContext(DateContext);
   const { movieGenres } = useContext(GenreContext);
-  const { currentFormIsMovies } = useContext(
-    FormOfEntertainmentContext
-  );
+  const { currentFormIsMovies } = useContext(FormOfEntertainmentContext);
 
   //* IMMUTABLE QUERIES
   const { data, error, isLoading, isSuccess } = useFetchNowPlayingMoviesQuery({
@@ -53,10 +50,6 @@ const Hero = () => {
 
   //* STATES
   const [listOfCasts, setListOfCasts] = useState({ casts: [], directors: [] });
-  const [listOfTVCasts, setListOfTVCasts] = useState({
-    casts: [],
-    directors: [],
-  });
   const [hasLoaded, setHasLoaded] = useState(false);
   const [loadedMoviesEn, setLoadedMoviesEn] = useState(null);
   //for ensuring movies/tv slides can change dynamically
@@ -69,7 +62,7 @@ const Hero = () => {
   //for ensuring movies/tv slides can change dynamically
   //to separate for easier to read code
   useEffect(() => {
-    setListOfCasts({ casts: [], directors: [] })
+    setListOfCasts({ casts: [], directors: [] });
     //if context global entertainment form changes from movies to TV etc.
   }, [currentFormIsMovies]);
 
@@ -100,7 +93,7 @@ const Hero = () => {
   //fetching and organizing a list of popular cast names for
   //our four movies (already fetched) displayed in Hero section
   const fetchUrl = async () => {
-
+    //!------------------TV SHOWS DATA SECTION (BELOW) / REFACTOR WHEN YOU HAVE TIME 
     let totalPages = 3;
 
     const fetchTotalPages = async (index) => {
@@ -143,24 +136,20 @@ const Hero = () => {
     sortedList.sort(
       (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
     );
-
-    console.log('😢😢😢😢😢😢', sortedList)
-
-
+    //!------------------TV SHOWS DATA SECTION (ABOVE) / REFACTOR WHEN YOU HAVE TIME
 
     let listOfMovieIDs;
     //retrieve a bunch of ID's from movie
-    if(currentFormIsMovies){
+    if (currentFormIsMovies) {
       listOfMovieIDs = loadedMoviesSortedList.map((item) => {
         return item.id;
       });
-    }else{
-      setLoadedMoviesEn(sortedList)
+    } else {
+      setLoadedMoviesEn(sortedList);
       listOfMovieIDs = sortedList.map((item) => {
         return item.id;
       });
     }
-    console.log('🍑🍑🍑🍑', listOfMovieIDs)
     //api call shouldn't exists in components like this but
     //this will be an exception considering it's not
     //viable to make two api calls with one dependent on another
@@ -169,7 +158,7 @@ const Hero = () => {
       let data;
       let movieCredits;
       //for fetching casts and directors
-      if(currentFormIsMovies){
+      if (currentFormIsMovies) {
         data = await fetch(
           `https://api.themoviedb.org/3/movie/${id}/credits?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US`
         );
@@ -180,16 +169,16 @@ const Hero = () => {
         );
         movieCredits = await data.json();
       }
-
+      // console.log('---------------', movieCredits.crew);
+      // ! Note: Directors might not be available for some TV Shows from TMDB
       const director = GetMovieDirector(movieCredits.crew);
       const castNames = GetMovieCasts(movieCredits.cast);
-   
-        setListOfCasts((prevState) => ({
-          ...prevState,
-          casts: [...prevState.casts, castNames],
-          directors: [...prevState.directors, director],
-        }));
-      
+
+      setListOfCasts((prevState) => ({
+        ...prevState,
+        casts: [...prevState.casts, castNames],
+        directors: [...prevState.directors, director],
+      }));
 
       setHasLoaded(true);
     };
@@ -201,8 +190,6 @@ const Hero = () => {
 
   //ensures data has been retrieved before moving onwards
   if (data && data2 && listOfCasts && hasLoaded) {
-    console.log('🐳🐳🐳🐳', listOfCasts)
-    console.log('🍌🍌🍌🍌🍌', listOfTVCasts)
     let nowPlayingMovies = loadedMoviesEn;
     //array of only four most popular movies
     nowPlayingMovies.splice(6);
@@ -210,7 +197,6 @@ const Hero = () => {
     bgImage = (
       <>
         {nowPlayingMovies.map((item, index) => {
-          console.log('🍱🍱🍱🍱', item.name)
           let starring = [];
           let director = [];
           let genres = [];
@@ -223,7 +209,6 @@ const Hero = () => {
                 }
               });
             }
-
             genres.splice(3);
             {
               /* reason why we are using ES6’s Array.prototype.entries here
@@ -245,16 +230,23 @@ const Hero = () => {
                     {i != 7 && ', '} &nbsp;
                   </p>
                   {i === 3 && <br></br>}
-                  {i === 7 && (
+                  {/* ensures all the previous elements are loaded before we add a new element for line break purposes */}
+                  {i === listOfCasts.casts[index].length - 1 && (
                     <p className={`text-base block `}>
-                      Release Date: {item.release_date}{' '}
+                      <b>
+                        {currentFormIsMovies
+                          ? 'Release Date:'
+                          : 'First Air Date'}
+                      </b>{' '}
+                      {item.release_date
+                        ? item.release_date
+                        : item.first_air_date}
                     </p>
                   )}
                 </>
               );
             }
             for (let dir of listOfCasts.directors[index].entries()) {
-              
               director.push(
                 <>
                   <p>
@@ -270,8 +262,12 @@ const Hero = () => {
               <Link to={`/details/movie/${item.id}`}>
                 <div className='text-left'>
                   <div className='absolute left-8 bottom-16  text-white '>
-                    <h1 className='text-6xl'>{item.title}</h1>
-                    <p className='text-xl'>(Now Playing)</p>
+                    <h1 className='text-6xl'>
+                      {item.title ? item.title : item.name}
+                    </h1>
+                    <p className='text-xl'>
+                      {currentFormIsMovies ? '(Now Playing)' : '(Now Airing)'}
+                    </p>
                     <p className='text-3xl'>Rating {item.vote_average}</p>
                     <div className=''>
                       {director}
