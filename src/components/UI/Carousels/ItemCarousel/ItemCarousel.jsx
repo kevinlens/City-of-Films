@@ -18,7 +18,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-const ItemCarousel = ({ highestRatedMovies, title }) => {
+const ItemCarousel = ({ highestRatedMovies, title, currentFormIsMovies }) => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const ItemCarousel = ({ highestRatedMovies, title }) => {
       <>
         {highestRatedMovies.map((item) => (
           <SwiperSlide key={item.id}>
-            <Link to={`/details/movie/${item.id}`}>
+            <Link to={`/details/${currentFormIsMovies ? 'movies': 'tvShows'}/${item.id}`}>
               <div className='py-3 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
                 <img
                   onError={(e) => {

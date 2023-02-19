@@ -168,7 +168,7 @@ const Summary = (props) => {
               {title} ({release_date.slice(0, 4)})
             </h1>
             <p>
-              {release_date.split('-').join('/')} &#x2022;
+              {release_date.split('-').join('/')}&nbsp;  &#x2022; &nbsp; 
               {genres.join(', ')} &#x2022; {timeConvert(runtime)}
             </p>
             <p>{tagline}</p>

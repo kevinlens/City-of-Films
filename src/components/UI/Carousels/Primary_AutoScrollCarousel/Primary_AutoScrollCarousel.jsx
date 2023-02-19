@@ -13,12 +13,11 @@ import '@splidejs/splide/dist/css/splide.min.css';
 import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 
-const Primary_AutoScrollCarousel = ({ collectionOfMovies }) => {
+const Primary_AutoScrollCarousel = ({ collectionOfMovies, currentFormIsMovies }) => {
   const [isMobile, setIsMobile] = useState(false);
 
   // *! Has to be an EVEN amount of items or will cause a loop reset glitch!
   const {upcomingMovies} = collectionOfMovies;
-  const {latestMovies} = collectionOfMovies;
 
   useEffect(() => {
     const mql = window.matchMedia('(max-width: 768px)');
@@ -32,12 +31,12 @@ const Primary_AutoScrollCarousel = ({ collectionOfMovies }) => {
 
   let movieCards = '';
 
-  if (collectionOfMovies.upcomingMovies) {
+  if (upcomingMovies) {
     movieCards = (
       <>
         {upcomingMovies.map((item) => (
           <SplideSlide className='odd:mt-24' key={item.id}>
-            <Link to={`/details/movie/${item.id}`}>
+            <Link to={`/details/${currentFormIsMovies ? 'movies': 'tvShows'}/${item.id}`}>
               <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
                 <img
                   src={`https://image.tmdb.org/t/p/original${item.poster_path}`}

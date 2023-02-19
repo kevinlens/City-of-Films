@@ -259,7 +259,7 @@ const Hero = () => {
 
           return (
             <SwiperSlide key={item.id}>
-              <Link to={`/details/movie/${item.id}`}>
+              <Link to={`/details/${currentFormIsMovies ? 'movies': 'tvShows'}/${item.id}`}>
                 <div className='text-left'>
                   <div className='absolute left-8 bottom-16  text-white '>
                     <h1 className='text-6xl'>

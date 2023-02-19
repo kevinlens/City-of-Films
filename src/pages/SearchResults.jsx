@@ -128,7 +128,7 @@ const SearchResults = () => {
     currentItems.map((item, index) => {
       movies.push(
         <Link
-          to={`/details/movie/${item.id}`}
+          to={`/details/${currentFormIsMovies ? 'movies': 'tvShows'}/${item.id}`}
           className='w-72 font-sourcePoppinsRegular text-white relative'
           key={index}
         >

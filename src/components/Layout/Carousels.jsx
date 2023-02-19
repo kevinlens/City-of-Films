@@ -220,11 +220,13 @@ const Carousels = () => {
       <div className='max-w-full mx-auto mt-14'>
         <Primary_AutoScrollCarousel
           collectionOfMovies={{ latestMovies, upcomingMovies }}
+          currentFormIsMovies={currentFormIsMovies}
         />
         <hr />
         <Secondary_AutoScrollCarousel
           speed={-0.4}
           latestMovies={latestMovies}
+          currentFormIsMovies={currentFormIsMovies}
         />
         <h1 className='flex text-white text-5xl justify-center'>
           Latest Movies
@@ -232,6 +234,7 @@ const Carousels = () => {
         <Secondary_AutoScrollCarousel
           speed={0.5}
           latestMovies={latestMoviesPage2}
+          currentFormIsMovies={currentFormIsMovies}
         />
       </div>
       <hr />
@@ -243,6 +246,7 @@ const Carousels = () => {
             ? 'Highest Rated of the Decade'
             : 'Highest Rated (North America)'
         }
+        currentFormIsMovies={currentFormIsMovies}
       />
       <hr />
 
@@ -253,6 +257,7 @@ const Carousels = () => {
             ? 'Highest Rated of the Decade (International)'
             : 'Highest Rated (International)'
         }
+        currentFormIsMovies={currentFormIsMovies}
       />
       <hr />
 

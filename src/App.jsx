@@ -8,6 +8,7 @@ import Footer from './components/Layout/Footer';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 import Details from './pages/Details';
+import DetailsTVShows from './pages/DetailsTVShows';
 import ScrollToTop from './components/UI/ScrollToTop/ScrollToTop';
 import SearchResults from './pages/SearchResults';
 function App() {
@@ -37,11 +38,21 @@ function App() {
             }
           />
           <Route
-            path='/details/movie/:id'
+            path='/details/movies/:id'
             element={
               <>
                 <Header modifiedHeader={true}/>
                 <Details />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path='/details/tvShows/:id'
+            element={
+              <>
+                <Header modifiedHeader={true}/>
+                <DetailsTVShows />
                 <Footer />
               </>
             }

@@ -13,7 +13,7 @@ import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/splide/dist/css/splide.min.css';
 
-const Secondary_AutoScrollCarousel = ({latestMovies, speed}) => {
+const Secondary_AutoScrollCarousel = ({latestMovies, speed, currentFormIsMovies}) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
 
@@ -48,7 +48,7 @@ const Secondary_AutoScrollCarousel = ({latestMovies, speed}) => {
       <>
         {latestMovies.map((item) => (
           <SplideSlide key={item.id}>
-            <Link to={`/details/movie/${item.id}`}>
+            <Link to={`/details/${currentFormIsMovies ? 'movies': 'tvShows'}/${item.id}`}>
             <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
               <img src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt='Image 2' />
             </div>
