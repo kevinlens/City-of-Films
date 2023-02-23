@@ -264,6 +264,7 @@ const Carousels = () => {
       <ItemCarousel
         highestRatedMovies={popularMovies}
         title={'Popular Movies'}
+        currentFormIsMovies={currentFormIsMovies}
       />
       <hr />
 

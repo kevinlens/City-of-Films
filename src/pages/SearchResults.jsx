@@ -5,10 +5,17 @@ import DuplicatesExterminator from '../Dry_Functions/DuplicatesExterminator';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
+
+//RTK QUERY 
 import { useFetchMoviesWithUserSearchQueryQuery } from '../store/reduxStore/fetch/fetchApi';
+import { useFetchTVShowsWithUserSearchQueryQuery } from '../store/reduxStore/fetch/fetchTVShowsApi';
+
 //STYLING
 import styles from './SearchResults.module.scss';
 import RatingPercentage from '../components/UI/RatingPercentage/RatingPercentage';
+
+import { useContext } from 'react';
+import FormOfEntertainmentContext from '../store/contextStore/FormOfEntertainment-Context';
 
 const formatDate = (dateStr) => {
   const date = new Date(dateStr);
@@ -23,6 +30,12 @@ const SearchResults = () => {
   const { data: moviesDataSet } = useFetchMoviesWithUserSearchQueryQuery({
     searchQuery,
   });
+
+  const { data: tvShowDataSet } = useFetchTVShowsWithUserSearchQueryQuery({
+    searchQuery,
+  });
+
+  const { currentFormIsMovies } = useContext(FormOfEntertainmentContext);
 
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [listOfMovies, setListOfMovies] = useState([]);
@@ -43,7 +56,7 @@ const SearchResults = () => {
     setPageCount(0);
     setItemOffset(0);
     setCurrentPage(0);
-  }, [moviesDataSet]);
+  }, [moviesDataSet, tvShowDataSet]);
 
   //for detecting user window resize
   useEffect(() => {
@@ -64,7 +77,7 @@ const SearchResults = () => {
       setItemsPerPage(12);
     }
     // Ensures movie data is fetched and has finished loading
-    if (moviesDataSet && hasLoaded != true) {
+    if (moviesDataSet && tvShowDataSet && hasLoaded != true) {
       fetchUrl();
     }
 
@@ -77,17 +90,31 @@ const SearchResults = () => {
     setCurrentItems(sortedMovies.slice(itemOffset, endOffset));
     setPageCount(Math.ceil(sortedMovies.length / itemsPerPage));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [moviesDataSet, itemOffset, itemsPerPage, hasLoaded, screenSize]);
+  }, [moviesDataSet, itemOffset, itemsPerPage, hasLoaded, screenSize, tvShowDataSet]);
 
   const fetchUrl = async () => {
     setListOfMovies([]);
-    let totalPages = moviesDataSet.total_pages;
-
+    let totalPages;
+    if (currentFormIsMovies){
+      totalPages = moviesDataSet.total_pages;
+      console.log('🪂🎃🎊🎎🎏🎗🎪🎭🥽👾🛺', )
+    }else {
+      console.log('🐳🐳🐳🐳', tvShowDataSet)
+      totalPages = tvShowDataSet.total_pages;
+    }
+    
     const fetchTotalPages = async (index) => {
       let pageNumber = index + 1;
-      let data = await fetch(
-        `https://api.themoviedb.org/3/search/movie?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&query=${searchQuery}&page=${pageNumber}&include_adult=true`
-      );
+      let data;
+      if(currentFormIsMovies){
+        data = await fetch(
+          `https://api.themoviedb.org/3/search/movie?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&query=${searchQuery}&page=${pageNumber}&include_adult=true`
+        );
+      }else{
+        data = await fetch(
+          `https://api.themoviedb.org/3/search/tv?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=${pageNumber}&query=${searchQuery}&include_adult=true`
+        );
+      }
       let movieData = await data.json();
       return movieData;
       // const rawMovies = [...movieData.results];
@@ -145,8 +172,8 @@ const SearchResults = () => {
               src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
               alt='Image 2'
             />
-            <p className='pt-2 text-xl'>{item.title}</p>
-            <p className='text-sm'>{formatDate(item.release_date)}</p>
+            <p className='pt-2 text-xl'>{item.title ? item.title : item.name}</p>
+            <p className='text-sm'>{formatDate(item.release_date ? item.release_date : item.first_air_date)}</p>
           </div>
         </Link>
       );

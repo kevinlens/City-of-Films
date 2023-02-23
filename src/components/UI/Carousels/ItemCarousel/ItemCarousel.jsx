@@ -25,7 +25,6 @@ const ItemCarousel = ({ highestRatedMovies, title, currentFormIsMovies }) => {
     const mql = window.matchMedia('(max-width: 768px)');
     setIsMobile(mql.matches);
     mql.addEventListener('change', handleMediaQueryChange);
-
     return () => {
       mql.removeEventListener('change', handleMediaQueryChange);
     };
