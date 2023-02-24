@@ -11,6 +11,8 @@
   "dependencies": {
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^1.0.6",
+    "@nivo/core": "^0.80.0",
+    "@nivo/geo": "^0.80.0",
     "@reduxjs/toolkit": "^1.9.1",
     "@splidejs/react-splide": "^0.7.12",
     "@splidejs/splide": "^4.1.4",
