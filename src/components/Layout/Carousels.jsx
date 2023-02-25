@@ -120,7 +120,7 @@ const Carousels = () => {
     let entireList = [];
 
     // * merge all array elements
-    list.map((item) => {
+    list.forEach((item) => {
       let reassignedArray = item.results;
       entireList.push(...reassignedArray);
     });
