@@ -64,42 +64,44 @@ const CalendarChart = ({
       //   });
       // });
 
-      setCalendarData(calendarDate)
+      setCalendarData(calendarDate);
     }
   }, [movieCollectionsFor2021, movieCollectionsFor2022]);
 
   return (
-    <div className='w-[44rem] h-[36rem]'>
+    <div>
       <h1 className='text-center text-3xl'>
-        Most Popular Genres for Movies of 2022
+        Calendar of Movie Contributions Throughout the Years
       </h1>
-      <ResponsiveCalendar
-        data={calendarData}
-        from='2021-03-01'
-        to='2022-07-12'
-        emptyColor='#eeeeee'
-        colors={['#61cdbb', '#97e3d5', '#e8c1a0', '#f47560']}
-        yearSpacing={40}
-        margin={{ left: 30 }}
-        yearLegendOffset={4}
-        monthBorderColor='#ffffff'
-        dayBorderWidth={2}
-        maxValue={100}
-        dayBorderColor='#ffffff'
-        legends={[
-          {
-            anchor: 'bottom-right',
-            direction: 'row',
-            translateY: -120,
-            translateX: -35,
-            itemCount: 4,
-            itemWidth: 42,
-            itemHeight: 36,
-            itemsSpacing: 14,
-            itemDirection: 'right-to-left',
-          },
-        ]}
-      />
+      <section className='w-[44rem] h-[20rem] mx-auto'>
+        <ResponsiveCalendar
+          data={calendarData}
+          from='2021-03-01'
+          to='2022-07-12'
+          emptyColor='#eeeeee'
+          colors={['#61cdbb', '#97e3d5', '#e8c1a0', '#f47560']}
+          yearSpacing={40}
+          margin={{ left: 30}}
+          yearLegendOffset={4}
+          monthBorderColor='#ffffff'
+          dayBorderWidth={2}
+          maxValue={100}
+          dayBorderColor='#ffffff'
+          legends={[
+            {
+              anchor: 'bottom-right',
+              direction: 'row',
+              translateY: 10,
+              translateX: -35,
+              itemCount: 4,
+              itemWidth: 42,
+              itemHeight: 36,
+              itemsSpacing: 14,
+              itemDirection: 'right-to-left',
+            },
+          ]}
+        />
+      </section>
     </div>
   );
 };

@@ -91,21 +91,16 @@ const Dashboard = () => {
   return (
     <div className={`${styles.dashboard} pb-20`}>
       <section className='flex items-center place-content-evenly'>
-        <CalendarChart
-          movieCollectionsFor2021={collectionOfMoviesFor2021}
-          movieCollectionsFor2022={collectionOfMoviesFor2022}
-        />
+        <ChoroplethChart />
         <RadarChart
           movieCollectionsFor2021={collectionOfMoviesFor2021}
           movieCollectionsFor2022={collectionOfMoviesFor2022}
         />
       </section>
-      <section className='w-[42rem] h-[28rem] mx-auto'>
-        <h1 className='text-center text-3xl'>
-          Countries and their Number of Aired TV Shows in 2022
-        </h1>
-        <ChoroplethChart />
-      </section>
+      <CalendarChart
+        movieCollectionsFor2021={collectionOfMoviesFor2021}
+        movieCollectionsFor2022={collectionOfMoviesFor2022}
+      />
     </div>
   );
 };

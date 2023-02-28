@@ -85,7 +85,7 @@ const RadarChart = ({ movieCollectionsFor2021, movieCollectionsFor2022 }) => {
       } `}
     >
       <h1 className='text-center text-3xl'>
-        Most Popular Genres for Movies of 2022
+        Most Common Movie Genres
       </h1>
 
       <ResponsiveRadar
