@@ -13,11 +13,14 @@ import '@splidejs/splide/dist/css/splide.min.css';
 import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 
-const Primary_AutoScrollCarousel = ({ collectionOfMovies, currentFormIsMovies }) => {
+const Primary_AutoScrollCarousel = ({
+  collectionOfMovies,
+  currentFormIsMovies,
+}) => {
   const [isMobile, setIsMobile] = useState(false);
 
   // *! Has to be an EVEN amount of items or will cause a loop reset glitch!
-  const {upcomingMovies} = collectionOfMovies;
+  const { upcomingMovies } = collectionOfMovies;
 
   useEffect(() => {
     const mql = window.matchMedia('(max-width: 768px)');
@@ -36,9 +39,18 @@ const Primary_AutoScrollCarousel = ({ collectionOfMovies, currentFormIsMovies })
       <>
         {upcomingMovies.map((item) => (
           <SplideSlide className='odd:mt-24' key={item.id}>
-            <Link to={`/details/${currentFormIsMovies ? 'movies': 'tvShows'}/${item.id}`}>
+            {/* in the case that the item doesn't exist we'll be replacing it's id to default id */}
+            <Link
+              to={`/details/${currentFormIsMovies ? 'movies' : 'tvShows'}/${
+                item.poster_path ? item.id : 576845
+              }`}
+            >
               <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
                 <img
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      'https://image.tmdb.org/t/p/original/ahbwIJl7T0D34m3sPKlBaCqs2xH.jpg';
+                  }}
                   src={`https://image.tmdb.org/t/p/original${item.poster_path}`}
                   alt='Image 2'
                 />
@@ -54,7 +66,6 @@ const Primary_AutoScrollCarousel = ({ collectionOfMovies, currentFormIsMovies })
     setIsMobile(event.matches);
   }
   let currentMedia = isMobile ? 2 : 4;
-
 
   return (
     <div className='mt-4 mb-8 relative text-center'>

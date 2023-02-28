@@ -5,7 +5,6 @@ import GenreContext from './Genre-Context';
 
 //COMPONENT
 const GenreProvider = (props) => {
-  
   const movieGenres = [
     { id: 28, name: 'Action' },
     { id: 12, name: 'Adventure' },
