@@ -72,9 +72,6 @@ const Carousels = () => {
   const [collectionOfTVShows, setCollectionOfTVShows] = useState([]);
   useEffect(() => {
     getCollectionOfTVShows();
-    // curatedTVShows.then((result) => {
-    //   console.log('🍌🍌🍌🍌🍌', result);
-    // });
     //all to avoid unnecessary rerenders
     if (
       movieLatest &&
@@ -87,7 +84,7 @@ const Carousels = () => {
       setHasLoaded(true);
     }
   }, [movieLatest, movieLatestPage2, movieUpcoming, currentFormIsMovies]);
-  
+
   const getCollectionOfTVShows = async () => {
     //! DO NOT CHANGE, needed here for the display of Primary Carousel
     //! Primary Carousel will also have a sorted by Popularity list
@@ -147,16 +144,20 @@ const Carousels = () => {
         ...movieHighestRatedPage2.results,
         ...movieHighestRatedPage3.results,
       ];
-      upcomingMoviesLists = [...movieUpcoming.results];
+      let filteredUpcomingMovies = [...movieUpcoming.results];
+      //get rid of duplicate movies through original title instead of IDs because IDs are unreliable
+      upcomingMoviesLists =  [...new Map(filteredUpcomingMovies.map(item => [item.original_title, item])).values()];
       latestMovies = [...movieLatest.results];
       latestMoviesPage2 = [...movieLatestPage2.results];
       latestMovies.sort(
         (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
       );
     } else {
+      //due to the fact that I didn't document my original problem, I can't
+      //seem to figure out whether or not I overcomplicated this function
+      //as it's now very hard to replicate the original bug
       let pureTVShowData = DuplicatesExterminator(collectionOfTVShows);
       let curatedTVShows = [...pureTVShowData];
-      console.log('🍱🍱🍱🍱', curatedTVShows);
       popularMovies = [...popularTVShowsPage5.results];
       highestRatedMovies = [
         ...topRatedTVShows.results,
@@ -203,7 +204,8 @@ const Carousels = () => {
     //remove any duplicates coming from Primary Carousels
     if (!currentFormIsMovies) {
       latestMovies = latestMoviesData.filter(
-        (element) => !upcomingMovies.includes(element) && !(element.name === 'BEASTARS')
+        (element) =>
+          !upcomingMovies.includes(element) && !(element.name === 'BEASTARS')
       );
       latestMoviesPage2 = latestMoviesPage2Data.filter(
         (element) => !upcomingMovies.includes(element)
@@ -229,7 +231,7 @@ const Carousels = () => {
           currentFormIsMovies={currentFormIsMovies}
         />
         <h1 className='flex text-white text-5xl justify-center'>
-          Latest Movies
+          {currentFormIsMovies ? 'Latest Movies' : 'Commonly TV Shows'}
         </h1>
         <Secondary_AutoScrollCarousel
           speed={0.5}
@@ -263,7 +265,11 @@ const Carousels = () => {
 
       <ItemCarousel
         highestRatedMovies={popularMovies}
-        title={'Popular Movies'}
+        title={
+          currentFormIsMovies
+            ? 'Popular Movies'
+            : 'Popular TV Shows'
+        }
         currentFormIsMovies={currentFormIsMovies}
       />
       <hr />

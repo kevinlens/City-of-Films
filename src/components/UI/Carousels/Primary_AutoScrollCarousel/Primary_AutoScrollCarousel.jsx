@@ -70,7 +70,7 @@ const Primary_AutoScrollCarousel = ({
   return (
     <div className='mt-4 mb-8 relative text-center'>
       <h1 className='text-6xl top-[-10px] left-0 right-0 text-white absolute z-10 mix-blend-exclusion'>
-        Upcoming Movies
+        {currentFormIsMovies ? 'Upcoming Movies' : 'Popular TV Shows'}
       </h1>
       <Splide
         aria-label='...'
@@ -91,19 +91,6 @@ const Primary_AutoScrollCarousel = ({
         extensions={{ AutoScroll }}
       >
         {movieCards}
-
-        {/* <SplideSlide>
-        <img
-          src='https://image.tmdb.org/t/p/original/m80kPdrmmtEh9wlLroCp0bwUGH0.jpg'
-          alt='Image 2'
-        />
-      </SplideSlide>
-      <SplideSlide>
-        <img
-          src='https://image.tmdb.org/t/p/original/9z4jRr43JdtU66P0iy8h18OyLql.jpg'
-          alt='Image 2'
-        />
-      </SplideSlide> */}
       </Splide>
     </div>
   );

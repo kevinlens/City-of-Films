@@ -169,7 +169,6 @@ const Hero = () => {
         );
         movieCredits = await data.json();
       }
-      // console.log('---------------', movieCredits.crew);
       // ! Note: Directors might not be available for some TV Shows from TMDB
       const director = GetMovieDirector(movieCredits.crew);
       const castNames = GetMovieCasts(movieCredits.cast);

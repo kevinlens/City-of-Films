@@ -25,8 +25,10 @@ import {
 //DRY FUNCTIONS
 import GetMovieDirector from '../Dry_Functions/GetMovieDirector';
 
-const DetailsTVShows = () => {
+//COMPONENTS
+import RatingPercentage from '../components/UI/RatingPercentage/RatingPercentage';
 
+const DetailsTVShows = () => {
   const params = useParams();
   //immutable
 
@@ -35,8 +37,8 @@ const DetailsTVShows = () => {
   const { data: tvShowKeywords } = useFetchTVShowKeywordsQuery(params.id);
   const { data: tvShowRecommendations } = useFetchTVShowRecommendationsQuery(
     params.id
-    );
-    const { data: tvShowCredits } = useFetchTVShowCreditsQuery(params.id);
+  );
+  const { data: tvShowCredits } = useFetchTVShowCreditsQuery(params.id);
   const { data: tvShowDetails } = useFetchTVShowDetailsQuery(params.id);
   const { data: tvShowReviews } = useFetchTVShowReviewsQuery(params.id);
   useEffect(() => {
@@ -49,7 +51,6 @@ const DetailsTVShows = () => {
       tvShowRecommendations &&
       tvShowKeywords
     ) {
-      console.log('🍌🍌🍌🍌🍌', tvShowDetails);
       getColor();
       setHasLoaded(true);
     }
@@ -98,17 +99,16 @@ const DetailsTVShows = () => {
       tagline,
     } = tvShowDetails;
 
+    const [year, month, day] = first_air_date.split('-');
+    const outputDate = `${month}-${day}-${year}`;
+
     const reviews = tvShowReviews.results.slice(0, 4);
     const trailers = tvShowTrailers.results.slice(0, 5);
     const recommendation = tvShowRecommendations.results.slice(0, 5);
     const keywords = [...tvShowKeywords.results];
-    tvShowDetails.genres.map(item=>{
-      genres.push(item.name)
-    })
-
-    // console.log('Movie Details', tvShowDetails);
-
-    // console.log('Movie Credits', tvShowCredits);
+    tvShowDetails.genres.map((item) => {
+      genres.push(item.name);
+    });
 
     const director = GetMovieDirector(tvShowCredits.crew);
     // const casts = GetMovieCasts(tvShowCredits.cast, true, 'all');
@@ -116,7 +116,6 @@ const DetailsTVShows = () => {
     const timestamp = '2022-12-16T06:48:15.541Z';
     const dt = new Date(timestamp);
     const options = { month: 'long', day: 'numeric', year: 'numeric' };
-    // console.log(new Intl.DateTimeFormat('default', options).format(dt));
 
     summary = (
       <div
@@ -126,7 +125,7 @@ const DetailsTVShows = () => {
         }}
       >
         <div
-          className='flex py-12 px-10 text-white'
+          className='flex py-12 px-20 text-white'
           style={{
             backgroundImage: `linear-gradient(to right, rgba(${hasColor.toString()}, 1) calc((50vw - 170px) - 340px), rgba(${hasColor.toString()}, 0.84) 30%, rgba(${hasColor.toString()}, 0.84) 100%)`,
           }}
@@ -137,18 +136,27 @@ const DetailsTVShows = () => {
             src={`https://image.tmdb.org/t/p/original${poster_path}`}
             alt='Image 2'
           />
-          <div>
-            <h1>
-              {name} ({first_air_date.slice(0, 4)})
+          <div className='mt-12'>
+            <h1 className='text-4xl'>
+              <b>{name}</b>
+              <p className='font-thin inline text-slate-300'>
+                ({first_air_date.slice(0, 4)})
+              </p>
             </h1>
             <p>
-              {first_air_date.split('-').join('/')}&nbsp;  &#x2022; &nbsp; 
+              {outputDate.split('-').join('/')}&nbsp; &#x2022; &nbsp;
               {genres.join(', ')}
             </p>
+            <section className='flex py-4'>
+              <div className='w-96'>
+                <RatingPercentage rating={7} />
+              </div>
+              <p>User Score</p>
+            </section>
             <p>{tagline}</p>
-            <h3>Overview</h3>
+            <h3 className='text-lg font-bold mb-2 pt-2'>Overview</h3>
             <p>{overview}</p>
-            <p>
+            <p className='text-lg font-bold pt-4'>
               <b>Director</b>
             </p>
             <p>{director}</p>
@@ -176,7 +184,7 @@ const DetailsTVShows = () => {
               className='w-36 mb-8 ml-2 h-72 flex-shrink-0 border-[1px] border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium'
               key={item.id}
             >
-              <div className='h-44 '>
+              <div className='h-44'>
                 <img
                   loading='lazy'
                   onError={(e) => {
@@ -202,8 +210,10 @@ const DetailsTVShows = () => {
             }}
           ></div>
         </ul>
-
-        <div className='relative flex flex-col'>
+        <div className='text-xl pl-2 mb-4'>Full Cast & Crew</div>
+        <hr></hr>
+        <h3 className='text-3xl mt-6 mb-2'>Media &nbsp;📺</h3>
+        <div className='relative flex flex-col mb-8'>
           <ul
             id='scrolling-content'
             className='flex overflow-x-scroll overflow-y-hidden rounded-lg'
@@ -241,15 +251,14 @@ const DetailsTVShows = () => {
           ></div>
         </div>
 
-        <div>Full Cast & Crew</div>
         <hr></hr>
-        <div className='text-lg'>Reviews</div>
+        <div className='text-3xl mt-2'>Reviews &nbsp;💬</div>
         <div id='container'>
           {reviews.length >= 1 ? (
             reviews.map((item) => {
               return (
                 <>
-                  <article className='flex border-2 pr-6 pt-4 pb-8 border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium'>
+                  <article className='flex border-2 pr-6 pt-4 pb-8 mt-4 border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium'>
                     <section
                       className='ml-2 mr-4 mt-2 h-36'
                       style={{ flex: '0 0 75px' }}
@@ -273,6 +282,7 @@ const DetailsTVShows = () => {
                           (e, i) => {
                             return (
                               <img
+                                key={item.id}
                                 className='w-8 inline pb-2'
                                 loading='lazy'
                                 onError={(e) => {
@@ -284,7 +294,11 @@ const DetailsTVShows = () => {
                             );
                           }
                         )}
-                        &nbsp;&nbsp; ({item.author_details.rating} / 10 Stars)
+                        &nbsp;&nbsp; (
+                        {item.author_details.rating
+                          ? item.author_details.rating
+                          : ' n/a'}{' '}
+                        / 10 Stars)
                       </p>
                       <p className='font-light mb-4'>
                         Written by {item.author} on{' '}
@@ -301,7 +315,13 @@ const DetailsTVShows = () => {
               );
             })
           ) : (
-            <section className='text-3xl'>No reviews available :( </section>
+            <section className='text-xl text-center'>
+              No reviews available :(
+              <img
+                className='w-48 mx-auto mt-4'
+                src='/assets/images/empty-box.png'
+              />
+            </section>
           )}
         </div>
         <hr></hr>
@@ -329,7 +349,10 @@ const DetailsTVShows = () => {
           <div className='flex flex-wrap'>
             {keywords.map((item) => {
               return (
-                <p className='bg-[#e5e5e5] text-[.90rem] font-semibold font-sourceSansProLight  mr-[4.5px] my-[2.5px] px-2 py-[4px] rounded border  border-[#d7d7d7]'>
+                <p
+                  key={item.id}
+                  className='bg-[#e5e5e5] text-[.90rem] font-semibold font-sourceSansProLight  mr-[4.5px] my-[2.5px] px-2 py-[4px] rounded border  border-[#d7d7d7]'
+                >
                   {item.name}
                 </p>
               );
@@ -345,9 +368,11 @@ const DetailsTVShows = () => {
     };
 
     finalSection = (
-      <div className='relative flex flex-col w-[75%] pl-16'>
-        <section className='flex flex-col'>
-          <h1 className='block'>Recommendations</h1>
+      <div className='relative flex flex-col w-[75%] pl-16 -mt-12'>
+        <hr></hr>
+        <section className='flex flex-col mt-8 mb-8'>
+          <h1 className='block text-3xl mb-4'>Recommendations &nbsp;🤙</h1>
+
           <div className='flex overflow-hidden'>
             <ul
               id='scrolling-content'
@@ -355,14 +380,15 @@ const DetailsTVShows = () => {
             >
               {recommendation.map((item) => (
                 <li
-                  className='w-72 mb-8 ml-2 h-48 flex-shrink-0 border-[1px] border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium'
+                  className={`${
+                    item.backdrop_path ? 'w-72' : 'w-52'
+                  } mb-8 ml-2 h-48 flex-shrink-0 border-[1px] border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium`}
                   key={item.id}
                 >
                   <img
                     loading='lazy'
                     onError={(e) => {
-                      e.currentTarget.src =
-                        'https://image.tmdb.org/t/p/original/mworc2R4hnmPk6EvogFqoqlVdhD.jpg';
+                      e.currentTarget.src = '/assets/images/NotAvailable.png';
                     }}
                     src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
                   />
@@ -371,6 +397,17 @@ const DetailsTVShows = () => {
               ))}
             </ul>
           </div>
+          {recommendation.length === 0 ? (
+            <div className='text-center text-xl'>
+              No recommendations available :(
+              <img
+                className='w-48 mx-auto mt-4'
+                src='/assets/images/empty-box.png'
+              />
+            </div>
+          ) : (
+            ''
+          )}
         </section>
       </div>
     );

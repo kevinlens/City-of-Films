@@ -17,7 +17,7 @@ const DuplicatesExterminator = (arr1) => {
     return [...new Set(array)];
   };
   // * 3
-  // * (duplicateFreeArray, your original lists)
+  // * function(duplicatesFreeArray, your original lists) -> arr
   // get only elements that don't already exists in our duplicateFreeArray
   const matchArrays = (arr1, arr2) => {
     const matchedObjects = [];
