@@ -161,7 +161,7 @@ const Summary = (props) => {
             src={`https://image.tmdb.org/t/p/original${poster_path}`}
             alt='Image 2'
           />
-          <div className='mt-12'>
+          <div className='mt-6'>
             <h1 className='text-4xl'>
               <b>{title} </b>
               <p className='font-thin inline text-slate-300'>
@@ -178,7 +178,7 @@ const Summary = (props) => {
               </div>
               <p>User Score</p>
             </section>
-            <p>{tagline}</p>
+            <p className='text-slate-300'>{tagline}</p>
             <h3 className='text-lg font-bold mb-2 pt-2'>Overview</h3>
             <p>{overview}</p>
             <p className='text-lg font-bold pt-4'>
@@ -483,6 +483,17 @@ const Summary = (props) => {
             allowFullScreen
           />
         </div>
+      )}
+      {!isLoading && !movieDetails ? (
+        <div className='relative'>
+          <img className='h-full w-full' src='/assets/images/NotFound.jpg' />
+          <div className='absolute lg:top-80 -lg:top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-3xl text-white'>
+            <p className='text-center text-4xl'>Sooooowie~~~</p>
+            <div className=''>Not enough data were provided by our third party API :(</div>
+          </div>
+        </div>
+      ) : (
+        ''
       )}
     </div>
   );

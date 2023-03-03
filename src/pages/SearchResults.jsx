@@ -224,9 +224,6 @@ const SearchResults = () => {
           />
         </div>
       ) : (
-        // <div className='pt-96 h-[50rem] text-white text-4xl text-center bg-slate-300'>
-        //   <div>Could Not Find Search Results</div>
-        // </div>
         <div className='relative'>
           <img className='h-full w-full' src='/assets/images/NotFound.jpg' />
           <div className='absolute lg:top-80 -lg:top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-5xl text-white'>

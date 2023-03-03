@@ -231,7 +231,7 @@ const Carousels = () => {
           currentFormIsMovies={currentFormIsMovies}
         />
         <h1 className='flex text-white text-5xl justify-center'>
-          {currentFormIsMovies ? 'Latest Movies' : 'Commonly TV Shows'}
+          {currentFormIsMovies ? 'Latest Movies' : 'Common TV Shows'}
         </h1>
         <Secondary_AutoScrollCarousel
           speed={0.5}

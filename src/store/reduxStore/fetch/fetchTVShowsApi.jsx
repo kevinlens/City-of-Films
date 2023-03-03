@@ -45,7 +45,7 @@ export const tvShowsApi = createApi({
     fetchTVShowDetails: builder.query({
       query: (tvId) =>
         `tv/${tvId}?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US`,
-    }),
+    }), 
     fetchTVShowReviews: builder.query({
       query: (tvId) =>
         `tv/${tvId}/reviews?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=1`,
@@ -65,6 +65,10 @@ export const tvShowsApi = createApi({
         `tv/${tvId}/keywords?api_key=8e6ba047d3bc0b9dddf8392f32410006`,
     }),
     fetchTVShowRecommendations: builder.query({
+      query: (tvId) =>
+        `tv/${tvId}/recommendations?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=1`,
+    }),
+    fetchTVShow: builder.query({
       query: (tvId) =>
         `tv/${tvId}/recommendations?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=1`,
     }),

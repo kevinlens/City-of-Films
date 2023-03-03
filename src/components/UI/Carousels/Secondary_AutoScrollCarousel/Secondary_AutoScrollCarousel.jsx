@@ -59,11 +59,7 @@ const Secondary_AutoScrollCarousel = ({
             >
               <div className='py-6 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
                 <img
-                  onError={(e) => {
-                    e.currentTarget.src =
-                      'https://image.tmdb.org/t/p/original/ahbwIJl7T0D34m3sPKlBaCqs2xH.jpg';
-                  }}
-                  src={`https://image.tmdb.org/t/p/original${item.poster_path}`}
+                  src={`${item.poster_path ? `https://image.tmdb.org/t/p/original${item.poster_path}` : `https://image.tmdb.org/t/p/original/ahbwIJl7T0D34m3sPKlBaCqs2xH.jpg`}`}
                   alt='Image 2'
                 />
               </div>

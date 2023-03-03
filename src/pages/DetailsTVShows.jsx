@@ -41,6 +41,20 @@ const DetailsTVShows = () => {
   const { data: tvShowCredits } = useFetchTVShowCreditsQuery(params.id);
   const { data: tvShowDetails } = useFetchTVShowDetailsQuery(params.id);
   const { data: tvShowReviews } = useFetchTVShowReviewsQuery(params.id);
+
+  //should always watch out for the state as it will sometimes
+  //cause unwanted rerenders if unwatched for
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [hasColor, setHasColor] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [videoSrc, setVideoSrc] = useState('');
+  const [network, setNetwork] = useState('');
+  let summary = '';
+  let midSection = '';
+  let midSectionAside = '';
+  let finalSection = '';
+  let genres = [];
+
   useEffect(() => {
     //all three to avoid unnecessary rerenders
     if (
@@ -53,6 +67,9 @@ const DetailsTVShows = () => {
     ) {
       getColor();
       setHasLoaded(true);
+      if(tvShowDetails.networks[0]){
+        getNetwork(tvShowDetails.networks[0].id);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -64,17 +81,14 @@ const DetailsTVShows = () => {
     tvShowKeywords,
   ]);
 
-  //should always watch out for the state as it will sometimes
-  //cause unwanted rerenders if unwatched for
-  const [hasLoaded, setHasLoaded] = useState(false);
-  const [hasColor, setHasColor] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [videoSrc, setVideoSrc] = useState('');
-  let summary = '';
-  let midSection = '';
-  let midSectionAside = '';
-  let finalSection = '';
-  let genres = [];
+  const getNetwork = async (id) => {
+    let data = await fetch(
+      `https://api.themoviedb.org/3/network/${id}/images?api_key=8e6ba047d3bc0b9dddf8392f32410006`
+    );
+    let networkData = await data.json();
+    setNetwork(networkData.logos[0].file_path);
+  };
+
   const getColor = async () => {
     const imgColor = await average(
       `http://image.tmdb.org/t/p/w500/${tvShowDetails.poster_path}`,
@@ -90,17 +104,21 @@ const DetailsTVShows = () => {
       poster_path,
       first_air_date,
       name,
-      budget,
-      revenue,
-      runtime,
       vote_average,
       status,
       original_language,
       tagline,
+      last_air_date,
+      networks,
+      number_of_episodes,
+      number_of_seasons,
     } = tvShowDetails;
 
+    console.log('🪂🎃🎊🎎🎏🎗🎪🎭🥽👾🛺', tvShowDetails);
     const [year, month, day] = first_air_date.split('-');
+    const [year2, month2, day2] = last_air_date.split('-');
     const outputDate = `${month}-${day}-${year}`;
+    const outputDate2 = `${month2}-${day2}-${year2}`;
 
     const reviews = tvShowReviews.results.slice(0, 4);
     const trailers = tvShowTrailers.results.slice(0, 5);
@@ -125,7 +143,7 @@ const DetailsTVShows = () => {
         }}
       >
         <div
-          className='flex py-12 px-20 text-white'
+          className='flex pt-12 pb-20 px-20 text-white'
           style={{
             backgroundImage: `linear-gradient(to right, rgba(${hasColor.toString()}, 1) calc((50vw - 170px) - 340px), rgba(${hasColor.toString()}, 0.84) 30%, rgba(${hasColor.toString()}, 0.84) 100%)`,
           }}
@@ -136,9 +154,9 @@ const DetailsTVShows = () => {
             src={`https://image.tmdb.org/t/p/original${poster_path}`}
             alt='Image 2'
           />
-          <div className='mt-12'>
+          <div className='mt-6'>
             <h1 className='text-4xl'>
-              <b>{name}</b>
+              <b>{name} </b>
               <p className='font-thin inline text-slate-300'>
                 ({first_air_date.slice(0, 4)})
               </p>
@@ -153,13 +171,32 @@ const DetailsTVShows = () => {
               </div>
               <p>User Score</p>
             </section>
-            <p>{tagline}</p>
+            <p className='text-slate-300'>{tagline}</p>
             <h3 className='text-lg font-bold mb-2 pt-2'>Overview</h3>
             <p>{overview}</p>
-            <p className='text-lg font-bold pt-4'>
-              <b>Director</b>
-            </p>
-            <p>{director}</p>
+
+            <div className='flex'>
+              <section className='relative text-lg font-bold pt-4 pr-6 mr-12'>
+                <p>Networks</p>
+                <div className='inline-block absolute'>
+                  {network.length > 0 ? (
+                    <img
+                      className='w-32 mt-4 inline'
+                      src={`https://image.tmdb.org/t/p/original/${network}`}
+                    />
+                  ) : (
+                    'N/A'
+                  )}
+                </div>
+              </section>
+
+              <div>
+                <p className='text-lg font-bold pt-4'>
+                  <b>Director</b>
+                </p>
+                <p>{director.length > 0 ? director : 'N/A'}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -333,7 +370,23 @@ const DetailsTVShows = () => {
         <section>
           <div className='mb-4'>
             <p className='font-extrabold'>Status</p>
-            <p>{status}</p>
+            <p className={status === 'Ended' ? 'bg-red-300' : 'bg-green-300'}>
+              {status}
+            </p>
+          </div>
+          {last_air_date ? (
+            <div className='mb-4'>
+              <p className='font-extrabold'>Last Aired Date</p>
+              <p>{outputDate2.split('-').join('/')}</p>
+            </div>
+          ) : (
+            ''
+          )}
+          <div className='mb-4'>
+            <p className='font-extrabold'>Total Episodes To Seasons Ratio</p>
+            <p>
+              {number_of_episodes} Episodes / {number_of_seasons} Seasons
+            </p>
           </div>
           <div className='mb-4'>
             <p className='font-extrabold'>Original Language</p>
