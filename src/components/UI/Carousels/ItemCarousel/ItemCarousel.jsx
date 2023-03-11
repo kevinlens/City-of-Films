@@ -70,7 +70,7 @@ const ItemCarousel = ({ highestRatedMovies, title, currentFormIsMovies }) => {
         loop={true}
         navigation={true}
         modules={[Navigation]}
-        initialSlide={4}
+        initialSlide={0}
         className='mySwiper'
       >
         {movieCards}

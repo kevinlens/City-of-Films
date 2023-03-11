@@ -31,12 +31,14 @@ import {
 import { useContext } from 'react';
 import DateContext from '../../store/contextStore/Date-Context';
 import FormOfEntertainmentContext from '../../store/contextStore/FormOfEntertainment-Context';
-
+import LoadingCompleteContext from '../../store/contextStore/LoadingComplete-Context';
+import Spinner from '../UI/Spinner/Spinner'
 const Carousels = () => {
   //CONTEXT API
   const { last60DaysDate, currentDate, lastDecadeDate } =
     useContext(DateContext);
   const { currentFormIsMovies } = useContext(FormOfEntertainmentContext);
+  const {loadingComplete} = useContext(LoadingCompleteContext);
 
   //RTK QUERIES FOR MOVIES
   const { data: movieLatest } = useFetchLatestMoviesQuery({
@@ -47,7 +49,7 @@ const Carousels = () => {
     last60DaysDate,
     currentDate,
   });
-  const { data: moviePopular } = useFetchPopularMoviesQuery();
+  const { data: moviePopular, isLoading } = useFetchPopularMoviesQuery();
   const { data: moviePopularPage2 } = useFetchPopularMoviesPage2Query();
   const { data: movieUpcoming } = useFetchUpcomingMoviesQuery({ currentDate });
   const { data: movieHighestRated } = useFetchHighestRatedQuery({
@@ -70,6 +72,7 @@ const Carousels = () => {
   //cause unwanted rerenders if unwatched for
   const [hasLoaded, setHasLoaded] = useState(false);
   const [collectionOfTVShows, setCollectionOfTVShows] = useState([]);
+  let loadingFinished = false;
   useEffect(() => {
     getCollectionOfTVShows();
     //all to avoid unnecessary rerenders
@@ -146,7 +149,11 @@ const Carousels = () => {
       ];
       let filteredUpcomingMovies = [...movieUpcoming.results];
       //get rid of duplicate movies through original title instead of IDs because IDs are unreliable
-      upcomingMoviesLists =  [...new Map(filteredUpcomingMovies.map(item => [item.original_title, item])).values()];
+      upcomingMoviesLists = [
+        ...new Map(
+          filteredUpcomingMovies.map((item) => [item.original_title, item])
+        ).values(),
+      ];
       latestMovies = [...movieLatest.results];
       latestMoviesPage2 = [...movieLatestPage2.results];
       latestMovies.sort(
@@ -211,71 +218,78 @@ const Carousels = () => {
         (element) => !upcomingMovies.includes(element)
       );
     }
+    loadingFinished = true;
   }
-
   return (
     <div className='mb-12 special'>
-      <div className='flex justify-center mt-12 '>
-        <ToggleSwitch />
-      </div>
-
-      <div className='max-w-full mx-auto mt-14'>
-        <Primary_AutoScrollCarousel
-          collectionOfMovies={{ latestMovies, upcomingMovies }}
-          currentFormIsMovies={currentFormIsMovies}
-        />
-        <hr />
-        <Secondary_AutoScrollCarousel
-          speed={-0.4}
-          latestMovies={latestMovies}
-          currentFormIsMovies={currentFormIsMovies}
-        />
-        <h1 className='flex text-white text-5xl justify-center'>
-          {currentFormIsMovies ? 'Latest Movies' : 'Common TV Shows'}
-        </h1>
-        <Secondary_AutoScrollCarousel
-          speed={0.5}
-          latestMovies={latestMoviesPage2}
-          currentFormIsMovies={currentFormIsMovies}
-        />
-      </div>
-      <hr />
-
-      <ItemCarousel
-        highestRatedMovies={highestRatedMoviesEn}
-        title={
-          currentFormIsMovies
-            ? 'Highest Rated of the Decade'
-            : 'Highest Rated (North America)'
-        }
-        currentFormIsMovies={currentFormIsMovies}
-      />
-      <hr />
-
-      <ItemCarousel
-        highestRatedMovies={highestRatedMoviesInt}
-        title={
-          currentFormIsMovies
-            ? 'Highest Rated of the Decade (International)'
-            : 'Highest Rated (International)'
-        }
-        currentFormIsMovies={currentFormIsMovies}
-      />
-      <hr />
-
-      <ItemCarousel
-        highestRatedMovies={popularMovies}
-        title={
-          currentFormIsMovies
-            ? 'Popular Movies'
-            : 'Popular TV Shows'
-        }
-        currentFormIsMovies={currentFormIsMovies}
-      />
-      <hr />
-
-      {/* <ItemCarousel />
-      <hr /> */}
+      {loadingFinished && latestMovies && popularMovies && loadingComplete ? (
+        <>
+          <div className='flex justify-center mt-12 '>
+            <ToggleSwitch />
+          </div>
+          <div className='max-w-full mx-auto mt-14'>
+            <Primary_AutoScrollCarousel
+              collectionOfMovies={{ latestMovies, upcomingMovies }}
+              currentFormIsMovies={currentFormIsMovies}
+            />
+            <hr />
+            <Secondary_AutoScrollCarousel
+              speed={-0.4}
+              latestMovies={latestMovies}
+              currentFormIsMovies={currentFormIsMovies}
+            />
+            <h1 className='flex text-white text-5xl justify-center'>
+              {currentFormIsMovies ? 'Latest Movies' : 'Common TV Shows'}
+            </h1>
+            <Secondary_AutoScrollCarousel
+              speed={0.5}
+              latestMovies={latestMoviesPage2}
+              currentFormIsMovies={currentFormIsMovies}
+            />
+          </div>
+          <hr />
+          <ItemCarousel
+            highestRatedMovies={highestRatedMoviesEn}
+            title={
+              currentFormIsMovies
+                ? 'Highest Rated of the Decade'
+                : 'Highest Rated (North America)'
+            }
+            currentFormIsMovies={currentFormIsMovies}
+          />
+          <hr />
+          <ItemCarousel
+            highestRatedMovies={highestRatedMoviesInt}
+            title={
+              currentFormIsMovies
+                ? 'Highest Rated of the Decade (International)'
+                : 'Highest Rated (International)'
+            }
+            currentFormIsMovies={currentFormIsMovies}
+          />
+          <hr />
+          <ItemCarousel
+            highestRatedMovies={popularMovies}
+            title={currentFormIsMovies ? 'Popular Movies' : 'Popular TV Shows'}
+            currentFormIsMovies={currentFormIsMovies}
+          />
+          <hr />
+        </>
+      ) : (
+        <div className='mt-6 pb-16'>
+          {/* height has to be there for functionality purposes */}
+          <div className='mt-12 mb-20 relative h-4'>
+            <Spinner />
+            {/* <h1 className='text-6xl bg-orange-500'>TESTING 123</h1> */}
+          </div>
+          <div className='mb-20 relative h-4'>
+            <Spinner />
+          </div>
+          <div className='mb-20 relative'>
+            <Spinner />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

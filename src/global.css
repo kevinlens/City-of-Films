@@ -60,13 +60,13 @@ body{
 }
 
 .single-chart {
-  width: 33%;
+  width: 100%;
   justify-content: space-around ;
 }
 
 .circular-chart {
   display: block;
-  margin: 10px auto;
+  margin: 10px 0;
   max-width: 80%;
   max-height: 250px;
 }

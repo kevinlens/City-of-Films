@@ -67,7 +67,7 @@ const DetailsTVShows = () => {
     ) {
       getColor();
       setHasLoaded(true);
-      if(tvShowDetails.networks[0]){
+      if (tvShowDetails.networks[0]) {
         getNetwork(tvShowDetails.networks[0].id);
       }
     }
@@ -112,9 +112,9 @@ const DetailsTVShows = () => {
       networks,
       number_of_episodes,
       number_of_seasons,
+      episode_run_time,
     } = tvShowDetails;
 
-    console.log('🪂🎃🎊🎎🎏🎗🎪🎭🥽👾🛺', tvShowDetails);
     const [year, month, day] = first_air_date.split('-');
     const [year2, month2, day2] = last_air_date.split('-');
     const outputDate = `${month}-${day}-${year}`;
@@ -163,21 +163,27 @@ const DetailsTVShows = () => {
             </h1>
             <p>
               {outputDate.split('-').join('/')}&nbsp; &#x2022; &nbsp;
-              {genres.join(', ')}
+              {genres.join(', ')} &#x2022; {episode_run_time[0]}m
             </p>
-            <section className='flex py-4'>
-              <div className='w-96'>
-                <RatingPercentage rating={7} />
-              </div>
-              <p>User Score</p>
+            <section className='flex pt-4 pb-2 items-center'>
+              <RatingPercentage rating={vote_average} iconWidth={20} />
+              <p className='w-2 font-bold pr-16'>User Score</p>
+              <img
+                className='w-8 cursor-pointer mr-2 transition-transform duration-200 transform-gpu hover:scale-110'
+                src={'/assets/images/heart.png'}
+              />
+              <img
+                className='w-8 cursor-pointer transition-transform duration-200 transform-gpu hover:scale-110'
+                src={'/assets/images/bookmark.png'}
+              />
             </section>
             <p className='text-slate-300'>{tagline}</p>
-            <h3 className='text-lg font-bold mb-2 pt-2'>Overview</h3>
+            <h3 className='text-lg font-bold mb-2'>Overview</h3>
             <p>{overview}</p>
 
             <div className='flex'>
               <section className='relative text-lg font-bold pt-4 pr-6 mr-12'>
-                <p>Networks</p>
+                <p>Network</p>
                 <div className='inline-block absolute'>
                   {network.length > 0 ? (
                     <img

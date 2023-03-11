@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { ResponsiveCalendar } from '@nivo/calendar';
-
+import Spinner from '../../../UI/Spinner/Spinner';
 const CalendarChart = ({
   movieCollectionsFor2021,
   movieCollectionsFor2022,
@@ -81,7 +81,7 @@ const CalendarChart = ({
           emptyColor='#eeeeee'
           colors={['#61cdbb', '#97e3d5', '#e8c1a0', '#f47560']}
           yearSpacing={40}
-          margin={{ left: 30}}
+          margin={{ left: 30 }}
           yearLegendOffset={4}
           monthBorderColor='#ffffff'
           dayBorderWidth={2}
@@ -102,6 +102,7 @@ const CalendarChart = ({
           ]}
         />
       </section>
+      {calendarData.length < 4 ? <Spinner /> : ''}
     </div>
   );
 };

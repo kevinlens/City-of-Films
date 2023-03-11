@@ -17,6 +17,8 @@ import RatingPercentage from '../components/UI/RatingPercentage/RatingPercentage
 import { useContext } from 'react';
 import FormOfEntertainmentContext from '../store/contextStore/FormOfEntertainment-Context';
 
+import Spinner from '../components/UI/Spinner/Spinner';
+
 const formatDate = (dateStr) => {
   const date = new Date(dateStr);
   const options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -35,7 +37,9 @@ const SearchResults = () => {
     searchQuery,
   });
 
-  const { currentFormIsMovies } = useContext(FormOfEntertainmentContext);
+  const { currentFormIsMovies, isLoading } = useContext(
+    FormOfEntertainmentContext
+  );
 
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [listOfMovies, setListOfMovies] = useState([]);
@@ -166,8 +170,8 @@ const SearchResults = () => {
           className='w-72 font-sourcePoppinsRegular text-white relative'
           key={index}
         >
-          <div className='absolute w-44 top-0'>
-            <RatingPercentage rating={item.vote_average} />
+          <div className='absolute w-20 top-0'>
+            <RatingPercentage rating={item.vote_average} iconWidth={16} />
           </div>
           <div>
             <img
@@ -223,13 +227,17 @@ const SearchResults = () => {
             renderOnZeroPageCount={null}
           />
         </div>
-      ) : (
+      ) : hasLoaded ? (
         <div className='relative'>
           <img className='h-full w-full' src='/assets/images/NotFound.jpg' />
           <div className='absolute lg:top-80 -lg:top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-5xl text-white'>
-          <p className='text-center text-4xl'>Sooooowie~~~</p>
-          <div className=''>Search Results Not Found :(</div>
+            <p className='text-center text-4xl'>Sooooowie~~~</p>
+            <div className=''>Search Results Not Found :(</div>
           </div>
+        </div>
+      ) : (
+        <div className='relative py-96'>
+          <Spinner />
         </div>
       )}
     </>

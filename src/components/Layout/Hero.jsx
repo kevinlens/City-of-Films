@@ -16,6 +16,7 @@ import { useContext } from 'react';
 import DateContext from '../../store/contextStore/Date-Context';
 import GenreContext from '../../store/contextStore/Genre-Context';
 import FormOfEntertainmentContext from '../../store/contextStore/FormOfEntertainment-Context';
+import LoadingCompleteContext from '../../store/contextStore/LoadingComplete-Context'
 //SWIPER.JS AND IT'S ASSOCIATED MODULES
 import { Autoplay } from 'swiper';
 
@@ -35,12 +36,16 @@ import { Pagination, Navigation, EffectFade } from 'swiper';
 import { useFetchNowPlayingMoviesQuery } from '../../store/reduxStore/fetch/fetchApi';
 import { useFetchPopularTVShowsQuery } from '../../store/reduxStore/fetch/fetchTVShowsApi';
 
+//COMPONENTS
+import Loader from '../UI/Loader/Loader';
+
 const Hero = () => {
   //* CONTEXT API
   const { monthsAgoDate, currentDate } = useContext(DateContext);
   const { movieGenres } = useContext(GenreContext);
   const { currentFormIsMovies } = useContext(FormOfEntertainmentContext);
-
+  const {setLoadedToTrue} = useContext(LoadingCompleteContext);
+  
   //* IMMUTABLE QUERIES
   const { data, error, isLoading, isSuccess } = useFetchNowPlayingMoviesQuery({
     monthsAgoDate,
@@ -58,11 +63,13 @@ const Hero = () => {
   //! global variables (like the ones below)
   let loadedMovies;
   let loadedMoviesSortedList;
+  let bgImage = '';
 
   //for ensuring movies/tv slides can change dynamically
   //to separate for easier to read code
   useEffect(() => {
     setListOfCasts({ casts: [], directors: [] });
+
     //if context global entertainment form changes from movies to TV etc.
   }, [currentFormIsMovies]);
 
@@ -89,11 +96,10 @@ const Hero = () => {
     }
   }, [data, data2, currentFormIsMovies]);
 
-  let bgImage = '';
   //fetching and organizing a list of popular cast names for
   //our four movies (already fetched) displayed in Hero section
   const fetchUrl = async () => {
-    //!------------------TV SHOWS DATA SECTION (BELOW) / REFACTOR WHEN YOU HAVE TIME 
+    //!------------------TV SHOWS DATA SECTION (BELOW) / REFACTOR WHEN YOU HAVE TIME
     let totalPages = 3;
 
     const fetchTotalPages = async (index) => {
@@ -185,6 +191,7 @@ const Hero = () => {
     for (let i = 0; i < 6; i++) {
       await getDetails(listOfMovieIDs[i]);
     }
+    setLoadedToTrue()
   };
 
   //ensures data has been retrieved before moving onwards
@@ -258,8 +265,12 @@ const Hero = () => {
 
           return (
             <SwiperSlide key={item.id}>
-              <Link to={`/details/${currentFormIsMovies ? 'movies': 'tvShows'}/${item.id}`}>
-                <div className='text-left'>
+              <Link
+                to={`/details/${currentFormIsMovies ? 'movies' : 'tvShows'}/${
+                  item.id
+                }`}
+              >
+                <div className='text-left mb-16'>
                   <div className='absolute left-8 bottom-16  text-white '>
                     <h1 className='text-6xl'>
                       {item.title ? item.title : item.name}
@@ -290,6 +301,7 @@ const Hero = () => {
         })}
       </>
     );
+
   }
 
   return (
@@ -309,7 +321,12 @@ const Hero = () => {
           disableOnInteraction: false,
         }}
       >
-        {bgImage}
+        {bgImage ? bgImage : 
+        <div className='mt-24'>
+          <Loader />
+        </div>
+        
+        }
       </Swiper>
     </div>
   );

@@ -31,7 +31,7 @@ import GetMovieDirector from '../Dry_Functions/GetMovieDirector';
 
 //COMPONENTS
 import RatingPercentage from '../components/UI/RatingPercentage/RatingPercentage';
-
+import Spinner from '../components/UI/Spinner/Spinner'
 //Convert movie screen time to readable hours
 const timeConvert = (n) => {
   let num = n;
@@ -91,6 +91,8 @@ const Summary = (props) => {
   const [hasColor, setHasColor] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [videoSrc, setVideoSrc] = useState('');
+  const [modalFinishedLoading, setModalFinishedLoading] = useState(true);
+
   let summary = '';
   let midSection = '';
   let midSectionAside = '';
@@ -172,14 +174,16 @@ const Summary = (props) => {
               {outputDate.split('-').join('/')}&nbsp; &#x2022; &nbsp;
               {genres.join(', ')} &#x2022; {timeConvert(runtime)}
             </p>
-            <section className='flex py-4'>
-              <div className='w-96'>
-                <RatingPercentage rating={7} />
+            <section className='flex pt-4 pb-2 items-center'>
+              <div className='w-20'>
+              <RatingPercentage rating={vote_average} iconWidth={28} />
               </div>
-              <p>User Score</p>
+              <p className='w-2 font-bold pr-16'>User Score</p>
+              <img className='w-8 cursor-pointer mr-2 transition-transform duration-200 transform-gpu hover:scale-110' src={'/assets/images/heart.png'} />
+              <img className='w-8 cursor-pointer transition-transform duration-200 transform-gpu hover:scale-110' src={'/assets/images/bookmark.png'} />
             </section>
             <p className='text-slate-300'>{tagline}</p>
-            <h3 className='text-lg font-bold mb-2 pt-2'>Overview</h3>
+            <h3 className='text-lg font-bold mb-2'>Overview</h3>
             <p>{overview}</p>
             <p className='text-lg font-bold pt-4'>
               <b>Director</b>
@@ -456,7 +460,10 @@ const Summary = (props) => {
         <div
           className='fixed top-0 left-0 bottom-0 right-0'
           style={{ background: 'rgba(0,0,0,0.8)' }}
-          onClick={() => setIsModalOpen(false)}
+          onClick={() => {
+            setIsModalOpen(false)
+            setModalFinishedLoading(true)
+          }}
         >
           <div
             onClick={() => setIsModalOpen(false)}
@@ -481,7 +488,9 @@ const Summary = (props) => {
             style={{ width: '80%', height: '80%' }}
             allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
             allowFullScreen
+            onLoad={()=>{ setModalFinishedLoading(false)}}
           />
+          {modalFinishedLoading == true ? <Spinner /> : ''}
         </div>
       )}
       {!isLoading && !movieDetails ? (
@@ -489,12 +498,19 @@ const Summary = (props) => {
           <img className='h-full w-full' src='/assets/images/NotFound.jpg' />
           <div className='absolute lg:top-80 -lg:top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-3xl text-white'>
             <p className='text-center text-4xl'>Sooooowie~~~</p>
-            <div className=''>Not enough data were provided by our third party API :(</div>
+            <div className=''>
+              Not enough data were provided by our third party API :(
+            </div>
           </div>
         </div>
       ) : (
         ''
       )}
+      {summary ? '' : 
+      <div className='relative py-96'>
+      <Spinner />
+      </div>
+      }
     </div>
   );
 };
