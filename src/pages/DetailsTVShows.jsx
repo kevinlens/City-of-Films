@@ -27,6 +27,7 @@ import GetMovieDirector from '../Dry_Functions/GetMovieDirector';
 
 //COMPONENTS
 import RatingPercentage from '../components/UI/RatingPercentage/RatingPercentage';
+import Spinner from '../components/UI/Spinner/Spinner';
 
 const DetailsTVShows = () => {
   const params = useParams();
@@ -39,7 +40,7 @@ const DetailsTVShows = () => {
     params.id
   );
   const { data: tvShowCredits } = useFetchTVShowCreditsQuery(params.id);
-  const { data: tvShowDetails } = useFetchTVShowDetailsQuery(params.id);
+  const { data: tvShowDetails, isLoading } = useFetchTVShowDetailsQuery(params.id);
   const { data: tvShowReviews } = useFetchTVShowReviewsQuery(params.id);
 
   //should always watch out for the state as it will sometimes
@@ -48,6 +49,7 @@ const DetailsTVShows = () => {
   const [hasColor, setHasColor] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [videoSrc, setVideoSrc] = useState('');
+  const [modalFinishedLoading, setModalFinishedLoading] = useState(true);
   const [network, setNetwork] = useState('');
   let summary = '';
   let midSection = '';
@@ -438,7 +440,7 @@ const DetailsTVShows = () => {
               className='flex overflow-x-scroll overflow-y-hidden rounded-lg'
             >
               {recommendation.map((item) => (
-                <li
+                <Link to={`/details/tvShows/${item.id}`}
                   className={`${
                     item.backdrop_path ? 'w-72' : 'w-52'
                   } mb-8 ml-2 h-48 flex-shrink-0 border-[1px] border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium`}
@@ -452,7 +454,7 @@ const DetailsTVShows = () => {
                     src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
                   />
                   <p className='pl-2'>{item.name}</p>
-                </li>
+                </Link>
               ))}
             </ul>
           </div>
@@ -484,7 +486,10 @@ const DetailsTVShows = () => {
         <div
           className='fixed top-0 left-0 bottom-0 right-0'
           style={{ background: 'rgba(0,0,0,0.8)' }}
-          onClick={() => setIsModalOpen(false)}
+          onClick={() => {
+            setIsModalOpen(false)
+            setModalFinishedLoading(true)
+          }}
         >
           <div
             onClick={() => setIsModalOpen(false)}
@@ -509,9 +514,29 @@ const DetailsTVShows = () => {
             style={{ width: '80%', height: '80%' }}
             allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
             allowFullScreen
+            onLoad={()=>{ setModalFinishedLoading(false)}}
           />
+           {modalFinishedLoading == true ? <Spinner /> : ''}
         </div>
       )}
+        {!isLoading && !tvShowDetails ? (
+        <div className='relative'>
+          <img className='h-full w-full' src='/assets/images/NotFound.jpg' />
+          <div className='absolute lg:top-80 -lg:top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-3xl text-white'>
+            <p className='text-center text-4xl'>Sooooowie~~~</p>
+            <div className=''>
+              Not enough data were provided by our third party API :(
+            </div>
+          </div>
+        </div>
+      ) : (
+        ''
+      )}
+      {summary ? '' : 
+      <div className='relative py-96'>
+      <Spinner />
+      </div>
+      }
     </div>
   );
 };

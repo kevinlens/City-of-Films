@@ -11,6 +11,7 @@ import Details from './pages/Details';
 import DetailsTVShows from './pages/DetailsTVShows';
 import ScrollToTop from './components/UI/ScrollToTop/ScrollToTop';
 import SearchResults from './pages/SearchResults';
+import CastInfo from './pages/CastInfo';
 function App() {
   return (
     <div>
@@ -62,7 +63,7 @@ function App() {
             element={
               <>
                 <Header modifiedHeader={true}/>
-
+                <CastInfo />
                 <Footer />
               </>
             }

@@ -414,7 +414,8 @@ const Summary = (props) => {
               className='flex overflow-x-scroll overflow-y-hidden rounded-lg'
             >
               {recommendation.map((item) => (
-                <li
+                <Link
+                  to={`/details/movies/${item.id}`}
                   className={`${
                     item.backdrop_path ? 'w-72' : 'w-52'
                   } mb-8 ml-2 h-48 flex-shrink-0 border-[1px] border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium`}
@@ -428,7 +429,7 @@ const Summary = (props) => {
                     src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
                   />
                   <p className='pl-2'>{item.title}</p>
-                </li>
+                </Link>
               ))}
             </ul>
           </div>
