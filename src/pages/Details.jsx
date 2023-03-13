@@ -152,7 +152,7 @@ const Summary = (props) => {
         }}
       >
         <div
-          className='flex py-12 px-20 text-white '
+          className='-sm:block flex py-12 px-20 text-white '
           style={{
             backgroundImage: `linear-gradient(to right, rgba(${hasColor.toString()}, 1) calc((50vw - 170px) - 340px), rgba(${hasColor.toString()}, 0.84) 30%, rgba(${hasColor.toString()}, 0.84) 100%)`,
           }}
@@ -197,7 +197,7 @@ const Summary = (props) => {
     midSection = (
       <div
         id='container'
-        className='relative flex flex-col my-24 w-[75%] pl-16'
+        className='-sm:w-full -sm:pl-0 relative flex flex-col my-24 w-[75%] pl-16'
       >
         <h1 className='text-3xl text-gray-900 text-left mb-4'>
           Top Billed Cast
@@ -355,7 +355,7 @@ const Summary = (props) => {
     );
 
     midSectionAside = (
-      <aside className='pl-12 w-[19rem] mt-24'>
+      <aside className='-sm:hidden pl-12 w-[19rem] mt-24'>
         <section>
           <div className='mb-4'>
             <p className='font-extrabold'>Status</p>

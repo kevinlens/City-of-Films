@@ -83,10 +83,10 @@ const ChoroplethChart = () => {
 
   return (
     <div>
-      <h1 className='text-center text-3xl'>
+      <h1 className='-sm:pt-6 text-center text-3xl'>
         Countries and their Number of Aired TV Shows in 2022
       </h1>
-      <section className='w-[42rem] h-[30rem] mt-8'>
+      <section className='-sm:w-[30rem] -lg:mx-auto w-[42rem] h-[30rem] mt-8'>
         <ResponsiveChoropleth
           data={adjustedCountriesData}
           features={countries.features}

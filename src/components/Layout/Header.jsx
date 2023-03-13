@@ -227,64 +227,80 @@ export default function Header(props) {
           <Disclosure.Panel className='lg:hidden'>
             <div className='px-2 pt-2 pb-3 space-y-1'>
               {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-              <Disclosure.Button
+              <Link
+                to={`/dashboard`}
                 as='a'
                 href='#'
                 className='bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium'
               >
                 Dashboard
-              </Disclosure.Button>
+              </Link>
             </div>
-            <div className='pt-4 pb-3 border-t border-gray-700'>
-              <div className='flex items-center px-5'>
-                <div className='flex-shrink-0'>
-                  <img
-                    loading='lazy'
-                    className='h-10 w-10 rounded-full'
-                    src='/assets/images/me.png'
-                    alt=''
-                  />
-                </div>
-                <div className='ml-3'>
-                  <div className='text-base font-medium text-white'>
-                    Tom Cook
+
+            {user?.displayName ? (
+              <div className='pt-4 pb-3 border-t border-gray-700'>
+                <div className='flex items-center px-5'>
+                  <div className='flex-shrink-0'>
+                    <img
+                      loading='lazy'
+                      className='h-10 w-10 rounded-full'
+                      src={`${user.photoURL}`}
+                      alt=''
+                    />
                   </div>
-                  <div className='text-sm font-medium text-gray-400'>
-                    tom@Header.com
+                  <div className='ml-3'>
+                    <div className='text-base font-medium text-white'>
+                      {user.displayName}
+                    </div>
+                    <div className='text-sm font-medium text-gray-400'>
+                      {user.email}
+                    </div>
                   </div>
+                  <button
+                    type='button'
+                    className='ml-auto flex-shrink-0 bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'
+                  >
+                    <span className='sr-only'>View notifications</span>
+                    <BellIcon className='h-6 w-6' aria-hidden='true' />
+                  </button>
                 </div>
-                <button
-                  type='button'
-                  className='ml-auto flex-shrink-0 bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'
-                >
-                  <span className='sr-only'>View notifications</span>
-                  <BellIcon className='h-6 w-6' aria-hidden='true' />
-                </button>
+                <div className='mt-3 px-2 space-y-1'>
+                  <Link
+                    to={`/profile`}
+                    as='a'
+                    href='#'
+                    className='block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700'
+                  >
+                    Your Profile
+                  </Link>
+                  <Link
+                    to={`/settings`}
+                    as='a'
+                    href='#'
+                    className='block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700'
+                  >
+                    Settings
+                  </Link>
+                  <Disclosure.Button
+                    onClick={handleSignOut}
+                    as='a'
+                    href='#'
+                    className='block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700'
+                  >
+                    Sign out
+                  </Disclosure.Button>
+                </div>
               </div>
-              <div className='mt-3 px-2 space-y-1'>
-                <Disclosure.Button
-                  as='a'
-                  href='#'
-                  className='block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700'
-                >
-                  Your Profile
-                </Disclosure.Button>
-                <Disclosure.Button
-                  as='a'
-                  href='#'
-                  className='block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700'
-                >
-                  Settings
-                </Disclosure.Button>
-                <Disclosure.Button
-                  as='a'
-                  href='#'
-                  className='block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700'
-                >
-                  Sign out
-                </Disclosure.Button>
-              </div>
-            </div>
+            ) : (
+              <Link
+                to='/signin'
+                as='a'
+                href='#'
+                className='block px-3 pt-4 pb-6 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700'
+              >
+                Sign In
+              </Link>
+            )}
           </Disclosure.Panel>
         </div>
       )}

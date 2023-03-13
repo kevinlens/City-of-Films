@@ -90,7 +90,7 @@ const Dashboard = () => {
 
   return (
     <div className={`${styles.dashboard} pb-20`}>
-      <section className='flex items-center place-content-evenly'>
+      <section className='-sm:block -lg:block flex items-center place-content-evenly'>
         <ChoroplethChart />
         <RadarChart
           movieCollectionsFor2021={collectionOfMoviesFor2021}

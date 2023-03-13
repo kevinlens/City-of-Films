@@ -278,8 +278,8 @@ const Hero = () => {
                     <p className='text-xl'>
                       {currentFormIsMovies ? '(Now Playing)' : '(Now Airing)'}
                     </p>
-                    <p className='text-3xl'>Rating {item.vote_average}</p>
-                    <div className=''>
+                    <p className='text-3xl -sm:hidden'>Rating {item.vote_average}</p>
+                    <div className='-sm:hidden'>
                       {director}
                       {starring}
                       <b>Genres: </b>
