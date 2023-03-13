@@ -12,6 +12,8 @@ import DateProvider from './store/contextStore/DateProvider';
 import GenreProvider from './store/contextStore/GenreProvider';
 import FormOfEntertainmentProvider from './store/contextStore/FormOfEntertainment';
 import LoadingCompleteProvider from './store/contextStore/LoadingCompleteProvider';
+import { AuthContextProvider } from './store/contextStore/AuthContext';
+
 //STYLING
 import './global.css';
 
@@ -21,16 +23,18 @@ root.render(
   //import in and set the store props for React/Redux to know
   //allows every React component to have access to redux global store
   <Provider store={store}>
-    <DateProvider>
-      <GenreProvider>
-        <LoadingCompleteProvider>
-          <FormOfEntertainmentProvider>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </FormOfEntertainmentProvider>
-        </LoadingCompleteProvider>
-      </GenreProvider>
-    </DateProvider>
+    <AuthContextProvider>
+      <DateProvider>
+        <GenreProvider>
+          <LoadingCompleteProvider>
+            <FormOfEntertainmentProvider>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </FormOfEntertainmentProvider>
+          </LoadingCompleteProvider>
+        </GenreProvider>
+      </DateProvider>
+    </AuthContextProvider>
   </Provider>
 );

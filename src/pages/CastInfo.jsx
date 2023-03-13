@@ -85,15 +85,14 @@ const CastInfo = () => {
         <section>
           <h2 className='text-3xl'>Personal Info</h2>
           <h3 className='text-3xl'>Known For</h3>
-          <p>{known_for_department}</p>
+          <p>{known_for_department || '-'}</p>
           <h3 className='text-3xl'>Known Credits</h3>
-          <p>{castCombinedCredits.cast.length}</p>
+          <p>{castCombinedCredits.cast.length || '-'}</p>
           <h3 className='text-3xl'>Gender</h3>
           <p>{gender === 1 ? 'Male' : 'Female'}</p>
           <h3 className='text-3xl'>Birthday</h3>
-          <p>{place_of_birth}</p>
+          <p>{birthday || '-'}</p>
         </section>
-        Testing
       </div>
     );
     summary = (
@@ -101,9 +100,10 @@ const CastInfo = () => {
         <h1 className='text-3xl'>{name}</h1>
         <h2 className='text-2xl'>
           Biography
-          <p className='text-base'>{biography ? biography : 'We don\'t have a biography for Karis Oka.'}</p>
+          <p className='text-base'>
+            {biography ? biography : "We don't have a biography for Karis Oka."}
+          </p>
         </h2>
-        Testing
       </div>
     );
 
@@ -120,7 +120,7 @@ const CastInfo = () => {
                 previousYear !== null && year !== previousYear;
               previousYear = year;
               return (
-                <div key={item.id}>
+                <Link to={`/details/movies/${item.id}`} key={item.id}>
                   {shouldAddLineBreak && <hr></hr>}
                   <div className='flex'>
                     <p>
@@ -145,7 +145,7 @@ const CastInfo = () => {
                       src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
                     />
                   </section>
-                </div>
+                </Link>
               );
             })}
           </div>

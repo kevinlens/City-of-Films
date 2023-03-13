@@ -12,6 +12,7 @@ import DetailsTVShows from './pages/DetailsTVShows';
 import ScrollToTop from './components/UI/ScrollToTop/ScrollToTop';
 import SearchResults from './pages/SearchResults';
 import CastInfo from './pages/CastInfo';
+import SignIn from './pages/SignIn';
 function App() {
   return (
     <div>
@@ -24,6 +25,16 @@ function App() {
                 <Header />
                 <Hero />
                 <Carousels />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path='/signin'
+            element={
+              <>
+                <Header />
+                <SignIn />
                 <Footer />
               </>
             }
