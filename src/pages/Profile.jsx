@@ -217,7 +217,7 @@ export default function Profile() {
                               <dd className='mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
                                 <span className='flex-grow'>
                                   <img
-                                    className='h-8 w-8 rounded-full'
+                                    className='h-24 w-24 rounded-full'
                                     src={`${user.photoURL}`}
                                     alt=''
                                   />
@@ -357,7 +357,7 @@ export default function Profile() {
                                 UID
                               </dt>
                               <dd className='mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                                <span className='flex-grow'>English</span>
+                                <span className='flex-grow'> {user.uid}</span>
                                 <span className='ml-4 flex-shrink-0'>
                                   <button
                                     type='button'
