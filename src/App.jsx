@@ -13,6 +13,9 @@ import ScrollToTop from './components/UI/ScrollToTop/ScrollToTop';
 import SearchResults from './pages/SearchResults';
 import CastInfo from './pages/CastInfo';
 import SignIn from './pages/SignIn';
+import Settings from './pages/Settings';
+import Profile from './pages/Profile';
+
 function App() {
   return (
     <div>
@@ -35,6 +38,26 @@ function App() {
               <>
                 <Header />
                 <SignIn />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path='/profile'
+            element={
+              <>
+                <Header modifiedHeader={true} />
+                <Profile />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path='/settings'
+            element={
+              <>
+                <Header modifiedHeader={true} />
+                <Settings />
                 <Footer />
               </>
             }

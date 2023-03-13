@@ -155,7 +155,7 @@ export default function Header(props) {
                             <img
                               loading='lazy'
                               className='h-8 w-8 rounded-full'
-                              src='/assets/images/me.png'
+                              src={`${user.photoURL}`}
                               alt=''
                             />
                           </Menu.Button>
@@ -172,7 +172,8 @@ export default function Header(props) {
                           <Menu.Items className='origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                             <Menu.Item>
                               {({ active }) => (
-                                <a
+                                <Link
+                                  to={`/profile`}
                                   href='#'
                                   className={classNames(
                                     active ? 'bg-gray-100' : '',
@@ -180,12 +181,13 @@ export default function Header(props) {
                                   )}
                                 >
                                   Your Profile
-                                </a>
+                                </Link>
                               )}
                             </Menu.Item>
                             <Menu.Item>
                               {({ active }) => (
-                                <a
+                                <Link
+                                  to={`/settings`}
                                   href='#'
                                   className={classNames(
                                     active ? 'bg-gray-100' : '',
@@ -193,7 +195,7 @@ export default function Header(props) {
                                   )}
                                 >
                                   Settings
-                                </a>
+                                </Link>
                               )}
                             </Menu.Item>
                             <Menu.Item>
