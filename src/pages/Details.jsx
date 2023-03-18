@@ -295,9 +295,9 @@ const Summary = (props) => {
                         loading='lazy'
                         onError={(e) => {
                           e.currentTarget.src =
-                            'https://image.tmdb.org/t/p/w185/1kks3YnVkpyQxzw36CObFPvhL5f.jpg';
+                            'https://image.tmdb.org/t/p/w64_and_h64_face/1kks3YnVkpyQxzw36CObFPvhL5f.jpg';
                         }}
-                        src={`https://image.tmdb.org/t/p/w185/${item.author_details.avatar_path}`}
+                        src={`https://image.tmdb.org/t/p/w64_and_h64_face/${item.author_details.avatar_path}`}
                       />
                     </section>
                     <section>
