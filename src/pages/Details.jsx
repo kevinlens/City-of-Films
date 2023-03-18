@@ -92,7 +92,7 @@ const Summary = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [videoSrc, setVideoSrc] = useState('');
   const [modalFinishedLoading, setModalFinishedLoading] = useState(true);
-
+  const [contentHasLoaded, setContentHasLoaded] = useState(false);
   let summary = '';
   let midSection = '';
   let midSectionAside = '';
@@ -495,7 +495,7 @@ const Summary = (props) => {
       )}
       {!isLoading && !movieDetails ? (
         <div className='relative'>
-          <img className='h-full w-full' src='/assets/images/NotFound.jpg' />
+          <img className='h-full w-full' src='/assets/images/NotFound.jpg' onLoad={()=>{ setContentHasLoaded(true)}} />
           <div className='absolute lg:top-80 -lg:top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-3xl text-white'>
             <p className='text-center text-4xl'>Sooooowie~~~</p>
             <div className=''>
@@ -506,10 +506,10 @@ const Summary = (props) => {
       ) : (
         ''
       )}
-      {summary ? '' : 
+      {summary ? '' : contentHasLoaded == false ? (
       <div className='relative py-96'>
       <Spinner />
-      </div>
+      </div>) : ''
       }
     </div>
   );
