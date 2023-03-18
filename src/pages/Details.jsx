@@ -148,7 +148,7 @@ const Summary = (props) => {
       <div
         className='bg-cover bg-no-repeat bg-[left_calc((50vw-170px)-340px)_top]'
         style={{
-          backgroundImage: `url(https://image.tmdb.org/t/p/original${backdrop_path})`,
+          backgroundImage: `url(https://image.tmdb.org/t/p/w500${backdrop_path})`,
         }}
       >
         <div
@@ -158,9 +158,8 @@ const Summary = (props) => {
           }}
         >
           <img
-            loading='lazy'
             className='w-[300px] mr-10 rounded-lg'
-            src={`https://image.tmdb.org/t/p/original${poster_path}`}
+            src={`https://image.tmdb.org/t/p/w500${poster_path}`}
             alt='Image 2'
           />
           <div className='mt-6'>
@@ -426,7 +425,7 @@ const Summary = (props) => {
                     onError={(e) => {
                       e.currentTarget.src = '/assets/images/NotAvailable.png';
                     }}
-                    src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
+                    src={`https://image.tmdb.org/t/p/w500${item.backdrop_path}`}
                   />
                   <p className='pl-2'>{item.title}</p>
                 </Link>

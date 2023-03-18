@@ -29,11 +29,9 @@ export const AuthContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    console.log('🍑🍑🍑🍑', auth)
     //get user info
     const unsubscribe = onAuthStateChanged(auth,(currentUser) => {
       setUser(currentUser)
-      console.log('User', currentUser)
     })
     //cleanup to prevent memory leak (look at notes)
     return () => {

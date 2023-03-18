@@ -33,12 +33,12 @@ const CastInfo = () => {
   let previousYear = null;
 
   useEffect(() => {
-    if ((castDetails, castCombinedCredits, castImages)) {
+    if (castDetails && castCombinedCredits && castImages) {
       setHasLoaded(true);
     }
   }, [castDetails, castCombinedCredits, castImages]);
 
-  if (hasLoaded && castCombinedCredits) {
+  if (hasLoaded && castCombinedCredits && castDetails) {
     const {
       also_known_as,
       biography,
@@ -50,6 +50,8 @@ const CastInfo = () => {
       place_of_birth,
       profile_path,
     } = castDetails;
+
+    console.log('---------------', castDetails);
 
     const castCombinedCreditsSorted = [...castCombinedCredits.cast].filter(
       (item) => {
@@ -71,80 +73,110 @@ const CastInfo = () => {
     });
 
     sideInfo = (
-      <div className='w-[20%]'>
+      <div>
         <section>
           <img
-            className='block h-[4.5rem]'
+            loading='lazy'
+            className='block h-[28rem] rounded-lg'
             onError={(e) => {
               e.currentTarget.src =
-                'https://image.tmdb.org/t/p/original/oGUmQBU87QXAsnaGleYaAjAXSlj.jpg';
+                'https://image.tmdb.org/t/p/w500/oGUmQBU87QXAsnaGleYaAjAXSlj.jpg';
             }}
-            src={`https://image.tmdb.org/t/p/original/${profile_path}`}
+            src={`https://image.tmdb.org/t/p/w500/${profile_path}`}
           />
         </section>
         <section>
-          <h2 className='text-3xl'>Personal Info</h2>
-          <h3 className='text-3xl'>Known For</h3>
-          <p>{known_for_department || '-'}</p>
-          <h3 className='text-3xl'>Known Credits</h3>
-          <p>{castCombinedCredits.cast.length || '-'}</p>
-          <h3 className='text-3xl'>Gender</h3>
-          <p>{gender === 1 ? 'Male' : 'Female'}</p>
-          <h3 className='text-3xl'>Birthday</h3>
-          <p>{birthday || '-'}</p>
+          <h2 className='text-2xl mt-6 mb-2'>Personal Info</h2>
+          <div className='mb-3'>
+            <h3 className='text-lg font-medium'>Known For</h3>
+            <p>{known_for_department || '-'}</p>
+          </div>
+          <div className='mb-3'>
+            <h3 className='text-lg font-medium'>Known Credits</h3>
+            <p>{castCombinedCredits.cast.length || '-'}</p>
+          </div>
+          <div className='mb-3'>
+            <h3 className='text-lg font-medium'>Gender</h3>
+            <p>{gender === 1 ? 'Male' : 'Female'}</p>
+          </div>
+          <div className='mb-3'>
+            <h3 className='text-lg font-medium'>Birthday</h3>
+            <p>{birthday || '-'}</p>
+          </div>
         </section>
       </div>
     );
     summary = (
-      <div className='w-[80%] bg-green-400'>
-        <h1 className='text-3xl'>{name}</h1>
+      <div>
+        <h1 className='text-3xl font-semibold pb-8'>{name}</h1>
         <h2 className='text-2xl'>
           Biography
-          <p className='text-base'>
-            {biography ? biography : "We don't have a biography for Karis Oka."}
+          <p className='text-base pt-2' style={{ whiteSpace: 'pre-wrap' }}>
+            {biography ? biography : `We don't have a biography for ${name}`}
           </p>
         </h2>
       </div>
     );
 
     credits = (
-      <div className='w-[80%] bg-white ml-auto mr-0'>
+      <div>
         Acting
-        <article className='flex border-2 pt-4 pb-8 mt-4 w-[80%] border-[#E3E3E3] rounded-lg overflow-hidden shadow-smedium'>
-          <div className='w-[100%]'>
+        <article className='flex border-2 pt-4 pb-8 mt-12 w-[95%] border-[#E3E3E3] rounded-sm overflow-hidden shadow-smedium'>
+          <div className='grid grid-cols-3 gap-2 w-[100%] '>
             {castCombinedCreditsSorted.map((item) => {
-              const year = new Date(
-                item.release_date || item.first_air_date
-              ).getFullYear();
-              const shouldAddLineBreak =
-                previousYear !== null && year !== previousYear;
-              previousYear = year;
+
+              // const year = new Date(
+              //   item.release_date || item.first_air_date
+              // ).getFullYear();
+              // const shouldAddLineBreak =
+              //   previousYear !== null && year !== previousYear;
+              // previousYear = year;
+              
               return (
                 <Link to={`/details/movies/${item.id}`} key={item.id}>
-                  {shouldAddLineBreak && <hr></hr>}
-                  <div className='flex'>
-                    <p>
-                      {item.release_date
-                        ? new Date(item.release_date).getFullYear()
-                        : new Date(item.first_air_date).getFullYear()}
-                    </p>
-                    <img
-                      className='h-[1rem] self-center'
+
+                  <div>
+                  <p className='block text-center'>
+                        {item.release_date
+                          ? new Date(item.release_date).getFullYear()
+                          : new Date(item.first_air_date).getFullYear()}
+                      </p>
+                    <div className='flex text-center justify-center'>
+                      {/* <img
+                      loading='lazy'
+                      className='h-[1rem] px-4'
                       src={`https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-298-circle-empty-04c378f484e29180410eb305f586561b024cc969e038a8687fffd641f55b894c.svg`}
-                    />
-                    <p>{item.original_title || item.original_name}</p>
-                    <p>Played as {item.character}</p>
+                    /> */}
+                      <p className='font-medium'>
+                        {item.original_title || item.original_name}
+
+                      {item.character ? (
+                        <p className='pl-2'>
+                          <p className='text-[#898989] inline pr-1'>as</p>{' '}
+                          <p className='inline font-extralight'>
+                            {item.character}
+                          </p>
+                        </p>
+                      ) : (
+                        ''
+                      )}
+                      </p>
+                    </div>
+
+                    <section className='pb-8 pt-2 flex justify-center'>
+                      <img
+                        loading='lazy'
+                        className='block h-64'
+                        onError={(e) => {
+                          e.currentTarget.src =
+                            'https://image.tmdb.org/t/p/w500/mLwS1TDAyffGSAcppkrs5ymoJYo.jpg';
+                        }}
+                        src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
+                      />
+                    </section>
                   </div>
-                  <section>
-                    <img
-                      className='block h-[4.5rem]'
-                      onError={(e) => {
-                        e.currentTarget.src =
-                          'https://image.tmdb.org/t/p/original/mLwS1TDAyffGSAcppkrs5ymoJYo.jpg';
-                      }}
-                      src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
-                    />
-                  </section>
+
+                  {/* <hr className='w-48 border-1 border-black mx-auto mb-8'></hr> */}
                 </Link>
               );
             })}
@@ -155,13 +187,14 @@ const CastInfo = () => {
   }
 
   return (
-    <div>
+    <div className='pt-12 bg-white ml-auto mr-0'>
       <section className='flex'>
-        {sideInfo}
-        {summary}
-        <div></div>
+        <div className='w-[25%] pl-10 bg-white'>{sideInfo}</div>
+        <div className='w-[75%] text-[#000000] pl-4 pb-12'>
+          {summary}
+          {credits}
+        </div>
       </section>
-      <section>{credits}</section>
     </div>
   );
 };

@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { GoogleButton } from 'react-google-button';
-import GithubButton from 'react-github-login-button'
+import GithubButton from 'react-github-login-button';
 import { UserAuth } from '../store/contextStore/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,18 +24,22 @@ const SignIn = () => {
     }
   };
 
-  useEffect(()=>{
-    if(user != null){
-      navigate('/')
+  useEffect(() => {
+    if (user != null) {
+      navigate('/');
     }
-  }, [user])
+  }, [user]);
 
   return (
-    <div>
-      <h1 className='text-center text-3xl font-bold py-8'>Sign In</h1>
-      <div className='max-w-[240px] m-auto py-4'>
-        <GoogleButton onClick={handleGoogleSignIn} />
-        <GithubButton onClick={handleGithubSignIn} />
+    <div className='pt-56 pb-72 bg-white'>
+      <h1 className='text-center text-3xl font-bold py-2'>Sign In</h1>
+      <div className='max-w-[240px] m-auto py-2'>
+        <div className='mb-2'>
+          <GoogleButton onClick={handleGoogleSignIn} />
+        </div>
+        <div>
+          <GithubButton onClick={handleGithubSignIn} />
+        </div>
       </div>
     </div>
   );

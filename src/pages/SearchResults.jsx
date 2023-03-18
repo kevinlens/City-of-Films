@@ -176,11 +176,10 @@ const SearchResults = () => {
           <div>
             <img
               className='rounded-2xl'
-              loading='lazy'
               onError={(e) => {
                 e.currentTarget.src = '/assets/images/NotAvailable.png';
               }}
-              src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
+              src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
               alt='Image 2'
             />
             <p className='pt-2 text-xl'>

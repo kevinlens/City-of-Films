@@ -198,7 +198,7 @@ export default function Profile() {
                               </dt>
                               <dd className='mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
                                 <span className='flex-grow'>
-                                  {user.displayName}
+                                  {user?.displayName}
                                 </span>
                                 <span className='ml-4 flex-shrink-0'>
                                   <button

@@ -36,7 +36,7 @@ function App() {
             path='/signin'
             element={
               <>
-                <Header />
+                <Header modifiedHeader={true} />
                 <SignIn />
                 <Footer />
               </>

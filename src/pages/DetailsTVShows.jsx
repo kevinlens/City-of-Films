@@ -141,7 +141,7 @@ const DetailsTVShows = () => {
       <div
         className='bg-cover bg-no-repeat bg-[left_calc((50vw-170px)-340px)_top]'
         style={{
-          backgroundImage: `url(https://image.tmdb.org/t/p/original${backdrop_path})`,
+          backgroundImage: `url(https://image.tmdb.org/t/p/w500${backdrop_path})`,
         }}
       >
         <div
@@ -151,9 +151,8 @@ const DetailsTVShows = () => {
           }}
         >
           <img
-            loading='lazy'
             className='w-[300px] mr-10 rounded-lg'
-            src={`https://image.tmdb.org/t/p/original${poster_path}`}
+            src={`https://image.tmdb.org/t/p/w500${poster_path}`}
             alt='Image 2'
           />
           <div className='mt-6'>
@@ -190,7 +189,7 @@ const DetailsTVShows = () => {
                   {network.length > 0 ? (
                     <img
                       className='w-32 mt-4 inline'
-                      src={`https://image.tmdb.org/t/p/original/${network}`}
+                      src={`https://image.tmdb.org/t/p/w500/${network}`}
                     />
                   ) : (
                     'N/A'
@@ -313,9 +312,9 @@ const DetailsTVShows = () => {
                         loading='lazy'
                         onError={(e) => {
                           e.currentTarget.src =
-                            'https://image.tmdb.org/t/p/w185/1kks3YnVkpyQxzw36CObFPvhL5f.jpg';
+                            'https://image.tmdb.org/t/p/w64_and_h64_face/1kks3YnVkpyQxzw36CObFPvhL5f.jpg';
                         }}
-                        src={`https://image.tmdb.org/t/p/w185/${item.author_details.avatar_path}`}
+                        src={`https://image.tmdb.org/t/p/w64_and_h64_face/${item.author_details.avatar_path}`}
                       />
                     </section>
                     <section>
@@ -451,7 +450,7 @@ const DetailsTVShows = () => {
                     onError={(e) => {
                       e.currentTarget.src = '/assets/images/NotAvailable.png';
                     }}
-                    src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
+                    src={`https://image.tmdb.org/t/p/w500${item.backdrop_path}`}
                   />
                   <p className='pl-2'>{item.name}</p>
                 </Link>

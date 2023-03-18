@@ -153,7 +153,6 @@ export default function Header(props) {
                           <Menu.Button className='bg-gray-800 rounded-full flex text-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'>
                             <span className='sr-only'>Open user menu</span>
                             <img
-                              loading='lazy'
                               className='h-8 w-8 rounded-full'
                               src={`${user.photoURL}`}
                               alt=''
@@ -200,7 +199,8 @@ export default function Header(props) {
                             </Menu.Item>
                             <Menu.Item>
                               {({ active }) => (
-                                <a
+                                <Link
+                                  to='/'
                                   href='#'
                                   className={classNames(
                                     active ? 'bg-gray-100' : '',
@@ -209,7 +209,7 @@ export default function Header(props) {
                                   onClick={handleSignOut}
                                 >
                                   Sign out
-                                </a>
+                                </Link>
                               )}
                             </Menu.Item>
                           </Menu.Items>
@@ -217,7 +217,9 @@ export default function Header(props) {
                       </Menu>
                     </>
                   ) : (
-                    <Link to='/signin'>Sign In</Link>
+                    <Link to='/signin' className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium ml-2'>
+                      Sign In
+                    </Link>
                   )}
                 </div>
               </div>
@@ -242,7 +244,6 @@ export default function Header(props) {
                 <div className='flex items-center px-5'>
                   <div className='flex-shrink-0'>
                     <img
-                      loading='lazy'
                       className='h-10 w-10 rounded-full'
                       src={`${user.photoURL}`}
                       alt=''
@@ -281,14 +282,15 @@ export default function Header(props) {
                   >
                     Settings
                   </Link>
-                  <Disclosure.Button
+                  <Link
+                    to={`/`}
                     onClick={handleSignOut}
                     as='a'
                     href='#'
                     className='block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700'
                   >
                     Sign out
-                  </Disclosure.Button>
+                  </Link>
                 </div>
               </div>
             ) : (

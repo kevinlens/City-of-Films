@@ -49,8 +49,8 @@ const Primary_AutoScrollCarousel = ({
                 <img
                   src={`${
                     item.poster_path
-                      ? `https://image.tmdb.org/t/p/original${item.poster_path}`
-                      : `https://image.tmdb.org/t/p/original/ahbwIJl7T0D34m3sPKlBaCqs2xH.jpg`
+                      ? `https://image.tmdb.org/t/p/w780${item.poster_path}`
+                      : `https://image.tmdb.org/t/p/w780/ahbwIJl7T0D34m3sPKlBaCqs2xH.jpg`
                   }`}
                   alt='Image 2'
                 />

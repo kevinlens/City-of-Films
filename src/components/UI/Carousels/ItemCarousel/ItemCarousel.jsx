@@ -44,10 +44,11 @@ const ItemCarousel = ({ highestRatedMovies, title, currentFormIsMovies }) => {
               <div className='py-3 transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-200 cursor-pointer'>
                 <img
                   onError={(e) => {
-                    e.currentTarget.src = 'https://image.tmdb.org/t/p/original/c8dm74uPCMA27iKAR1WnHKTsI9h.jpg';
+                    e.currentTarget.src = 'https://image.tmdb.org/t/p/w500/c8dm74uPCMA27iKAR1WnHKTsI9h.jpg';
                   }}
-                  src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
+                  src={`https://image.tmdb.org/t/p/w500${item.backdrop_path}`}
                   alt='Image 2'
+                  loading="lazy"
                 />
                 <p className='text-zinc-400'>
                   {item.title

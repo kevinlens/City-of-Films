@@ -20,6 +20,7 @@ const navigation = [
   { name: 'Team', href: '#', icon: UsersIcon, current: false },
   { name: 'Settings', href: '#', icon: CogIcon, current: true },
 ];
+
 const secondaryNavigation = [
   { name: 'Help', href: '#', icon: QuestionMarkCircleIcon },
   { name: 'Logout', href: '#', icon: CogIcon },
@@ -33,8 +34,6 @@ export default function Settings() {
   const { user } = UserAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [automaticTimezoneEnabled, setAutomaticTimezoneEnabled] =
-    useState(true);
   const [autoUpdateApplicantDataEnabled, setAutoUpdateApplicantDataEnabled] =
     useState(false);
 
@@ -47,6 +46,7 @@ export default function Settings() {
   return (
     <>
       <div className='bg-white'>
+
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as='div'
@@ -99,6 +99,7 @@ export default function Settings() {
                 </Transition.Child>
                 <div className='flex-shrink-0 px-4 flex items-center'>
                   <img
+                    loading='lazy'
                     className='h-8 w-auto'
                     src='https://tailwindui.com/img/logos/easywire-logo-purple-600-mark-gray-900-text.svg'
                     alt='Easywire'
@@ -215,8 +216,7 @@ export default function Settings() {
                                 Delete Account
                               </dt>
                               <dd className='mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                                <span className='flex-grow'>
-                                </span>
+                                <span className='flex-grow'></span>
                                 <span className='ml-4 flex-shrink-0 flex items-start space-x-4'>
                                   <button
                                     type='button'
@@ -244,8 +244,7 @@ export default function Settings() {
                                 Install More Ram
                               </dt>
                               <dd className='mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                                <span className='flex-grow'>
-                                </span>
+                                <span className='flex-grow'></span>
                                 <span className='ml-4 flex-shrink-0'>
                                   <button
                                     type='button'
@@ -256,12 +255,9 @@ export default function Settings() {
                                 </span>
                               </dd>
                             </div>
-
                           </dl>
                         </div>
                       </div>
-
-
                     </div>
                   </div>
                 </div>
