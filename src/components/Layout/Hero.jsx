@@ -270,7 +270,7 @@ const Hero = () => {
                   item.id
                 }`}
               >
-                <div className='text-left mb-16'>
+                <div className='text-left'>
                   <div className='absolute left-8 bottom-16  text-white '>
                     <h1 className='text-6xl'>
                       {item.title ? item.title : item.name}

@@ -82,7 +82,9 @@ const Carousels = () => {
       movieUpcoming &&
       moviePopular &&
       movieHighestRated &&
-      collectionOfTVShows
+      collectionOfTVShows &&
+      moviePopularPage2 &&
+      movieHighestRatedPage3
     ) {
       setHasLoaded(true);
     }
