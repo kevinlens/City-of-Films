@@ -32,13 +32,13 @@ import { useContext } from 'react';
 import DateContext from '../../store/contextStore/Date-Context';
 import FormOfEntertainmentContext from '../../store/contextStore/FormOfEntertainment-Context';
 import LoadingCompleteContext from '../../store/contextStore/LoadingComplete-Context';
-import Spinner from '../UI/Spinner/Spinner'
+import Spinner from '../UI/Spinner/Spinner';
 const Carousels = () => {
   //CONTEXT API
   const { last60DaysDate, currentDate, lastDecadeDate } =
     useContext(DateContext);
   const { currentFormIsMovies } = useContext(FormOfEntertainmentContext);
-  const {loadingComplete} = useContext(LoadingCompleteContext);
+  const { loadingComplete } = useContext(LoadingCompleteContext);
 
   //RTK QUERIES FOR MOVIES
   const { data: movieLatest } = useFetchLatestMoviesQuery({
@@ -86,9 +86,21 @@ const Carousels = () => {
       moviePopularPage2 &&
       movieHighestRatedPage3
     ) {
+      console.log('🍒', movieUpcoming);
       setHasLoaded(true);
     }
-  }, [movieLatest, movieLatestPage2, movieUpcoming, currentFormIsMovies]);
+
+    console.log('movieHighestRatedPage3', movieHighestRatedPage3);
+  }, [
+    movieLatest,
+    movieLatestPage2,
+    movieUpcoming,
+    currentFormIsMovies,
+    moviePopular,
+    movieHighestRated,
+    moviePopularPage2,
+    movieHighestRatedPage3,
+  ]);
 
   const getCollectionOfTVShows = async () => {
     //! DO NOT CHANGE, needed here for the display of Primary Carousel

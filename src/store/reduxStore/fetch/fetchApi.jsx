@@ -30,7 +30,7 @@ export const fetchApi = tvShowsApi.injectEndpoints({
     // --------------------------------------------------------
     fetchHighestRated: builder.query({
       query: ({ lastDecadeDate }) =>
-        `fetch-movies?startingParams=${'movie/top_rated'}&gte=${lastDecadeDate}&page=${'1'}`
+        `fetch-movies?startingParams=${'movie/top_rated'}&page=${'1'}&gte=${lastDecadeDate}`
     }),
     fetchHighestRatedPage2: builder.query({
       query: ({ lastDecadeDate }) =>
