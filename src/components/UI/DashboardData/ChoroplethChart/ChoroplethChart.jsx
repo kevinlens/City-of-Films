@@ -46,37 +46,47 @@ const ChoroplethChart = () => {
   };
 
   const getCollectionOfTVShowsFor2022 = async () => {
-    let totalPages = popularTVShowsAiredIn2022.total_pages;
-
-    const fetchTotalPages = async (index) => {
-      let pageNumber = index + 1;
-      // * Fetching data from pages between 5 / 12
-      let data = await fetch(
-        `https://api.themoviedb.org/3/tv/popular?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=${pageNumber}&first_air_date.gte=2022-01-01&first_air_date.lte=2022-12-31`
-      );
-      let tvData = await data.json();
-      return tvData;
-    };
-
-    // * fetches all url at once as each url is limited to 20 array elements
-    const list = await Promise.all(
-      Array.from({ length: totalPages }, (_, index) => fetchTotalPages(index))
+    // let totalPages = popularTVShowsAiredIn2022.total_pages;
+    let dataArray;
+    // const fetchTotalPages = async (index) => {
+    //   let pageNumber = index + 1;
+    //   // * Fetching data from pages between 5 / 12
+    let data = await fetch(
+      // `https://api.themoviedb.org/3/tv/popular?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=${pageNumber}&first_air_date.gte=2022-01-01&first_air_date.lte=2022-12-31`
+      // `/.netlify/functions/fetch-movies?startingParams=${'tv/popular'}&page=${pageNumber}&gteAD=${'2022-01-01'}&lteAD${'2022-12-31'}`
+      `/.netlify/functions/fetch-movies?isFirebase=${true}&firebaseCategory=${'tvShows'}`
     );
+    let tvData = await data.json();
+    //   return tvData;
+    // };
+    //object key is a complex name so it's much easier to just loop
+    //through it in order to get the key value of the object
+    for (const key in tvData) {
+      dataArray = tvData[key];
+    }
+    console.log('🪂🎃🎊🎎🎏🎗🎪🎭🥽👾🛺', dataArray);
+    // // * fetches all url at once as each url is limited to 20 array elements
+    // const list = await Promise.all(
+    //   Array.from({ length: totalPages }, (_, index) => fetchTotalPages(index))
+    // );
 
     let entireList = [];
     let listOfOriginCountry = [];
-    // * merge all array elements
-    list.forEach((item) => {
-      let reassignedArray = item.results;
-      entireList.push(...reassignedArray);
-    });
+    // // * merge all array elements
+    // list.forEach((item) => {
+    //   let reassignedArray = item.results;
+    //   entireList.push(...reassignedArray);
+    // });
+
     //API still seems to send back movies with random years so adding
     //extra safety net with a custom year filter
-    const rigorouslyFilteredList = entireList.filter((obj) =>
+    const rigorouslyFilteredList = dataArray.filter((obj) =>
       obj.first_air_date.startsWith(2022)
     );
     rigorouslyFilteredList.forEach((item) => {
-      listOfOriginCountry.push(item.origin_country[0]);
+      if(item.origin_country){
+        listOfOriginCountry.push(item.origin_country[0]);
+      }
     });
     setCollectionOfTVShows(listOfOriginCountry);
   };
@@ -84,7 +94,7 @@ const ChoroplethChart = () => {
   return (
     <div>
       <h1 className='-sm:pt-6 text-center text-3xl'>
-        Countries and their Number of Aired TV Shows in 2022
+        Countries and Number of Aired TV Shows in 2022
       </h1>
       <section className='-sm:w-[30rem] -lg:mx-auto w-[42rem] h-[30rem] mt-8'>
         <ResponsiveChoropleth

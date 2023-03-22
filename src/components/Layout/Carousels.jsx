@@ -84,13 +84,12 @@ const Carousels = () => {
       movieHighestRated &&
       collectionOfTVShows &&
       moviePopularPage2 &&
-      movieHighestRatedPage3
+      movieHighestRatedPage2 &&
+      movieHighestRatedPage3 &&
+      topRatedTVShows
     ) {
-      console.log('🍒', movieUpcoming);
       setHasLoaded(true);
     }
-
-    console.log('movieHighestRatedPage3', movieHighestRatedPage3);
   }, [
     movieLatest,
     movieLatestPage2,
@@ -99,7 +98,9 @@ const Carousels = () => {
     moviePopular,
     movieHighestRated,
     moviePopularPage2,
+    movieHighestRatedPage2,
     movieHighestRatedPage3,
+    topRatedTVShows
   ]);
 
   const getCollectionOfTVShows = async () => {
@@ -111,7 +112,7 @@ const Carousels = () => {
       let pageNumber = index + 4;
       // * Fetching data from pages between 5 / 12
       let data = await fetch(
-        `https://api.themoviedb.org/3/tv/top_rated?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=${pageNumber}`
+        `/.netlify/functions/fetch-movies?startingParams=${'tv/top_rated'}&page=${pageNumber}`
       );
       let movieData = await data.json();
       return movieData;

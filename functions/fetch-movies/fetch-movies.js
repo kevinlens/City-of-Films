@@ -8,16 +8,42 @@
 const axios = require('axios')
 
 const handler = async (event) => {
-  const { startingParams, categoryParams, id, page, searchQuery, gte, lte, gteAD, lteAD } = event.queryStringParameters;
-  
+  const { startingParams, categoryParams, id, page, searchQuery, gte, lte, gteAD, lteAD, isFirebase,
+    firebaseMovieYear,firebaseCategory } = event.queryStringParameters;
+  const apiEndpoints = []
   // const API_SECRET = process.env.API_SECRET
   const API_SECRET = '8e6ba047d3bc0b9dddf8392f32410006'
-  // const API_SECRET = process.env.API_SECRET
-  const url = `https://api.themoviedb.org/3/${startingParams}${id ? `/${id}` : ''}${categoryParams ? `/${categoryParams}` : ''}?api_key=${API_SECRET}&language=en-US&${gte ? `primary_release_date.gte=${gte}&` : ''}${lte ? `primary_release_date.lte=${lte}&` : ''}${gte ? `first_air_date.gte=${gteAD}&` : ''}${lte ? `first_air_date.gte.lte=${lteAD}&` : ''}language=en-US&${searchQuery ? `query=${searchQuery}&` : ''}${page ? `page=${page}` : ''}&include_adult=true`;
-  // const url = `https://content.guardianapis.com/${category}?search?from-date=${currentDate}&page-size=10&show-fields=body%2Cthumbnail%2CshouldHideAdverts%2Cheadline%2C&show-elements=image&show-blocks=all&show-tags=contributor&api-key=${API_SECRET}`;
 
+  if(!isFirebase){
+
+     const url = `https://api.themoviedb.org/3/${startingParams}${id ? `/${id}` : ''}${categoryParams ? `/${categoryParams}` : ''}?api_key=${API_SECRET}&language=en-US&${gte ? `primary_release_date.gte=${gte}&` : ''}${lte ? `primary_release_date.lte=${lte}&` : ''}${gte ? `first_air_date.gte=${gteAD}&` : ''}${lte ? `first_air_date.gte.lte=${lteAD}&` : ''}language=en-US&${searchQuery ? `query=${searchQuery}&` : ''}${page ? `page=${page}` : ''}&include_adult=true`;
+    // const url = `https://content.guardianapis.com/${category}?search?from-date=${currentDate}&page-size=10&show-fields=body%2Cthumbnail%2CshouldHideAdverts%2Cheadline%2C&show-elements=image&show-blocks=all&show-tags=contributor&api-key=${API_SECRET}`;
+  
+    try {
+    
+      const { data } = await axios.get(url)
+  
+      return {
+        statusCode: 200,
+        body: JSON.stringify(data)
+      }
+  
+    }catch(error){
+      const {status, statusText, headers, data} = error.response;
+  
+      return{
+        statusCode: status,
+        body: JSON.stringify({status, statusText, headers, data})
+      }
+      
+    }
+  } else if (!firebaseCategory){
+
+
+    const url = `https://film-city-6d3c6-default-rtdb.firebaseio.com/popularMoviesFor${firebaseMovieYear}.json`;
   try {
-    const { data } = await axios.get(url)
+    
+    const { data } = await axios.get(url);
 
     return {
       statusCode: 200,
@@ -33,6 +59,32 @@ const handler = async (event) => {
     }
     
   }
+
+  } else{
+
+
+    const url = `https://film-city-6d3c6-default-rtdb.firebaseio.com/popularTVShowsAiredIn2022.json`;
+  try {
+    
+    const { data } = await axios.get(url);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(data)
+    }
+
+  }catch(error){
+    const {status, statusText, headers, data} = error.response;
+
+    return{
+      statusCode: status,
+      body: JSON.stringify({status, statusText, headers, data})
+    }
+    
+  }
+
+  }
+
 }
 
 module.exports = { handler }

@@ -105,7 +105,7 @@ const Hero = () => {
     const fetchTotalPages = async (index) => {
       let pageNumber = index + 1;
       let data = await fetch(
-        `https://api.themoviedb.org/3/tv/popular?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=${pageNumber}`
+        `/.netlify/functions/fetch-movies?startingParams=${'tv/popular'}&page=${pageNumber}`
       );
       let movieData = await data.json();
       return movieData;
@@ -166,12 +166,12 @@ const Hero = () => {
       //for fetching casts and directors
       if (currentFormIsMovies) {
         data = await fetch(
-          `https://api.themoviedb.org/3/movie/${id}/credits?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US`
+          `/.netlify/functions/fetch-movies?startingParams=${'movie'}&categoryParams=${'credits'}&id=${id}&page=${'1'}`
         );
         movieCredits = await data.json();
       } else {
         data = await fetch(
-          `https://api.themoviedb.org/3/tv/${id}/credits?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US`
+          `/.netlify/functions/fetch-movies?startingParams=${'tv'}&categoryParams=${'credits'}&id=${id}&page=${'1'}`
         );
         movieCredits = await data.json();
       }

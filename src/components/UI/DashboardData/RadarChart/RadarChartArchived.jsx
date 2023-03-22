@@ -87,7 +87,6 @@ const RadarChartArchived = () => {
     if (popularMoviesForYear2022 && popularMoviesForYear2021) {
       getCollectionOfMoviesFor2021();
       getCollectionOfMoviesFor2022();
-
     }
   }, [popularMoviesForYear2022, popularMoviesForYear2021]);
 
@@ -102,23 +101,23 @@ const RadarChartArchived = () => {
       const dataFor2021 = getDataForRadarChart(listOfGenresFor2021);
       const dataFor2022 = getDataForRadarChart(listOfGenresFor2022);
 
-      setDataForRadarChart2021(dataFor2021)
-      setDataForRadarChart2022(dataFor2022)
+      setDataForRadarChart2021(dataFor2021);
+      setDataForRadarChart2022(dataFor2022);
     }
   }, [collectionOfMoviesFor2022, collectionOfMoviesFor2021, movieGenres]);
 
   const getDataForRadarChart = (arr) => {
     //spread operator and target a specific property and a sum value (if it's been added before)
-    //else assign a value of zero and add one value to it. This is all through the works 
-    //of key-value pairs 
+    //else assign a value of zero and add one value to it. This is all through the works
+    //of key-value pairs
     const counts = arr.reduce(
       (acc, genre) => ({ ...acc, [genre]: (acc[genre] || 0) + 1 }),
       {}
     );
-    
+
     //loop through genres array (which is in the correct order) and use it's order
     //to organize our counts array using it's key-value pair
-    //if it's value doesn't exist then assign it to zero 
+    //if it's value doesn't exist then assign it to zero
     const result = movieGenres.map((genre) => counts[genre.name] || 0);
     return result;
   };
@@ -135,7 +134,7 @@ const RadarChartArchived = () => {
     const fetchTotalPages = async (index, year) => {
       const pageNumber = index + 1;
       const data = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=${pageNumber}&primary_release_date.gte=${year}-01-01&primary_release_date.lte=${year}-12-31&region=US`
+        `/.netlify/functions/fetch-movies?startingParams=${'movie/popular'}&categoryParams=${'credits'}&id=${id}&gte=${`${year}-01-01`}&lte${`${year}-12-31`}&page=${pageNumber}`
       );
       const movieData = await data.json();
       return movieData;

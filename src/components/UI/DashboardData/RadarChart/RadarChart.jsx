@@ -40,10 +40,14 @@ const RadarChart = ({ movieCollectionsFor2021, movieCollectionsFor2022 }) => {
     if (movieCollectionsFor2021.length > 0 && movieCollectionsFor2022.length > 0) {
       
       movieCollectionsFor2021.forEach((item) => {
-        listOfGenres2021.push(...item.genre_ids);
+        if(item.genre_ids){
+          listOfGenres2021.push(...item.genre_ids);
+        }
       });
       movieCollectionsFor2022.forEach((item) => {
-        listOfGenres2022.push(...item.genre_ids);
+        if(item.genre_ids){
+          listOfGenres2022.push(...item.genre_ids);
+        }
       });
       setCollectionOfMoviesFor2021(listOfGenres2021)
       setCollectionOfMoviesFor2022(listOfGenres2022)

@@ -85,7 +85,7 @@ const DetailsTVShows = () => {
 
   const getNetwork = async (id) => {
     let data = await fetch(
-      `https://api.themoviedb.org/3/network/${id}/images?api_key=8e6ba047d3bc0b9dddf8392f32410006`
+      `/.netlify/functions/fetch-movies?startingParams=${'network'}&categoryParams=${'images'}&id=${id}&page=${'1'}`
     );
     let networkData = await data.json();
     setNetwork(networkData.logos[0].file_path);
@@ -93,7 +93,7 @@ const DetailsTVShows = () => {
 
   const getColor = async () => {
     const imgColor = await average(
-      `http://image.tmdb.org/t/p/w500/${tvShowDetails.poster_path}`,
+      `http://image.tmdb.org/t/p/w500/${tvShowDetails.poster_path ? tvShowDetails.poster_path : '/pR858ihc6Ls9xohpdRJVjV787ml.jpg'}`,
       { amount: 1 }
     );
     setHasColor(imgColor);
@@ -152,7 +152,7 @@ const DetailsTVShows = () => {
         >
           <img
             className='w-[300px] mr-10 rounded-lg'
-            src={`https://image.tmdb.org/t/p/w500${poster_path}`}
+            src={`${poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : '/assets/images/NotAvailable.png'}`}
             alt='Image 2'
           />
           <div className='mt-6'>

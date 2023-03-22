@@ -19,63 +19,83 @@ const Dashboard = () => {
     []
   );
 
-  const { data: popularMoviesForYear2022 } =
-    useFetchPopularMoviesForYear2022Query();
-  const { data: popularMoviesForYear2021 } =
-    useFetchPopularMoviesForYear2021Query();
-
   useEffect(() => {
-    if (popularMoviesForYear2021 && popularMoviesForYear2022) {
       getCollectionOfMoviesFor2021();
       getCollectionOfMoviesFor2022();
-    }
-  }, [popularMoviesForYear2021, popularMoviesForYear2022]);
+  }, []);
 
-  const getCollectionOfMovies = async (year, pages) => {
-    let totalPages;
-    if (pages >= 501) {
-      //API LIMIT IS 500 PAGES OR 10,000 ITEMS
-      totalPages = 500;
-    } else {
-      totalPages = pages;
-    }
+  const getCollectionOfMovies = async (year) => {
+    // let totalPages;
+    // if (pages >= 501) {
+    //   //API LIMIT IS 500 PAGES OR 10,000 ITEMS
+    //   totalPages = 500;
+    // } else {
+    //   totalPages = pages;
+    // }
 
-    const fetchTotalPages = async (index, year) => {
-      const pageNumber = index + 1;
-      const data = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=${pageNumber}&primary_release_date.gte=${year}-01-01&primary_release_date.lte=${year}-12-31&region=US`
-      );
-      const movieData = await data.json();
-      return movieData;
-    };
+    // const fetchTotalPages = async (index, year) => {
+    //   const pageNumber = index + 1;
+    //   const data = await fetch(
+    //     `https://api.themoviedb.org/3/movie/popular?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=${pageNumber}&primary_release_date.gte=${year}-01-01&primary_release_date.lte=${year}-12-31&region=US`
+    //     // `/.netlify/functions/fetch-movies?startingParams=${'movie/popular'}&categoryParams=${'recommendations'}&gte=${`${year}-01-01`}&lte${`${year}-12-31`}&page=${pageNumber}`
 
-    const list = await Promise.all(
-      Array.from({ length: totalPages }, (_, index) =>
-        fetchTotalPages(index, year)
-      )
+    //     );
+    //   const movieData = await data.json();
+    //   return movieData;
+    // };
+
+    const data = await fetch(
+      // `https://api.themoviedb.org/3/movie/popular?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=${pageNumber}&primary_release_date.gte=${year}-01-01&primary_release_date.lte=${year}-12-31&region=US`
+      // `/.netlify/functions/fetch-movies?startingParams=${'movie/popular'}&gte=${`${year}-01-01`}&lte${`${year}-12-31`}&page=${'1'}&pageIndexes=${'30'}`
+      `/.netlify/functions/fetch-movies?isFirebase=${true}&firebaseMovieYear=${year}`
     );
+    const movieData = await data.json();
 
-    const entireList = [];
+    
+    // const list = movieData
 
-    list.forEach((item) => {
-      const reassignedArray = item.results;
-      entireList.push(...reassignedArray);
+    // const entireList = [];
+    let dataArray = [];
+    let mergedArray = [];
+    
+    //object key is a complex name so it's much easier to just loop
+    //through it in order to get the key value of the object
+    for (const key in movieData) {
+      dataArray = movieData[key];
+    }
+
+    mergedArray = dataArray.map((item) => {
+      return item.results;
     });
+
+    mergedArray = mergedArray.flat();
+
+    // console.log('😢😢😢😢😢😢', mergedArray)
+
+    // list.forEach((item) => {
+    //   const reassignedArray = item.results;
+    //   entireList.push(...reassignedArray);
+    // });
+
+    // console.log('🍱🍱🍱🍱', mergedArray)
+
     //API still seems to send back movies with random years so adding
     //extra safety net with a custom year filter
-    const rigorouslyFilteredList = entireList.filter((obj) =>
-      obj.release_date.startsWith(year)
-    );
+    const rigorouslyFilteredList = mergedArray.filter((obj) => {
+      if (obj) {
+        return obj.release_date.startsWith(year);
+      }
+    });
     rigorouslyFilteredList.sort(
       (a, b) => new Date(a.release_date) - new Date(b.release_date)
     );
+    // console.log('😢😢😢😢😢😢', rigorouslyFilteredList)
     return rigorouslyFilteredList;
   };
 
   const getCollectionOfMoviesFor2021 = async () => {
     const collection = await getCollectionOfMovies(
       '2021',
-      popularMoviesForYear2021.total_pages
     );
     setCollectionOfMoviesFor2021(collection);
   };
@@ -83,7 +103,6 @@ const Dashboard = () => {
   const getCollectionOfMoviesFor2022 = async () => {
     const collection = await getCollectionOfMovies(
       '2022',
-      popularMoviesForYear2022.total_pages
     );
     setCollectionOfMoviesFor2022(collection);
   };

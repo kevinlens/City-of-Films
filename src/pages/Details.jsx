@@ -101,7 +101,7 @@ const Summary = (props) => {
 
   const getColor = async () => {
     const imgColor = await average(
-      `http://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`,
+      `http://image.tmdb.org/t/p/w500/${movieDetails.poster_path ? movieDetails.poster_path : '/pR858ihc6Ls9xohpdRJVjV787ml.jpg'}`,
       { amount: 1 }
     );
     setHasColor(imgColor);
@@ -159,7 +159,7 @@ const Summary = (props) => {
         >
           <img
             className='w-[300px] mr-10 rounded-lg'
-            src={`https://image.tmdb.org/t/p/w500${poster_path}`}
+            src={`${poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : '/assets/images/NotAvailable.png'}`}
             alt='Image 2'
           />
           <div className='mt-6'>

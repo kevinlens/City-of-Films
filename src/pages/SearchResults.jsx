@@ -117,10 +117,12 @@ const SearchResults = () => {
       let data;
       if (currentFormIsMovies) {
         data = await fetch(
+          // `/.netlify/functions/fetch-movies?startingParams=${'search/movie'}&searchQuery=${searchQuery}&page=${pageNumber}`
           `https://api.themoviedb.org/3/search/movie?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&query=${searchQuery}&page=${pageNumber}&include_adult=true`
         );
       } else {
         data = await fetch(
+          // `/.netlify/functions/fetch-movies?startingParams=${'tv'}&searchQuery=${searchQuery}&page=${pageNumber}`
           `https://api.themoviedb.org/3/search/tv?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=${pageNumber}&query=${searchQuery}&include_adult=true`
         );
       }
