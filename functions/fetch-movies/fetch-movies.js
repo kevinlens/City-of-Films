@@ -11,8 +11,9 @@ const handler = async (event) => {
   const { startingParams, categoryParams, id, page, searchQuery, gte, lte, gteAD, lteAD, isFirebase,
     firebaseMovieYear,firebaseCategory } = event.queryStringParameters;
   const apiEndpoints = []
-  // const API_SECRET = process.env.API_SECRET
-  const API_SECRET = '8e6ba047d3bc0b9dddf8392f32410006'
+  const API_SECRET = process.env.API_SECRET
+  // const API_SECRET = '8e6ba047d3bc0b9dddf8392f32410006'
+  const FIREBASE_URL = process.env.FIREBASE_URL
 
   if(!isFirebase){
 
@@ -40,7 +41,7 @@ const handler = async (event) => {
   } else if (!firebaseCategory){
 
 
-    const url = `https://film-city-6d3c6-default-rtdb.firebaseio.com/popularMoviesFor${firebaseMovieYear}.json`;
+    const url = `${FIREBASE_URL}popularMoviesFor${firebaseMovieYear}.json`;
   try {
     
     const { data } = await axios.get(url);
@@ -63,7 +64,7 @@ const handler = async (event) => {
   } else{
 
 
-    const url = `https://film-city-6d3c6-default-rtdb.firebaseio.com/popularTVShowsAiredIn2022.json`;
+    const url = `${FIREBASE_URL}popularTVShowsAiredIn2022.json`;
   try {
     
     const { data } = await axios.get(url);
