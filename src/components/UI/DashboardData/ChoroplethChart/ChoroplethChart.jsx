@@ -92,11 +92,11 @@ const ChoroplethChart = () => {
   };
 
   return (
-    <div>
-      <h1 className='-sm:pt-6 text-center text-3xl'>
+    <div className='0xl:pt-6'>
+      <h1 className='-sm:pt-2 text-center text-3xl'>
         Countries and Number of Aired TV Shows in 2022
       </h1>
-      <section className='-sm:w-[30rem] -lg:mx-auto w-[42rem] h-[30rem] mt-8'>
+      <section className='-sm:w-[30rem] 0xl:mx-auto w-[42rem] h-[30rem] mt-6'>
         <ResponsiveChoropleth
           data={adjustedCountriesData}
           features={countries.features}
@@ -171,7 +171,7 @@ const ChoroplethChart = () => {
               anchor: 'bottom-left',
               direction: 'column',
               justify: true,
-              translateX: 20,
+              translateX: 30,
               translateY: -100,
               itemsSpacing: 0,
               itemWidth: 94,

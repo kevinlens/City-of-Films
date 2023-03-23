@@ -41,6 +41,9 @@ module.exports = {
         '1xl': { min: '1499px' },
         // => @media (max-width: 1535px) { ... }
 
+        '0xl': { max: '1380px' },
+        // => @media (max-width: 1535px) { ... }
+
         //!For a special case inside searchResults file
         '-lxl': { max: '1299px' },
         // => @media (max-width: 1279px) { ... }

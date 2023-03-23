@@ -84,7 +84,7 @@ const RadarChart = ({ movieCollectionsFor2021, movieCollectionsFor2022 }) => {
   return (
     //! DO NOT REMOVE! This is to artificially initiate chart animation on load
     <div
-      className={`-sm:w-[26rem] -sm:mt-16 -lg:mx-auto w-[36rem] ${
+      className={`-sm:w-[26rem] pt-4 0xl:mt-2 0xl:mx-auto w-[44rem] ${
         dataForRadarChart.length > 1 ? 'h-[36rem]' : 'h-12'
       } `}
     >

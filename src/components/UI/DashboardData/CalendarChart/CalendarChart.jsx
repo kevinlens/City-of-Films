@@ -70,7 +70,7 @@ const CalendarChart = ({
 
   return (
     <div>
-      <h1 className='-sm:mt-6 text-center text-3xl'>
+      <h1 className='text-center sm:pt-20 text-3xl'>
         Calendar of Movie Contributions Throughout the Years
       </h1>
       <section className='-sm:w-[25rem] w-[44rem] h-[20rem] mx-auto'>
