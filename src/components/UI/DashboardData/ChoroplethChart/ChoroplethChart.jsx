@@ -64,7 +64,7 @@ const ChoroplethChart = () => {
     for (const key in tvData) {
       dataArray = tvData[key];
     }
-    console.log('🪂🎃🎊🎎🎏🎗🎪🎭🥽👾🛺', dataArray);
+    // console.log('🪂🎃🎊🎎🎏🎗🎪🎭🥽👾🛺', dataArray);
     // // * fetches all url at once as each url is limited to 20 array elements
     // const list = await Promise.all(
     //   Array.from({ length: totalPages }, (_, index) => fetchTotalPages(index))

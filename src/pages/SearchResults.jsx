@@ -76,23 +76,37 @@ const SearchResults = () => {
   useEffect(() => {
     // * This is to get a consistent image portrayal without empty spaces
     if (screenSize.width >= 1500) {
-      setItemsPerPage(10);
+      // setItemsPerPage(10);
+      setItemsPerPage(20);
     } else {
-      setItemsPerPage(12);
+      // setItemsPerPage(12);
+      setItemsPerPage(20);
     }
+
+    console.log('🐳🐳🐳🐳', tvShowDataSet)
     // Ensures movie data is fetched and has finished loading
+    // moviesDataSet && tvShowDataSet are needed for total pages
     if (moviesDataSet && tvShowDataSet && hasLoaded != true) {
       fetchUrl();
     }
+
+
 
     let sortedMovies = [...listOfMovies];
     sortedMovies.sort(
       (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
     );
     // Fetch items from another resources.
-    const endOffset = itemOffset + itemsPerPage;
-    setCurrentItems(sortedMovies.slice(itemOffset, endOffset));
-    setPageCount(Math.ceil(sortedMovies.length / itemsPerPage));
+    // const endOffset = itemOffset + itemsPerPage;
+    setCurrentItems(sortedMovies);
+    if(currentFormIsMovies && moviesDataSet){
+      setPageCount(Math.ceil(moviesDataSet.total_pages));
+    }
+    // ! unresolved error: giving irrelevant page number
+    // else if (currentFormIsMovies && moviesDataSet){
+    //   setPageCount(Math.ceil(tvShowDataSet.total_pages));
+    // }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     moviesDataSet,
@@ -101,64 +115,80 @@ const SearchResults = () => {
     hasLoaded,
     screenSize,
     tvShowDataSet,
+    currentFormIsMovies
   ]);
 
   const fetchUrl = async () => {
     setListOfMovies([]);
-    let totalPages;
-    if (currentFormIsMovies) {
-      totalPages = moviesDataSet.total_pages;
-    } else {
-      totalPages = tvShowDataSet.total_pages;
-    }
 
-    const fetchTotalPages = async (index) => {
-      let pageNumber = index + 1;
+    // const fetchTotalPages = async (index) => {
+    //   let pageNumber = index + 1;
       let data;
       if (currentFormIsMovies) {
         data = await fetch(
-          // `/.netlify/functions/fetch-movies?startingParams=${'search/movie'}&searchQuery=${searchQuery}&page=${pageNumber}`
-          `https://api.themoviedb.org/3/search/movie?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&query=${searchQuery}&page=${pageNumber}&include_adult=true`
+          `/.netlify/functions/fetch-movies?startingParams=${'search/movie'}&searchQuery=${searchQuery}&page=${currentPage ? currentPage + 1 : '1'}`
+          // `https://api.themoviedb.org/3/search/movie?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&query=${searchQuery}&page=${pageNumber}&include_adult=true`
         );
       } else {
         data = await fetch(
-          // `/.netlify/functions/fetch-movies?startingParams=${'tv'}&searchQuery=${searchQuery}&page=${pageNumber}`
-          `https://api.themoviedb.org/3/search/tv?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=${pageNumber}&query=${searchQuery}&include_adult=true`
+          `/.netlify/functions/fetch-movies?startingParams=${'search/tv'}&searchQuery=${searchQuery}&page=${currentPage ? currentPage + 1 : '1'}`
+          // `https://api.themoviedb.org/3/search/tv?api_key=8e6ba047d3bc0b9dddf8392f32410006&language=en-US&page=${currentPage ? currentPage + 1 : '1'}&query=${searchQuery}&include_adult=true`
         );
       }
       let movieData = await data.json();
-      return movieData;
+      // * set page count for pagination and number of pages to choose from
+      setPageCount(Math.ceil(movieData.total_pages));
       // const rawMovies = [...movieData.results];
       // setListOfMovies((currentSetOfMovies) => [
       //   ...currentSetOfMovies,
       //   ...rawMovies,
       // ]);
-    };
+    // };
 
     // for (let index = 1; index <= totalPages; index++) {
     //   await fetchTotalPages(index);
     // }
 
-    // * fetches all url at once as each url is limited to 20 array elements
-    const list = await Promise.all(
-      Array.from({ length: totalPages }, (_, index) => fetchTotalPages(index))
-    );
-    let entireList = [];
+    // // * fetches all url at once as each url is limited to 20 array elements
+    // const list = await Promise.all(
+    //   Array.from({ length: totalPages }, (_, index) => fetchTotalPages(index))
+    // );
+    // let entireList = [];
 
-    // * merge all array elements
-    list.forEach((item) => {
-      let reassignedArray = item.results;
-      entireList.push(...reassignedArray);
-    });
-    setListOfMovies(DuplicatesExterminator(entireList));
+    // // * merge all array elements
+    // list.forEach((item) => {
+    //   let reassignedArray = item.results;
+    //   entireList.push(...reassignedArray);
+    // });
+
+
+      // if(pageClicked){
+      //   let sortedMovies = [...movieData.results];
+      //   sortedMovies.sort(
+      //     (a, b) => parseFloat(b.vote_count) - parseFloat(a.vote_count)
+      //   );
+
+      //   const endOffset = itemOffset + itemsPerPage;
+      //   Fetch items from another resources.
+      //   setCurrentItems(sortedMovies.slice(itemOffset, endOffset));
+      //   setPageCount(Math.ceil(movieData.total_pages - 1));
+      // }
+
+    //listOfMovies will be displayed for user
+    setListOfMovies(DuplicatesExterminator(movieData.results));
     setHasLoaded(true);
   };
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % listOfMovies.length;
-    setItemOffset(newOffset);
+    //when you see the three dots and click on it
+    //it will take you to a specific page number, that is dictated by the offset
+    // setItemOffset(event.selected);
+
+    //needed for a data refetch of users page clicked
     setCurrentPage(event.selected);
+    //to reinvoke movie data fetch
+    setHasLoaded(false)
   };
 
   let movies = [];
@@ -178,10 +208,7 @@ const SearchResults = () => {
           <div>
             <img
               className='rounded-2xl'
-              onError={(e) => {
-                e.currentTarget.src = '/assets/images/NotAvailable.png';
-              }}
-              src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
+              src={item.poster_path ? `https://image.tmdb.org/t/p/w500/${item.poster_path}` : '/assets/images/NotAvailable.png'}
               alt='Image 2'
             />
             <p className='pt-2 text-xl'>
@@ -202,7 +229,7 @@ const SearchResults = () => {
     <>
       {listOfMovies.length > 0 ? (
         <div>
-          <div className='grid grid-cols-autoFill wrap overflow-hidden justify-center pt-32 -1xl:gap-4 -lxl:gap-0 -sxl:gap-8'>
+          <div className='grid grid-cols-autoFill wrap overflow-hidden justify-center pt-32 1xl:gap-14 xl:gap-32 lxl:gap-8 md:gap-6 sxl:gap-8'>
             {movies}
           </div>
           <ReactPaginate

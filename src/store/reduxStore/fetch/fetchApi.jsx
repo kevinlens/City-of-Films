@@ -8,7 +8,6 @@ export const fetchApi = tvShowsApi.injectEndpoints({
     fetchMoviesWithUserSearchQuery: builder.query({
       query: ({ searchQuery }) =>
         `fetch-movies?startingParams=${'search/movie'}&searchQuery=${searchQuery}&page=${'1'}`
-
     }),
     //**!  FOR FETCHING MOVIES */
     fetchNowPlayingMovies: builder.query({

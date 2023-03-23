@@ -86,7 +86,8 @@ const Carousels = () => {
       moviePopularPage2 &&
       movieHighestRatedPage2 &&
       movieHighestRatedPage3 &&
-      topRatedTVShows
+      topRatedTVShows && 
+      popularTVShowsPage5 
     ) {
       setHasLoaded(true);
     }
@@ -100,7 +101,8 @@ const Carousels = () => {
     moviePopularPage2,
     movieHighestRatedPage2,
     movieHighestRatedPage3,
-    topRatedTVShows
+    topRatedTVShows,
+    popularTVShowsPage5
   ]);
 
   const getCollectionOfTVShows = async () => {

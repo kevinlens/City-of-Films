@@ -38,15 +38,27 @@ module.exports = {
         '-1xl': { max: '1499px' },
         // => @media (max-width: 1535px) { ... }
 
+        '1xl': { min: '1499px' },
+        // => @media (max-width: 1535px) { ... }
+
         //!For a special case inside searchResults file
         '-lxl': { max: '1299px' },
+        // => @media (max-width: 1279px) { ... }
+
+        'lxl': { min: '1299px' },
         // => @media (max-width: 1279px) { ... }
 
         '-xl': { max: '1279px' },
         // => @media (max-width: 1279px) { ... }
 
+        'xl': { min: '1279px' },
+        // => @media (max-width: 1279px) { ... }
+
         //!For a special case inside searchResults file
         '-sxl': { max: '1200px' },
+        // => @media (max-width: 1279px) { ... }
+
+        'sxl': { min: '1200px' },
         // => @media (max-width: 1279px) { ... }
 
         '-lg': { max: '1023px' },

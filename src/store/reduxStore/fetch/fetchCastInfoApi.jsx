@@ -6,17 +6,17 @@ export const fetchCastInfo = tvShowsApi.injectEndpoints({
   endpoints: (builder) => ({
     fetchCastDetails: builder.query({
       query: (castId) =>
-        `fetch-movies?startingParams=${'person'}&categoryParams=${''}&id${castId}&page=${'1'}&searchQuery=${''}&others${''}&gte=${''}&lte${''}`
+        `fetch-movies?startingParams=${'person'}&categoryParams=${''}&id${castId}`
 
     }),
     fetchCastCombinedCredits: builder.query({
       query: (castId) =>
-        `fetch-movies?startingParams=${'person'}&categoryParams=${'combined_credits'}&id${castId}&page=${'1'}&searchQuery=${''}&others${''}&gte=${''}&lte${''}`
+        `fetch-movies?startingParams=${'person'}&categoryParams=${'combined_credits'}&id${castId}`
 
     }),
     fetchCastImages: builder.query({
       query: (castId) =>
-        `fetch-movies?startingParams=${'person'}&categoryParams=${'images'}&id${castId}&page=${'1'}&searchQuery=${''}&others${''}&gte=${''}&lte${''}`
+        `fetch-movies?startingParams=${'person'}&categoryParams=${'images'}&id${castId}`
 
     }),
 
