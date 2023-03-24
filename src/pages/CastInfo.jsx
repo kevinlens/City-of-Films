@@ -111,7 +111,7 @@ const CastInfo = () => {
         <h1 className='text-3xl font-semibold pb-8'>{name}</h1>
         <h2 className='text-2xl'>
           Biography
-          <p className='text-base pt-2' style={{ whiteSpace: 'pre-wrap' }}>
+          <p className='text-base pt-2 -sxl:pl-4 pr-16' style={{ whiteSpace: 'pre-wrap' }}>
             {biography ? biography : `We don't have a biography for ${name}`}
           </p>
         </h2>
@@ -120,9 +120,8 @@ const CastInfo = () => {
 
     credits = (
       <div>
-        Acting
         <article className='flex border-2 pt-4 pb-8 mt-12 w-[95%] border-[#E3E3E3] rounded-sm overflow-hidden shadow-smedium'>
-          <div className='grid grid-cols-3 gap-2 w-[100%] '>
+          <div className='grid sm:grid-cols-2 md:grid-cols-3 gap-2 w-[100%] '>
             {castCombinedCreditsSorted.map((item) => {
 
               // const year = new Date(
@@ -188,9 +187,9 @@ const CastInfo = () => {
 
   return (
     <div className='pt-12 bg-white ml-auto mr-0'>
-      <section className='flex'>
-        <div className='w-[25%] pl-10 bg-white'>{sideInfo}</div>
-        <div className='w-[75%] text-[#000000] pl-4 pb-12'>
+      <section className='sxl:flex'>
+        <div className='sxl:w-[25%] pl-10 bg-white -sxl:justify-center -sxl:flex -sxl:text-center -sxl:mb-12'>{sideInfo}</div>
+        <div className='sxl:w-[75%] text-[#000000] pl-4 pb-12'>
           {summary}
           {credits}
         </div>
