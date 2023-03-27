@@ -11,10 +11,8 @@ const handler = async (event) => {
   const { startingParams, categoryParams, id, page, searchQuery, gte, lte, gteAD, lteAD, isFirebase,
     firebaseMovieYear,firebaseCategory } = event.queryStringParameters;
   const apiEndpoints = []
-  // const API_SECRET = process.env.API_SECRET
-  // const FIREBASE_URL = process.env.FIREBASE_URL
-  const API_SECRET = '8e6ba047d3bc0b9dddf8392f32410006'
-  const FIREBASE_URL = 'https://film-city-6d3c6-default-rtdb.firebaseio.com/'
+  const API_SECRET = process.env.API_SECRET
+  const FIREBASE_URL = process.env.FIREBASE_URL
 
   if(!isFirebase){
 
