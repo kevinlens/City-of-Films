@@ -71,7 +71,7 @@ const CalendarChart = ({
   return (
     <div>
       <h1 className='text-center sm:pt-20 text-3xl'>
-        Calendar of Movie Contributions Throughout the Years
+        Movie Contributions Through the Years
       </h1>
       <section className='-sm:w-[25rem] w-[44rem] h-[20rem] mx-auto'>
         <ResponsiveCalendar
